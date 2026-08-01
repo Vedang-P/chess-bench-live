@@ -1,6 +1,10 @@
 // Dashboard configuration — edit these for your deployment.
 const CONFIG = {
-  // Where the monitor state is published (public repo, raw.githubusercontent).
+  // Cloudflare Worker proxy (recommended): e.g. "https://chess-live.USERNAME.workers.dev"
+  // Serves fresh data with a 3s cache. Leave empty to fall back to the raw
+  // GitHub URLs below (those are cached ~5 minutes by GitHub's CDN).
+  WORKER_BASE: "",
+  // Raw GitHub URLs (fallback channel; ~5 min edge cache).
   STATE_URL: "https://raw.githubusercontent.com/Vedang-P/chess-bench-live/main/monitor/state.json",
   HISTORY_URL: "https://raw.githubusercontent.com/Vedang-P/chess-bench-live/main/monitor/history.jsonl",
   LIVE_URL: "https://raw.githubusercontent.com/Vedang-P/chess-bench-live/main/monitor/live.json",

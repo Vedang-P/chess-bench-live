@@ -22,17 +22,36 @@
   }
 
   // ---------------- data ----------------
+  // worker-first endpoints; raw GitHub as fallback (cached ~5 min).
+  const feedUrl = (kind) => {
+    if (CONFIG.WORKER_BASE) {
+      const map = { state: "/state", history: "/history", live: "/live" };
+      return CONFIG.WORKER_BASE.replace(/\/$/, "") + map[kind];
+    }
+    return { state: CONFIG.STATE_URL, history: CONFIG.HISTORY_URL, live: CONFIG.LIVE_URL }[kind];
+  };
+
   async function fetchText(url) {
     const res = await fetch(url, { cache: "no-store" });
     if (!res.ok) throw new Error(`${res.status} ${url}`);
     return res.text();
   }
 
+  async function fetchFeed(kind) {
+    try {
+      return await fetchText(feedUrl(kind));
+    } catch (e) {
+      if (!CONFIG.WORKER_BASE) throw e;
+      const raw = { state: CONFIG.STATE_URL, history: CONFIG.HISTORY_URL, live: CONFIG.LIVE_URL }[kind];
+      return await fetchText(raw); // worker unreachable -> raw fallback
+    }
+  }
+
   async function load() {
     try {
-      state = JSON.parse(await fetchText(CONFIG.STATE_URL));
+      state = JSON.parse(await fetchFeed("state"));
       try {
-        history = (await fetchText(CONFIG.HISTORY_URL)).trim().split("\n")
+        history = (await fetchFeed("history")).trim().split("\n")
           .filter(Boolean).map((l) => JSON.parse(l));
       } catch { history = []; }
       fetchFailed = false;
@@ -391,8 +410,10 @@
   }
 
   // ---------------- live board ----------------
-  const GLYPHS = { K: "♔", Q: "♕", R: "♖", B: "♗", N: "♘", P: "♙",
-                   k: "♚", q: "♛", r: "♜", b: "♝", n: "♞", p: "♟" };
+  // Single solid glyph set for both colors; color + outline via CSS so black
+  // and white are unambiguous on any square (Unicode has no reliable filled
+  // white glyphs — rendering depends on the font).
+  const GLYPHS = { k: "♚", q: "♛", r: "♜", b: "♝", n: "♞", p: "♟" };
   const GAME_TASKS = ["playout-5x5", "ttt", "c4"];
   let live = null;
   let lastLiveKey = null;
@@ -440,12 +461,16 @@
         const piece = pieces[sq];
         const dark = (r + c) % 2 === 1;
         let cls = `board-cell ${dark ? "dark" : "light"}`;
-        if (sq === fromSq) cls += " hl-from";
-        if (sq === toSq) {
-          cls += verdictClass === "correct" ? " hl-to-correct"
-               : verdictClass === "wrong" ? " hl-to-wrong" : " last-move";
-        }
-        html += `<div class="${cls}">${piece && GLYPHS[piece] ? `<span class="board-piece">${GLYPHS[piece]}</span>` : ""}</div>`;
+        if (sq === fromSq || sq === toSq) cls += " last-move";
+        if (sq === toSq && verdictClass === "correct") cls += " hl-to-correct";
+        if (sq === toSq && verdictClass === "wrong") cls += " hl-to-wrong";
+        const coords = [];
+        if (c === 0) coords.push(`<span class="board-coord rank">${n - r}</span>`);
+        if (r === n - 1) coords.push(`<span class="board-coord file">${String.fromCharCode(97 + c)}</span>`);
+        const pieceHtml = piece && GLYPHS[piece.toLowerCase()]
+          ? `<span class="board-piece ${piece === piece.toUpperCase() ? "w" : "b"}">${GLYPHS[piece.toLowerCase()]}</span>`
+          : "";
+        html += `<div class="${cls}">${pieceHtml}${coords.join("")}</div>`;
       }
     }
     el.innerHTML = html;
@@ -528,7 +553,7 @@
 
   async function loadLive() {
     try {
-      const l = JSON.parse(await fetchText(CONFIG.LIVE_URL));
+      const l = JSON.parse(await fetchFeed("live"));
       const key = `${l.cell ? l.cell.model + l.cell.task + l.cell.variant : ""}|${l.position_id || ""}|${l.sample_idx || ""}`;
       if (key !== lastLiveKey) {
         if (live && live.position_id && live !== l) replay.push(live);
