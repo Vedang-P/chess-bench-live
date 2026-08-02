@@ -21,7 +21,7 @@
         <span class="wordmark-glyph">♞</span>
         <div>
           <h1>ChessBench <span class="wordmark-live">LIVE</span></h1>
-          <p class="wordmark-sub">SLM capability trials · six entrants · T4 board</p>
+           <p class="wordmark-sub">SLM capability trials · six models · T4 board</p>
         </div>
       </div>
       <div class="masthead-right">
@@ -56,7 +56,7 @@
         <span class="now-line" id="currentCell" hidden></span>
       </div>
       <div class="sb-cell sb-wide">
-        <span class="sb-label">games played</span>
+         <span class="sb-label">cells completed</span>
         <span class="sb-value sb-big" id="kCells">—</span>
         <span class="sb-sub" id="kCellsSub">—</span>
         <div class="rule-track"><div class="rule-fill" id="progressFill"></div></div>
@@ -67,22 +67,22 @@
         <span class="sb-sub" id="kLegalSub">—</span>
       </div>
       <div class="sb-cell">
-        <span class="sb-label">mate-in-1</span>
+         <span class="sb-label">mate-in-1 · grid strict</span>
         <span class="sb-value" id="kTactics">—</span>
         <span class="sb-sub" id="kTacticsSub">—</span>
       </div>
       <div class="sb-cell">
-        <span class="sb-label">stockfish top-1</span>
+         <span class="sb-label">stockfish top-1 · grid</span>
         <span class="sb-value" id="kStock">—</span>
         <span class="sb-sub" id="kStockSub">—</span>
       </div>
       <div class="sb-cell">
-        <span class="sb-label">game win rate</span>
+         <span class="sb-label">game win rate</span>
         <span class="sb-value" id="kGames">—</span>
         <span class="sb-sub" id="kGamesSub">—</span>
       </div>
       <div class="sb-cell">
-        <span class="sb-label">grid − fen</span>
+         <span class="sb-label">grid / fen legal gap</span>
         <span class="sb-value" id="kDivergence">—</span>
         <span class="sb-sub">representation gap</span>
       </div>
@@ -96,39 +96,62 @@
     <!-- live board -->
     <section class="board live-panel">
       <div class="board-head">
-        <h2>Live board</h2>
-        <span class="board-note" id="liveMeta">—</span>
+        <div class="board-head-copy">
+          <h2>Live sample</h2>
+          <p class="live-now" id="liveNow">waiting for the monitor</p>
+          <p class="live-sync" id="liveSync">waiting for a sample identity check</p>
+        </div>
+        <div class="board-actions">
+          <span class="board-note" id="liveMeta">—</span>
+          <div class="nav-arrows">
+            <button class="nav-btn" id="navPrev" title="previous sample">←</button>
+            <button class="nav-btn" id="navSync" title="back to live">●</button>
+            <button class="nav-btn" id="navNext" title="next sample">→</button>
+          </div>
+        </div>
       </div>
       <div class="live-grid">
         <div class="live-board-wrap">
           <div class="board-stage" id="liveBoard"></div>
+          <div class="arrow-legend">
+            <span class="legend-arrow green">→</span><span class="dim">reference move</span>
+            <span class="legend-arrow blue">→</span><span class="dim">model move</span>
+          </div>
           <div class="live-caption" id="liveCaption">waiting for the first position…</div>
+          <p class="live-integrity" id="liveIntegrity" hidden></p>
         </div>
         <div class="live-side">
+          <div class="live-block">
+            <span class="live-label" id="livePromptLabel">exact model input</span>
+            <pre class="live-prompt" id="livePrompt">—</pre>
+          </div>
           <div class="live-block thinking-block">
-            <span class="live-label">thinking <span class="live-dot" id="liveDot"></span></span>
+            <span class="live-label"><span id="liveGenerationLabel">model output</span> <span class="live-dot" id="liveDot"></span></span>
+            <p class="live-generation-note" id="liveGenerationNote">—</p>
             <pre class="live-thinking" id="liveThinking">—</pre>
           </div>
-          <div class="live-moves">
-            <div class="live-block">
-              <span class="live-label">model move</span>
+          <div class="live-comparison">
+            <div class="live-result model-result">
+              <span class="live-label">model answer</span>
               <span class="live-move mono" id="liveModelMove">—</span>
+              <span class="result-note" id="liveModelStatus">waiting for an answer</span>
             </div>
-            <div class="live-block">
-              <span class="live-label">stockfish</span>
+            <div class="live-result reference-result">
+              <span class="live-label" id="liveReferenceLabel">reference answer</span>
               <span class="live-move mono" id="liveStockMove">—</span>
+              <span class="result-note" id="liveReferenceNote">—</span>
             </div>
           </div>
-          <div class="live-verdict" id="liveVerdict"></div>
+          <div class="live-verdict" id="liveVerdict" hidden></div>
         </div>
       </div>
       <div class="live-replay" id="liveReplay"></div>
     </section>
 
-    <!-- entrant list -->
+    <!-- model list -->
     <section class="board" id="entrants">
       <div class="board-head">
-        <h2>Entrants</h2>
+        <h2>Models</h2>
         <span class="board-note" id="tableCount">—</span>
       </div>
       <div class="entrants" id="entrantRows"></div>
@@ -137,20 +160,20 @@
     <!-- charts -->
     <section class="charts">
       <figure class="chart-figure chart-span2">
-        <figcaption>Legality on standard positions <span class="fig-note">grid / fen · cap-legal-8x8</span></figcaption>
-        <div class="chart-box"><canvas id="chartLegal"></canvas></div>
+         <figcaption>Parsing and legality <span class="fig-note">completed position cells</span></figcaption>
+         <div class="chart-box"><canvas id="chartLegal"></canvas><p class="chart-status" id="chartLegalStatus"></p></div>
       </figure>
       <figure class="chart-figure">
-        <figcaption>Tactics <span class="fig-note">lichess puzzles</span></figcaption>
-        <div class="chart-box"><canvas id="chartTactics"></canvas></div>
+         <figcaption>Tactics pipeline <span class="fig-note">parsed · legal · strict score</span></figcaption>
+         <div class="chart-box"><canvas id="chartTactics"></canvas><p class="chart-status" id="chartTacticsStatus"></p></div>
       </figure>
       <figure class="chart-figure">
-        <figcaption>Move strength <span class="fig-note">vs stockfish</span></figcaption>
-        <div class="chart-box"><canvas id="chartStock"></canvas></div>
+         <figcaption>Move strength <span class="fig-note">bestmove task · Stockfish</span></figcaption>
+         <div class="chart-box"><canvas id="chartStock"></canvas><p class="chart-status" id="chartStockStatus"></p></div>
       </figure>
       <figure class="chart-figure chart-span2">
-        <figcaption>Progress over time <span class="fig-note">avg legal rate</span></figcaption>
-        <div class="chart-box"><canvas id="chartHistory"></canvas></div>
+         <figcaption>Progress over time <span class="fig-note">average legal rate</span></figcaption>
+         <div class="chart-box"><canvas id="chartHistory"></canvas><p class="chart-status" id="chartHistoryStatus"></p></div>
       </figure>
     </section>
 
@@ -158,17 +181,17 @@
     <section class="board">
       <div class="board-head">
         <h2>Record</h2>
-        <span class="board-note">per task, per entrant</span>
+         <span class="board-note">per task, per model</span>
       </div>
       <div class="table-wrap">
         <table>
           <thead>
             <tr>
-              <th class="num">#</th><th>entrant</th><th>task</th><th>form</th><th class="num">n</th>
+               <th class="num">#</th><th>model</th><th>task</th><th>form</th><th>condition</th><th class="num">n</th>
               <th class="num">parse</th><th class="num">legal</th><th class="num">score</th><th></th>
             </tr>
           </thead>
-          <tbody id="cellsBody"><tr><td colspan="9" class="empty">no games recorded yet</td></tr></tbody>
+          <tbody id="cellsBody"><tr><td colspan="10" class="empty">no scored cells yet</td></tr></tbody>
         </table>
       </div>
     </section>
