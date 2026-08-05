@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-08-05T20:19:46Z",
+ "updated_at": "2026-08-05T20:24:49Z",
  "cell": {
   "model": "gemma4-e2b",
   "task": "mate-selection-test",
@@ -9,101 +9,65 @@
  "task_kind": "mate_selection",
  "run_kind": "mate-selection",
  "run_id": "gemma1000-w1",
- "sample_idx": 241,
+ "sample_idx": 244,
  "sample_total": 500,
- "position_id": "mate-sel-21957",
- "prompt": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves and their strategic explanation.\nThe FEN of the given chess board is \"8/2k3p1/p3P1Bp/1p5P/8/6r1/PPP1K3/4n3 w - - 0 33\". Which move is better? MoveA:e6e7 By moving a white pawn forward, the center becomes more spacious, offering more opportunities to move pieces freely. MoveB:e2e1 Exchange a minor piece for a major one, and gain a tactical advantage. ",
- "model_input": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves and their strategic explanation.\nThe FEN of the given chess board is \"8/2k3p1/p3P1Bp/1p5P/8/6r1/PPP1K3/4n3 w - - 0 33\". Which move is better? MoveA:e6e7 By moving a white pawn forward, the center becomes more spacious, offering more opportunities to move pieces freely. MoveB:e2e1 Exchange a minor piece for a major one, and gain a tactical advantage. \nAnswer with exactly one of: MoveA:<move> or MoveB:<move>. Only output the line, nothing else.\nYou MUST output an answer. If you cannot determine which move is better with confidence, output your best guess from the two candidates anyway. An answer is required; refusing to answer is not acceptable.",
- "output": "MoveA:e6e7",
- "reasoning": "The user wants me to evaluate two candidate moves for White in a given chess position and select the better one.\n\nFEN: `8/2k3p1/p3P1Bp/1p5P/8/6r1/PPP1K3/4n3 w - - 0 33`\nIt is White's turn to move.\n\n**Material Advantage:** Equal material (White has Rooks, Bishop, Knight vs Black having Rook, Knight). Wait, let's check the pieces on the board based on the FEN.\nWhite: K(e2), P(a2, b2, c2, f2, g3, h4), B(g6) - wait, the bishop is on g6? No, looking at the FEN: `8/2k3p1/p3P1Bp/1p5P/8/6r1/PPP1K3/4n3 w - - 0 33`.\nWhite pieces: King on e2, Pawns on a2, b2, c2, f2, g3, h4. A Bishop on g6? This seems highly unusual if it's White's turn and the setup implies standard development. Let's re-examine the FEN structure carefully.\n\nBoard representation:\nRank 8: 8/2k3p1 (Black King on c8, Pawn on g7)\nRank 7: p3P1Bp (Black Pawn on a7, White Pawn on e7, White Bishop on b7?) -> The 'B' is on b7 according to this rank description.\nRank 6: 1p5P (Black Pawn on b6, White Pawn on h6)\nRank 5: 1p5 (Black Pawn on b5)\nRank 4: 8\nRank 3: 6r1 (Black Rook on g3)\nRank 2: PPP1K3 (White Pawns on a2, b2, c2, White King on e2)\nRank 1: 4n3 (Black Knight on e1)\n\nLet's list the pieces explicitly:\nWhite: K(e2), Ps(a2, b2, c2, f2, g3, h4). (Total 6 pawns + K)\nBlack: K(c8), N(e1), R(g3), B(b7?), Ps(a7, b6, b5, g7).\n\nWait, the FEN shows: `8/2k3p1/p3P1Bp/1p5P/8/6r1/PPP1K3`\nRank 7: `2k3p1` (Black King on c8, Pawn on g7)\nRank 6: `p3P1Bp` (Black Pawn on a6? No, that would be a black pawn. It looks like `p` then `3` then `P` then `B` then `p`).\nIf we parse strictly by character:\nR7: p (Black Pawn) 3 (empty) P (White Pawn) 1 (empty) B (White Bishop) p (Black Pawn) -- This interpretation is confusing because usually pieces alternate colors unless specified otherwise.\n\nStandard FEN parsing assumes pieces listed belong to the side whose turn it is *not* if they are separated by '/' boundaries, but here we just look at the configuration.\n\nLet's assume standard notation where uppercase letters are White pieces and lowercase are Black pieces.\n\n`8/2k3p1/p3P1Bp/1p5P/8/6r1/PPP1K3`\n\nRow 7: `2k3p1` -> Black King on c8, Pawn on g7.\nRow 6: `p3P1Bp` -> Black Pawn on a6? No, maybe a black pawn on a6, followed by empty squares, White Pawn on e6? Then a Bishop on b6? This layout strongly suggests illegal placement or non-standard reading if interpreted literally as algebraic notation within the row string.\n\nHowever, I must treat the input FEN as valid. In most contexts, when analyzing positions derived from engines or databases, the FEN provided defines the state precisely.\n\nKey features visible:\n1. Black has a very active Rook on g3 and a Knight on e1.\n2. White has a passed pawn on e7, supported by the King on e2.\n3. Black's King is relatively safe on c8.\n4. White's King is somewhat exposed on e2.\n\nCandidate Moves:\nMoveA: e6e7 (This implies capturing something on e6 and then moving the pawn to e7, OR perhaps it means moving the pawn currently on e7 to e6, and then another move e7? Given the context of engine suggestions, this likely refers to a specific sequence or a single move notation error in the prompt.) Assuming MoveA means moving the pawn on e7 somewhere, or perhaps trying to exploit the central space. Since there is already a pawn on e7, this move name is ambiguous without knowing what piece is captured or moved first. If it means $e7 \\to e6$, it blocks nothing immediately. If it means $e7 \\to e8$ (if possible), it advances. But the suggestion says \"By moving a white pawn forward, the center becomes more spacious\".\n\nMoveB: e2e1 (Exchange a minor piece for a major one, and gain a tactical advantage). This implies exchanging the King (on e2) for the Knight (on e1)? Or perhaps exchanging a piece involving e2 and e1? If it means $Kxe1$? That requires a piece on e1 for White to capture. The Knight is on e1 (black). So $Kxe1$ is impossible unless the notation implies a different exchange entirely. Perhaps it means $Kxe1$ if the Knight was white, or some other complex maneuver. Given the text \"Exchange a minor piece for a major one\", this hints at a trade sacrifice or simplification leading to a favorable endgame.\n\n**Evaluation Strategy:**\nSince I cannot perfectly visualize the board due to potential ambiguity in the FEN transcription regarding piece locations (especially around Rank 6), I must rely heavily on positional intuition guided by the descriptions provided for the candidate moves.\n\nPosition assessment: Black has significant pressure with the centralized Rook and Knight. White needs to consolidate or create threats.\n\nMoveA: Focuses on space and central control via pawn movement.\nMoveB: Focuses on immediate tactical exchanges.\n\nIn endgames, simplifying into favorable structures is often good, especially if the opponent's coordination is poor. However, forcing tactical advantages are usually preferred if available.\n\nGiven the presence of the advanced White pawn on e7, advancing it further (or creating tension) seems strategically sound if it doesn't expose the king too much.\n\nLet's assume the primary objective is maximizing White's winning chances.\n\nIf MoveA ($e6e7$) aims to open lines, it addresses the spatial constraint.\nIf MoveB ($e2e1$) aims for tactics, it might lead to a forced win or decisive material gain.\n\nWithout running an engine, I lean towards positional improvement unless a clear tactic exists. The description for MoveB (\"Exchange a minor piece for a major one\") sounds overly dramatic for a simple exchange unless it leads directly to mate or massive material gain.\n\nI will tentatively favor the positional approach suggested by MoveA.",
- "finished": true,
- "token_usage": {
-  "input_tokens": 226,
-  "output_tokens": 1623,
-  "reasoning_tokens": 1611,
-  "total_tokens": 1849,
-  "cache_read_tokens": null,
-  "cache_write_tokens": null,
-  "cache_hit_tokens": null,
-  "cache_miss_tokens": null,
-  "usage_source": "hf_transformers",
-  "usage_complete": true,
-  "stream_events": null,
-  "time_to_first_token_ms": null,
-  "generation_seconds": 127.21123051643372,
-  "output_tokens_per_second": 12.75830752844053,
-  "reasoning_tokens_per_second": 12.663976234330065
- },
- "phase": "scored",
- "status": "correct",
- "move": "e6e7",
- "compliance": true,
+ "position_id": "mate-sel-22191",
+ "prompt": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves and their strategic explanation.\nThe FEN of the given chess board is \"2rb2k1/1RrR1pp1/1p5p/4p3/8/5N1P/5PP1/6K1 w - - 6 32\". Which move is better? MoveA:g2g4 When a white pawn advances, it widens the kingside, allowing white greater liberty in moving pieces. MoveB:d7f7 Give up a piece to create an open pathway or diagonal near the enemy king ",
+ "model_input": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves and their strategic explanation.\nThe FEN of the given chess board is \"2rb2k1/1RrR1pp1/1p5p/4p3/8/5N1P/5PP1/6K1 w - - 6 32\". Which move is better? MoveA:g2g4 When a white pawn advances, it widens the kingside, allowing white greater liberty in moving pieces. MoveB:d7f7 Give up a piece to create an open pathway or diagonal near the enemy king \nAnswer with exactly one of: MoveA:<move> or MoveB:<move>. Only output the line, nothing else.\nYou MUST output an answer. If you cannot determine which move is better with confidence, output your best guess from the two candidates anyway. An answer is required; refusing to answer is not acceptable.",
+ "output": "",
+ "reasoning": "The user wants me to evaluate two candidate moves for White given a specific FEN: `2rb2k1/1RrR1pp1/1p5p/4p3/8/5N1P/5PP1/6K1 w - - 6 32`.\n\n**FEN Analysis:**\n`2rb2k1/1RrR1pp1/1p5p/4p3/8/5N1P/5PP1/6K1 w - - 6 32`\nIt is White's turn (w).\nWhite has Rooks on c7, d7, and a7 (Wait, let's re-examine the FEN structure carefully).\n\nBoard setup:\nRank 8: 2 r b 2 k 1 (Black King on g8, Rook on c8, Bishop on b8)\nRank 7: 1 R r R 1 p p 1 (White Rook on b7, Rook on d7, Rook on c7... wait, this looks highly unusual if we assume standard algebraic notation placement based on the input string.)\n\nLet's parse the FEN strictly:\nRow 8: 2 r b 2 k 1 (a8=2, b8=r, c8=b, d8=2, e8=k, f8=1, g8=empty, h8=empty) -> This implies Black has pieces on b8 and c8, but 'r' and 'b' are usually lowercase for black pieces. Let's assume standard interpretation where uppercase indicates White, lowercase indicates Black.\n\nIf we look at the provided FEN: `2rb2k1/1RrR1pp1/1p5p/4p3/8/5N1P/5PP1/6K1 w - - 6 32`\n\nWhite pieces: K(g1), N(f3), P(h3, g2, f2). Rooks seem misplaced or there's a typo in my reading of the visual representation vs the text parsing.\n\nLet's map coordinates:\nRank 8: . . r b . k . (a8=., b8=r, c8=b, d8=., e8=k, f8=., g8=., h8=.) -- Wait, the FEN starts with '2'. So a8=empty, b8=empty. The first character is the square index.\n\nStandard FEN parsing:\n`2rb2k1`: Rank 8. Empty, Empty, Black Rook (r), Black Bishop (b), Empty, Black King (k), Empty. (This seems impossible as it only lists 6 squares unless some are implied empty).\n\nLet's rely on the explicit piece locations indicated by the FEN structure:\nWhite pieces: R on b7, R on d7, R on c7 (if that's what 'RrR' means across ranks).\nBlack pieces: R on c8, B on b8, K on g8.\n\nGiven the complexity and potential ambiguity of manual transcription verification, I must trust the engine evaluation context implicitly suggested by the prompt structure, focusing on the strategic explanations provided.\n\n**Candidate Moves:**\nMoveA: g2g4 (White pawn push)\nMoveB: d7f7 (Giving up a piece?)\n\n**Strategic Explanation Analysis:**\nMoveA: g2g4: \"When a white pawn advances, it widens the kingside, allowing white greater liberty in moving pieces.\" (Positional gain, space advantage).\nMoveB: d7f7: \"Give up a piece to create an open pathway or diagonal near the enemy king.\" (Sacrifice/exchange strategy).\n\n**Evaluation Context:**\nThe position appears relatively closed, though White has centralized rooks. Black's king is somewhat exposed or constrained depending on the exact configuration.\n\nSince I don't have the full engine depth, I must assess which move aligns better with general principles or the provided rationale.\n\nIf the position is complex and tactical opportunities exist, sacrificing material (MoveB) might be warranted if it leads to a decisive attack or massive positional compensation. If the position favors slow maneuvering and space control, advancing pawns (MoveA) is preferred.\n\nWithout seeing the actual board state clearly, I lean towards the positional advice unless immediate tactics scream otherwise. Pawn pushes often dictate the flow in middlegames.\n\nHowever, the description for MoveB (\"Give up a piece\") suggests a concrete sacrifice.\n\nLet's assume this is a known tactical situation favoring simplification or disruption. In many endgames or complex positions, forcing lines via sacrifices can be key.\n\nGiven the instruction: \"If you cannot determine which move is better with confidence, output your best guess from the two candidates anyway.\"\n\nI will select the move that sounds more strategically sound based on typical endgame/middlegame principles, leaning slightly towards positional improvement unless the sacrifice is obviously winning.\n\nIf White plays g2g4, they solidify the kingside structure.\nIf White plays d7f7, this implies capturing something on d7 or making a structural concession involving a piece exchange. Since d7 currently holds a White Rook according to the FEN snippet",
+ "finished": false,
+ "token_usage": null,
+ "phase": "generating",
+ "status": null,
+ "move": null,
+ "compliance": null,
  "correct": {
-  "move": "MoveA:e6e7",
+  "move": "MoveA:g2g4",
   "note": "MATE expert choice"
  },
  "oracle": {
   "kind": "mate_selection",
-  "candidate_a": "e6e7",
-  "candidate_b": "e2e1",
+  "candidate_a": "g2g4",
+  "candidate_b": "d7f7",
   "truth_label": "A"
  },
- "fen": "8/2k3p1/p3P1Bp/1p5P/8/6r1/PPP1K3/4n3 w - - 0 33",
+ "fen": "2rb2k1/1RrR1pp1/1p5p/4p3/8/5N1P/5PP1/6K1 w - - 6 32",
  "pieces": [
   {
-   "sq": "e1",
-   "color": "b",
-   "kind": "N"
-  },
-  {
-   "sq": "a2",
-   "color": "w",
-   "kind": "P"
-  },
-  {
-   "sq": "b2",
-   "color": "w",
-   "kind": "P"
-  },
-  {
-   "sq": "c2",
-   "color": "w",
-   "kind": "P"
-  },
-  {
-   "sq": "e2",
+   "sq": "g1",
    "color": "w",
    "kind": "K"
   },
   {
-   "sq": "g3",
-   "color": "b",
-   "kind": "R"
-  },
-  {
-   "sq": "b5",
-   "color": "b",
-   "kind": "P"
-  },
-  {
-   "sq": "h5",
+   "sq": "f2",
    "color": "w",
    "kind": "P"
   },
   {
-   "sq": "a6",
+   "sq": "g2",
+   "color": "w",
+   "kind": "P"
+  },
+  {
+   "sq": "f3",
+   "color": "w",
+   "kind": "N"
+  },
+  {
+   "sq": "h3",
+   "color": "w",
+   "kind": "P"
+  },
+  {
+   "sq": "e5",
    "color": "b",
    "kind": "P"
   },
   {
-   "sq": "e6",
-   "color": "w",
+   "sq": "b6",
+   "color": "b",
    "kind": "P"
-  },
-  {
-   "sq": "g6",
-   "color": "w",
-   "kind": "B"
   },
   {
    "sq": "h6",
@@ -111,78 +75,88 @@
    "kind": "P"
   },
   {
+   "sq": "b7",
+   "color": "w",
+   "kind": "R"
+  },
+  {
    "sq": "c7",
    "color": "b",
-   "kind": "K"
+   "kind": "R"
+  },
+  {
+   "sq": "d7",
+   "color": "w",
+   "kind": "R"
+  },
+  {
+   "sq": "f7",
+   "color": "b",
+   "kind": "P"
   },
   {
    "sq": "g7",
    "color": "b",
    "kind": "P"
+  },
+  {
+   "sq": "c8",
+   "color": "b",
+   "kind": "R"
+  },
+  {
+   "sq": "d8",
+   "color": "b",
+   "kind": "B"
+  },
+  {
+   "sq": "g8",
+   "color": "b",
+   "kind": "K"
   }
  ],
  "n": 8,
- "record_id": "mate-sel-21957",
+ "record_id": "mate-sel-22191",
  "position": {
-  "id": "mate-sel-21957",
+  "id": "mate-sel-22191",
   "n": 8,
   "turn": "w",
-  "fen": "8/2k3p1/p3P1Bp/1p5P/8/6r1/PPP1K3/4n3 w - - 0 33",
+  "fen": "2rb2k1/1RrR1pp1/1p5p/4p3/8/5N1P/5PP1/6K1 w - - 6 32",
   "pieces": [
    {
-    "sq": "e1",
-    "color": "b",
-    "kind": "N"
-   },
-   {
-    "sq": "a2",
-    "color": "w",
-    "kind": "P"
-   },
-   {
-    "sq": "b2",
-    "color": "w",
-    "kind": "P"
-   },
-   {
-    "sq": "c2",
-    "color": "w",
-    "kind": "P"
-   },
-   {
-    "sq": "e2",
+    "sq": "g1",
     "color": "w",
     "kind": "K"
    },
    {
-    "sq": "g3",
-    "color": "b",
-    "kind": "R"
-   },
-   {
-    "sq": "b5",
-    "color": "b",
-    "kind": "P"
-   },
-   {
-    "sq": "h5",
+    "sq": "f2",
     "color": "w",
     "kind": "P"
    },
    {
-    "sq": "a6",
+    "sq": "g2",
+    "color": "w",
+    "kind": "P"
+   },
+   {
+    "sq": "f3",
+    "color": "w",
+    "kind": "N"
+   },
+   {
+    "sq": "h3",
+    "color": "w",
+    "kind": "P"
+   },
+   {
+    "sq": "e5",
     "color": "b",
     "kind": "P"
    },
    {
-    "sq": "e6",
-    "color": "w",
+    "sq": "b6",
+    "color": "b",
     "kind": "P"
-   },
-   {
-    "sq": "g6",
-    "color": "w",
-    "kind": "B"
    },
    {
     "sq": "h6",
@@ -190,14 +164,44 @@
     "kind": "P"
    },
    {
+    "sq": "b7",
+    "color": "w",
+    "kind": "R"
+   },
+   {
     "sq": "c7",
     "color": "b",
-    "kind": "K"
+    "kind": "R"
+   },
+   {
+    "sq": "d7",
+    "color": "w",
+    "kind": "R"
+   },
+   {
+    "sq": "f7",
+    "color": "b",
+    "kind": "P"
    },
    {
     "sq": "g7",
     "color": "b",
     "kind": "P"
+   },
+   {
+    "sq": "c8",
+    "color": "b",
+    "kind": "R"
+   },
+   {
+    "sq": "d8",
+    "color": "b",
+    "kind": "B"
+   },
+   {
+    "sq": "g8",
+    "color": "b",
+    "kind": "K"
    }
   ],
   "source": "MATE testset"
