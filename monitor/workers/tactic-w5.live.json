@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-08-08T11:58:32Z",
+ "updated_at": "2026-08-08T11:58:55Z",
  "cell": {
   "model": "deepseek-v4-flash",
   "task": "mate-selection-test",
@@ -9,49 +9,54 @@
  "task_kind": "mate_selection",
  "run_kind": "mate-selection",
  "run_id": "mate-tactic-w5",
- "sample_idx": 2,
+ "sample_idx": 3,
  "sample_total": 200,
- "position_id": "mate-sel-31473",
- "prompt": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves and their tactics.\nThe FEN of the given chess board is \"3r1k2/8/p5p1/Pp2b1p1/2pP1n2/4N3/1P3R2/3R2K1 w - - 0 43\". Which move is better? MoveA:d4e5,tactic d4e5 d8d3 d1d3 c4d3 Trade the lower value piece for a higher value piece.  MoveB:e3f5,tactic e3f5 g6f5 Trade the lower value piece for a higher value piece. ",
- "model_input": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves and their tactics.\nThe FEN of the given chess board is \"3r1k2/8/p5p1/Pp2b1p1/2pP1n2/4N3/1P3R2/3R2K1 w - - 0 43\". Which move is better? MoveA:d4e5,tactic d4e5 d8d3 d1d3 c4d3 Trade the lower value piece for a higher value piece.  MoveB:e3f5,tactic e3f5 g6f5 Trade the lower value piece for a higher value piece. \nAnswer with exactly one of: MoveA:<move> or MoveB:<move>. Only output the line, nothing else.\nYou MUST output an answer. If you cannot determine which move is better with confidence, output your best guess from the two candidates anyway. An answer is required; refusing to answer is not acceptable.",
- "output": "MoveA:d4e5",
- "reasoning": "We need answer chess move. Need analyze position. We have FEN: \"3r1k2/8/p5p1/Pp2b1p1/2pP1n2/4N3/1P3R2/3R2K1 w - - 0 43\"\n\nLet's parse board. FEN ranks 8 to 1:\nr1: \"3r1k2\" => a8 empty, b8 empty, c8 empty, d8 black rook, e8 empty, f8 black king, g8 empty, h8 empty.\nr2: \"8\" => all empty.\nr3: \"p5p1\" => a6 black pawn, b5? Wait \"p5p1\": char1 p => a6 pawn, then 5 empties b6,c6,d6,e6,f6, then g6 black pawn, h6 empty.\nr4: \"Pp2b1p1\" => a5 white pawn, b5 black pawn, c5,c? Actually \"P p 2 b 1 p 1\": a5 P, b5 p, c5 empty, d5 empty, e5 black bishop, f5 empty, g5 black pawn, h5 empty.\nr5: \"2pP1n2\" => a4 empty, b4 empty, c4 black pawn, d4 white pawn, e4 empty, f4 black knight, g4 empty, h4 empty.\nr6: \"4N3\" => a3 empty,b3 empty,c3 empty,d3 empty,e3 white knight,f3 empty,g3 empty,h3 empty.\nr7: \"1P3R2\" => a2 empty,b2 white pawn,c2 empty,d2 empty,e2 empty,f2 white rook,g2 empty,h2 empty.\nr8: \"3R2K1\" => a1 empty,b1 empty,c1 empty,d1 white rook,e1 empty,f1 empty,g1 white king,h1 empty.\n\nWhite to move, castling none, en passant none, halfmove 43.\n\nPieces:\nWhite: King g1, Rooks d1 and f2, Knight e3, Pawns a5,b2,d4. Also? bishop none, queen none. Total K,R,R,N,3 pawns = 4+5+5+3+3=20 points? Actually.\nBlack: King f8, Rook d8, Bishop e5, Knight f4, Pawns a6,b5,c4,g5,g6. Also? Total K,R,B,N,5 pawns = 4+5+3+3+5=20. Material equal? White has two rooks vs rook bishop knight? Wait white rooks 10, knight 3, pawns 3 =16? K not counted. Black rook5 bishop3 knight3 pawns5 =16. Equal.\n\nPosition: White has heavy pieces on d-file and f-file. Black king f8. Candidate moves:\nMoveA: d4xe5, tactic d4e5 d8d3 d1d3 c4d3 Trade lower value piece (pawn d4) for higher value bishop e5. Sequence: 1. dxe5? Actually d4 pawn captures bishop e5. Then black rook d8 to d3? Wait after d4xe5, black rook d8? It can move to d3? Need examine: Rook d8 on d-file, d4 pawn moved to e5, so d-file open from d8 to d1? Squares d7,d6,d5,d4,d3,d2,d1. White rook d1 controls d-file, but black rook could move d8-d3+? It would move to d3, attacking? d3 square is empty? White rook d1 behind, knight e3? Actually d3 empty. Rook d8 to d3 is legal if no pieces between: d7,d6,d5,d4 (vacated), d3 empty. Yes 1...Rd3 attacks? White rook d1 on same file, black rook at d3 would be adjacent with white rook at d1 with d2 empty? Actually d2 empty, so black rook on d3 attacks d1 rook (same file with d2 empty). White replies Rxd3? d1 rook captures d3? But wait d2 empty, yes rook d1 to d3 captures black rook. Then black c4 pawn captures d3: c4xd3. Net: White wins bishop (3) for pawn (1) initially, then trades rooks: Black rook captures? Sequence: 1 dxe5 Rd3 2 Rxd3 cxd3. After 2...cxd3, black has pawn on d3, white lost rook d1, black lost rook d8, bishop e5, pawn c4? Let's tally: Initial material equal. After 1.dxe5: White pawn removed (d4) black bishop removed: white +3-1=+2. Then 1...Rd3 black rook moves, attacks rook. 2.Rxd3 white captures black rook: white gains +5, black rook lost. Black 2...cxd3 captures white rook: black gains +5, white rook lost. Net after sequence: White captures bishop e5 and rook d8 (8 points), loses pawn d4 and rook d1 (5+1=6) plus? Wait black c4 pawn captured white rook, so white lost rook, not rook? Let's do material: White lost pawn d4 (1) and Rook d1 (5) =6. Black lost Bishop e5 (3), Rook d8 (5), and pawn c4? Actually c4 pawn moved to d3, it survived, so black lost pieces: bishop+rook =8, pawn c4 removed from c4 but became d3 pawn (still exists) so no loss. Net white gains +2 (bishop+rook vs pawn+rook =8 vs6 = +2). But white also has a black pawn on d3 extra, actually material count final: White pieces: King, Rook f2, Knight e3, Pawns a5,b2; Black pawn d3? Black pieces: King, Bishop? bishop gone, Knight f4, Pawns a6,b5,d3,g5,g6. Material: White 5+3+2=10? Rook5+Knight3+2 pawns=10. Black Knight3+5 pawns=15? Wait black pawns a6,b5,d3,g5,g6 =5 pawns =5 plus knight 3 =8? Actually pawns 5 points, knight 3 =>8; White rook5+knight3+pawns2=10. So white +2. Yes.\n\nMoveB: e3f5, tactic e3f5 g6f5 Trade lower value piece for higher value piece. White knight on e3 captures f5? Wait e3 knight moves to f5? Knight moves from e3 to f5 is legal: e3->f5 (2 up 1 left? Coordinates: e3 to f5 is (+1,+2), yes). In square f5 there is black pawn? Board rank 5: \"Pp2b1p1\": a5 P, b5 p, c5 empty, d5 empty, e5 black bishop, f5 empty, g5 black pawn, h5 empty. So f5 is empty! Wait candidate says e3f5 tactic e3f5 g6f5 Trade lower value piece for higher value piece. But e3xf5? There is no piece on f5. Maybe notation e3f5 means knight moves to f5, not capture. Then black pawn g6 captures f5? g6 pawn moves to f5 (diagonal capture) if white knight on f5. So sequence: 1.Nf5 (not capture) black gxf5 captures knight, pawn g6 from g6 to f5, capturing knight. White sacrificed knight (3) for black pawn? Actually white knight moved to f5, black pawn captures it; material: White loses knight 3, black loses nothing (pawn g6 moved to f5 but still exists). That is bad: \"Trade lower value piece for higher value piece\" is wrong: White knight 3 > black pawn 1, and no immediate capture. Unless Nf5 attacks something? After 1.Nf5, black gxf5, white gains? Actually black pawn g6 captures knight; black pawn becomes f5, still exists. White lost knight for no piece. Very bad. Maybe f5 square has black bishop? Wait e5 bishop, f5 empty. Maybe e3f5 means knight captures? No, f5 empty. Could there be black pawn g6? Knight on f5 could be captured by g6 pawn; yes.\n\nLet's evaluate MoveA seems clearly better: wins bishop for pawn with tactical sequence. MoveB loses knight for nothing? But maybe Nf5 is a fork/check? Let's examine: White knight on f5 attacks d6, e7, g7, h6, h4, g3, e3, d4. It attacks e7? black king at f8, d6 etc. Does it attack anything important? It attacks g7 pawn? Actually black g6 pawn at g6, knight f5 attacks h6, g7 (pawn), h4, d6, e7, d4 (white pawn), e3, g3. It attacks black g7 pawn, but there is no g7 pawn (g6 pawn). It attacks e7 empty, d6 empty, h6 empty, h4 empty. It also attacks d4 white pawn, e3 itself. It doesn't attack king or rook. Black's g6 pawn can capture it, so white loses knight for nothing likely. So MoveB is terrible.\n\nBut maybe f5 is not empty? Let's verify FEN \"3r1k2/8/p5p1/Pp2b1p1/2pP1n2/4N3/1P3R2/3R2K1 w - - 0 43\": rank 5 \"Pp2b1p1\": positions: a5=P, b5=p, c5=empty, d5=empty, e5=b (black bishop), f5=empty? After \"b1\" means one empty at f5, then \"p\" at g5, then empty h5. Yes f5 empty. So e3f5 is not a capture. It's a blunder because gxf5. Candidate label \"Trade lower value piece for higher value piece\" is nonsensical unless they mean knight on f5 attacks rook? No. Black could instead not capture? But likely gxf5 is obvious. Thus MoveA.\n\nNeed output exactly \"MoveA:d4e5\" maybe with move notation? User asks \"Which move is better? MoveA:d4e5,tactic... MoveB:e3f5,... Answer exactly one of: MoveA:<move> or MoveB:<move>. Only output line, nothing else.\" So output \"MoveA:d4e5\". Need ensure no extra.",
+ "position_id": "mate-sel-31513",
+ "prompt": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves and their tactics.\nThe FEN of the given chess board is \"2kr3r/1pp1qpp1/p3pn1p/8/2BbP3/2N1QP2/PP3P1P/3R1RK1 w - - 0 16\". Which move is better? MoveA:e3g5,tactic e3g5 h6g5 Trade the lower value piece for a higher value piece.  MoveB:e3f4,tactic e3f4 g7g5 f4d2 d4a7 d2c2 f6d7  ",
+ "model_input": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves and their tactics.\nThe FEN of the given chess board is \"2kr3r/1pp1qpp1/p3pn1p/8/2BbP3/2N1QP2/PP3P1P/3R1RK1 w - - 0 16\". Which move is better? MoveA:e3g5,tactic e3g5 h6g5 Trade the lower value piece for a higher value piece.  MoveB:e3f4,tactic e3f4 g7g5 f4d2 d4a7 d2c2 f6d7  \nAnswer with exactly one of: MoveA:<move> or MoveB:<move>. Only output the line, nothing else.\nYou MUST output an answer. If you cannot determine which move is better with confidence, output your best guess from the two candidates anyway. An answer is required; refusing to answer is not acceptable.",
+ "output": "MoveB:e3f4",
+ "reasoning": "We need answer chess move. Need evaluate. Need choose between MoveA e3g5 and MoveB e3f4 given FEN. Need reason. Let's parse FEN: \"2kr3r/1pp1qpp1/p3pn1p/8/2BbP3/2N1QP2/PP3P1P/3R1RK1 w - - 0 16\"\n\nBoard: Black king c8, rooks d8 h8. White king g1 rook d1 f1. White pieces: Qe3, Nc3, bishop c4, pawns a2 b2 e4 f2 g2 h2? FEN ranks:\n8: \"2kr3r\" => a8 empty b8 empty c8 black king d8 black rook e8 empty f8 empty g8 empty h8 black rook\n7: \"1pp1qpp1\" => a7 empty b7 black pawn c7 black pawn d7 empty e7 black queen f7 black pawn g7 black pawn h7 empty\n6: \"p3pn1p\" => a6 black pawn b6 empty c6 empty d6 empty e6 black pawn f6 black knight g6 empty h6 black pawn\n5: \"8\" empty\n4: \"2BbP3\" => a2? Wait rank 4: a4 empty b4 empty c4 white bishop d4 black bishop e4 white pawn f4 empty g4 empty h4 empty\n3: \"2N1QP2\" => a3 empty b3 empty c3 white knight d3 empty e3 white queen f3 empty? Wait \"2N1QP2\": positions: a empty, b empty, c N, d empty? Actually string length 7? Let's parse: \"2N1QP2\" = two empties (a,b), N(c), one empty(d), Q(e), P(f), two empties(g,h). So Qe3, pawn f3. Yes.\n2: \"PP3P1P\" => a2 P b2 P c2 empty d2 empty e2 empty f2 P g2 empty h2 P.\n1: \"3R1RK1\" => a1 empty b1 empty c1 empty d1 R e1 empty f1 R g1 K h1 empty.\nWhite to move.\n\nPosition: Black king c8, queen e7, rooks d8/h8, bishop d4, knight f6, pawns b7 c7 a6 e6 f7 g7 h6. White pieces: Qe3, Nc3, Bc4, pawns a2 b2 e4 f3 f2 g2 h2, rooks d1 f1, king g1.\n\nCandidates:\nMoveA: Qe3-g5. Tactics: e3g5 h6g5 Trade lower value piece for higher? Wait queen captures? e3g5 from e3 to g5: Queen moves to g5, attacking? Black pawn h6 can capture queen? h6-g5 pawn captures queen on g5. So White queen (9) captured by black pawn (1): White loses queen for pawn? That's terrible. But tactic says \"Trade the lower value piece for a higher value piece.\" Maybe e3g5 is queen fork? Let's examine: Qg5+? Queen on g5 checks king? Black king c8, queen g5 diagonal to c1? No check. It attacks g7 pawn? Actually Qg5 attacks g7 pawn? Queen diagonal g5-f6-e7? It attacks f6 knight and e7 queen? From g5, queen attacks f6 knight, e7 queen along diagonal g5-f6-e7-d8? Yes Qg5 attacks Nf6 and Qe7 (diagonal), also h6 pawn? Queen on g5 attacks pawn g7? vertically g5-g7 (g6 empty) yes attacks g7. But black h6 pawn can capture queen (h6xg5), since queen on g5 adjacent. So Qg5 is a queen sacrifice? Actually black pawn h6 takes queen, that's a pawn capturing queen. White then? Maybe white bishop d4? Wait black bishop d4 on same diagonal? White Qg5 maybe pins? Let's analyze: Qe3-g5 is a blunder because hxg5 wins queen. The \"tactic\" says trade lower value piece for higher: White queen captures? h6g5: pawn captures queen, so white traded queen for pawn? Not beneficial. Maybe there is a tactic: Qg5+?? Wait if queen moves to g5, black h6 pawn can capture because h6 pawn is black; yes black pawn at h6 moves to g5 capturing queen. So MoveA seems losing queen. But maybe black cannot because queen on g5 gives check to king along g5-d8? Actually queen on g5 attacks d8 via g5-f6-e7-d8; black king c8? Diagonal d8-c7-b6 not c8, no. Queen g5 attacks e7 queen, f6 knight, g7 pawn, g8? It also attacks d8 rook along diagonal g5-f6-e7-d8, but e7 occupied by black queen (blocked). So not check. So black simply hxg5. So MoveA is awful. Why candidate tactic says \"Trade the lower value piece for a higher value piece.\" Maybe move notation e3g5 means capture? Wait Qe3-g5: Queen moves, not capture. Tactic text \"e3g5 h6g5 Trade the lower value piece for a higher value piece.\" That seems as if White queen captures something? But h6g5 is black pawn captures queen; from white perspective lower value (pawn) captures higher queen, not \"trade lower for higher\" maybe they mean black trades pawn for queen, which is lower for higher (black gains). But moveA is bad.\n\nMoveB: Qe3-f4. Tactic: e3f4 g7g5 f4d2 d4a7 d2c2 f6d7. Let's parse: After Qf4, black g7-g5 attacks queen? Queen f4, pawn g5 attacks f4? Pawn at g7 moves to g5, now black pawn g5 attacks f4 (diagonal down? From g5 to f4). So black attacks queen with pawn g5. White moves Qf4-d2. Then black B d4-a7? Wait \"d4a7\" is bishop from d4 to a7 capturing?? White queen on d2? Bishop d4 to a7 diagonal d4-c5-b6-a7; captures? There is white pawn a2? Actually a7 is empty? Rank 7: a7 empty, b7 black pawn, c7 black pawn. So Bxd4? Wait B d4-a7: bishop moves to a7, maybe attacks/captures? a7 empty, but b6 empty c5 empty, so bishop goes to a7, maybe threatening? Then White \"d2c2\": Qd2-c2. Then Black \"f6d7\": Nf6-d7. This is a sequence of quiet moves not obviously tactical. Need evaluate if MoveB better than MoveA, likely yes. But need be certain: MoveA loses queen for pawn, MoveB at least retreats queen, so MoveB better. However need output exactly MoveB:e3f4. But let's not rush: maybe MoveA e3g5 actually captures? Wait FEN has black pawn h6 at h6, queen e3 can move to g5. There is no black piece on g5; it's empty. So Qg5 is just move. Candidate tactic \"e3g5 h6g5 Trade the lower value piece for a higher value piece.\" It implies black replies hxg5, so white loses queen (9) for pawn (1). That's losing huge. Could there be a refutation? Maybe after Qg5 hxg5, White has Bxf7+? Let's see: White bishop c4 can take f7? Diagonal c4-d5-e6-f7, but e6 black pawn blocks? Actually c4 to f7: c4-d5-e6-f7, e6 is black pawn so blocked. Bishop c4 maybe takes d5? No. Queen sacrifice might open h-file? No. So MoveA terrible.\n\nMoveB Qf4, is it legal? Queen e3 to f4. It attacks f6 knight? Queen f4 attacks c7? no. It defends e4 pawn? Queen f4 attacks e4? own pawn. It maybe avoids Qg5? The tactical sequence given: e3f4 g7g5 f4d2 d4a7 d2c2 f6d7. Let's examine if Qf4 allows black g5 attacking queen, white retreats to d2, black Bxa7? Actually d4a7 is bishop captures a7? a7 empty, but maybe bishop captures pawn on b? Wait \"d4a7\" could be Bxd? There is no piece at a7. Maybe notation missing capture? d4 to a7 diagonal passes through c5, b6, a7. No white piece on a7. It doesn't capture. Maybe black bishop moves to a7 attacking? Then White Qd2-c2, black Nf6-d7. This seems positional. But maybe Qf4 is also bad because allows g5 with tempo, then Bxa7? Let's see after Qf4, black g5 attacks queen, white Qd2, black Bxa7? Actually bishop d4 to a7 moves away, maybe discovers? It leaves d4; black bishop at a7 attacks? It attacks b? Black bishop on a7 diagonal to b8/c? it attacks b8? Actually from a7, diagonal b8 (black? empty), b6 c5 etc. Not relevant. White Qd2-c2. Black Nd7. This is not obviously winning. But compared to queen loss, MoveB is better.\n\nNeed answer with exactly one line: \"MoveB:e3f4\". Ensure format.\n\nBut let's consider if MoveA could be a tactic because queen on g5 maybe fork queen and rook? Wait black pawn h6 captures, but after hxg5, white maybe Bxg5? Actually white has bishop c4, no. h-pawn from h6 captures g5, then white rook? h file? White rook f1, not. So lose queen.\n\nThus answer MoveB:e3f4.\n\nNeed comply: only output line.",
  "finished": true,
  "token_usage": {
-  "input_tokens": 309,
-  "output_tokens": 2384,
-  "reasoning_tokens": 2377,
-  "total_tokens": 2693,
+  "input_tokens": 306,
+  "output_tokens": 2265,
+  "reasoning_tokens": 2258,
+  "total_tokens": 2571,
   "cache_read_tokens": 0,
   "cache_write_tokens": null,
   "cache_hit_tokens": 0,
-  "cache_miss_tokens": 309,
+  "cache_miss_tokens": 306,
   "usage_source": "opencode_go",
   "usage_complete": true,
-  "stream_events": 2383,
-  "time_to_first_token_ms": 1310.0321292877197,
-  "generation_seconds": 23.330913543701172,
-  "output_tokens_per_second": 102.18202538595524,
-  "reasoning_tokens_per_second": 101.88199427114748
+  "stream_events": 2264,
+  "time_to_first_token_ms": 1440.2978420257568,
+  "generation_seconds": 23.12862467765808,
+  "output_tokens_per_second": 97.93059602839062,
+  "reasoning_tokens_per_second": 97.62794076472673
  },
  "phase": "scored",
  "status": "correct",
- "move": "d4e5",
+ "move": "e3f4",
  "compliance": true,
  "correct": {
-  "move": "MoveA:d4e5",
+  "move": "MoveB:e3f4",
   "note": "MATE expert choice"
  },
  "oracle": {
   "kind": "mate_selection",
-  "candidate_a": "d4e5",
-  "candidate_b": "e3f5",
-  "truth_label": "A"
+  "candidate_a": "e3g5",
+  "candidate_b": "e3f4",
+  "truth_label": "B"
  },
- "fen": "3r1k2/8/p5p1/Pp2b1p1/2pP1n2/4N3/1P3R2/3R2K1 w - - 0 43",
+ "fen": "2kr3r/1pp1qpp1/p3pn1p/8/2BbP3/2N1QP2/PP3P1P/3R1RK1 w - - 0 16",
  "pieces": [
   {
    "sq": "d1",
+   "color": "w",
+   "kind": "R"
+  },
+  {
+   "sq": "f1",
    "color": "w",
    "kind": "R"
   },
@@ -61,6 +66,11 @@
    "kind": "K"
   },
   {
+   "sq": "a2",
+   "color": "w",
+   "kind": "P"
+  },
+  {
    "sq": "b2",
    "color": "w",
    "kind": "P"
@@ -68,46 +78,41 @@
   {
    "sq": "f2",
    "color": "w",
-   "kind": "R"
+   "kind": "P"
+  },
+  {
+   "sq": "h2",
+   "color": "w",
+   "kind": "P"
+  },
+  {
+   "sq": "c3",
+   "color": "w",
+   "kind": "N"
   },
   {
    "sq": "e3",
    "color": "w",
-   "kind": "N"
+   "kind": "Q"
+  },
+  {
+   "sq": "f3",
+   "color": "w",
+   "kind": "P"
   },
   {
    "sq": "c4",
-   "color": "b",
-   "kind": "P"
+   "color": "w",
+   "kind": "B"
   },
   {
    "sq": "d4",
-   "color": "w",
-   "kind": "P"
-  },
-  {
-   "sq": "f4",
-   "color": "b",
-   "kind": "N"
-  },
-  {
-   "sq": "a5",
-   "color": "w",
-   "kind": "P"
-  },
-  {
-   "sq": "b5",
-   "color": "b",
-   "kind": "P"
-  },
-  {
-   "sq": "e5",
    "color": "b",
    "kind": "B"
   },
   {
-   "sq": "g5",
-   "color": "b",
+   "sq": "e4",
+   "color": "w",
    "kind": "P"
   },
   {
@@ -116,9 +121,49 @@
    "kind": "P"
   },
   {
-   "sq": "g6",
+   "sq": "e6",
    "color": "b",
    "kind": "P"
+  },
+  {
+   "sq": "f6",
+   "color": "b",
+   "kind": "N"
+  },
+  {
+   "sq": "h6",
+   "color": "b",
+   "kind": "P"
+  },
+  {
+   "sq": "b7",
+   "color": "b",
+   "kind": "P"
+  },
+  {
+   "sq": "c7",
+   "color": "b",
+   "kind": "P"
+  },
+  {
+   "sq": "e7",
+   "color": "b",
+   "kind": "Q"
+  },
+  {
+   "sq": "f7",
+   "color": "b",
+   "kind": "P"
+  },
+  {
+   "sq": "g7",
+   "color": "b",
+   "kind": "P"
+  },
+  {
+   "sq": "c8",
+   "color": "b",
+   "kind": "K"
   },
   {
    "sq": "d8",
@@ -126,21 +171,26 @@
    "kind": "R"
   },
   {
-   "sq": "f8",
+   "sq": "h8",
    "color": "b",
-   "kind": "K"
+   "kind": "R"
   }
  ],
  "n": 8,
- "record_id": "mate-sel-31473",
+ "record_id": "mate-sel-31513",
  "position": {
-  "id": "mate-sel-31473",
+  "id": "mate-sel-31513",
   "n": 8,
   "turn": "w",
-  "fen": "3r1k2/8/p5p1/Pp2b1p1/2pP1n2/4N3/1P3R2/3R2K1 w - - 0 43",
+  "fen": "2kr3r/1pp1qpp1/p3pn1p/8/2BbP3/2N1QP2/PP3P1P/3R1RK1 w - - 0 16",
   "pieces": [
    {
     "sq": "d1",
+    "color": "w",
+    "kind": "R"
+   },
+   {
+    "sq": "f1",
     "color": "w",
     "kind": "R"
    },
@@ -150,6 +200,11 @@
     "kind": "K"
    },
    {
+    "sq": "a2",
+    "color": "w",
+    "kind": "P"
+   },
+   {
     "sq": "b2",
     "color": "w",
     "kind": "P"
@@ -157,46 +212,41 @@
    {
     "sq": "f2",
     "color": "w",
-    "kind": "R"
+    "kind": "P"
+   },
+   {
+    "sq": "h2",
+    "color": "w",
+    "kind": "P"
+   },
+   {
+    "sq": "c3",
+    "color": "w",
+    "kind": "N"
    },
    {
     "sq": "e3",
     "color": "w",
-    "kind": "N"
+    "kind": "Q"
+   },
+   {
+    "sq": "f3",
+    "color": "w",
+    "kind": "P"
    },
    {
     "sq": "c4",
-    "color": "b",
-    "kind": "P"
+    "color": "w",
+    "kind": "B"
    },
    {
     "sq": "d4",
-    "color": "w",
-    "kind": "P"
-   },
-   {
-    "sq": "f4",
-    "color": "b",
-    "kind": "N"
-   },
-   {
-    "sq": "a5",
-    "color": "w",
-    "kind": "P"
-   },
-   {
-    "sq": "b5",
-    "color": "b",
-    "kind": "P"
-   },
-   {
-    "sq": "e5",
     "color": "b",
     "kind": "B"
    },
    {
-    "sq": "g5",
-    "color": "b",
+    "sq": "e4",
+    "color": "w",
     "kind": "P"
    },
    {
@@ -205,9 +255,49 @@
     "kind": "P"
    },
    {
-    "sq": "g6",
+    "sq": "e6",
     "color": "b",
     "kind": "P"
+   },
+   {
+    "sq": "f6",
+    "color": "b",
+    "kind": "N"
+   },
+   {
+    "sq": "h6",
+    "color": "b",
+    "kind": "P"
+   },
+   {
+    "sq": "b7",
+    "color": "b",
+    "kind": "P"
+   },
+   {
+    "sq": "c7",
+    "color": "b",
+    "kind": "P"
+   },
+   {
+    "sq": "e7",
+    "color": "b",
+    "kind": "Q"
+   },
+   {
+    "sq": "f7",
+    "color": "b",
+    "kind": "P"
+   },
+   {
+    "sq": "g7",
+    "color": "b",
+    "kind": "P"
+   },
+   {
+    "sq": "c8",
+    "color": "b",
+    "kind": "K"
    },
    {
     "sq": "d8",
@@ -215,9 +305,9 @@
     "kind": "R"
    },
    {
-    "sq": "f8",
+    "sq": "h8",
     "color": "b",
-    "kind": "K"
+    "kind": "R"
    }
   ],
   "source": "MATE testset"
