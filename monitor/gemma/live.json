@@ -1,21 +1,21 @@
 {
- "updated_at": "2026-08-08T19:38:28Z",
+ "updated_at": "2026-08-08T19:40:41Z",
  "cell": {
   "model": "gemma4-e2b",
   "task": "mate-selection-test",
-  "variant": "noexplain"
+  "variant": "tactic"
  },
  "task_category": "Short Tactics",
  "task_kind": "mate_selection",
  "run_kind": "mate-selection",
- "run_id": "mate-gemma-noexplain-w1",
- "sample_idx": 90,
+ "run_id": "mate-gemma-tactic-w1",
+ "sample_idx": 111,
  "sample_total": 500,
- "position_id": "mate-sel-08400",
- "prompt": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves.\nThe FEN of the given chess board is \"6k1/2q2pp1/1p5p/1Q6/8/6P1/2P1RPK1/2r5 w - - 3 39\". Which move is better? MoveA:b5e8 MoveB:e2e8 ",
- "model_input": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves.\nThe FEN of the given chess board is \"6k1/2q2pp1/1p5p/1Q6/8/6P1/2P1RPK1/2r5 w - - 3 39\". Which move is better? MoveA:b5e8 MoveB:e2e8 \nAnswer with exactly one of: MoveA:<move> or MoveB:<move>. Only output the line, nothing else.\nYou MUST output an answer. If you cannot determine which move is better with confidence, output your best guess from the two candidates anyway. An answer is required; refusing to answer is not acceptable.",
+ "position_id": "mate-sel-04594",
+ "prompt": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves and their tactics.\nThe FEN of the given chess board is \"8/1p2kr2/p1p2R2/3pPK2/1P3P2/8/8/8 w - - 9 49\". Which move is better? MoveA:f5g6,tactic f5g6 f7f6 e5f6 Trade the lower value piece for a higher value piece.  MoveB:e5e6,tactic e5e6 f7f6 f5g4 f6e6 g4h5 e7f6  ",
+ "model_input": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves and their tactics.\nThe FEN of the given chess board is \"8/1p2kr2/p1p2R2/3pPK2/1P3P2/8/8/8 w - - 9 49\". Which move is better? MoveA:f5g6,tactic f5g6 f7f6 e5f6 Trade the lower value piece for a higher value piece.  MoveB:e5e6,tactic e5e6 f7f6 f5g4 f6e6 g4h5 e7f6  \nAnswer with exactly one of: MoveA:<move> or MoveB:<move>. Only output the line, nothing else.\nYou MUST output an answer. If you cannot determine which move is better with confidence, output your best guess from the two candidates anyway. An answer is required; refusing to answer is not acceptable.",
  "output": "",
- "reasoning": "The user wants me to evaluate two candidate moves for a chess position given by a FEN and choose the better one.\n\nFEN: `6k1/2q2pp1/1p5p/1Q6/8/6P1/2P1RPK1/2r5 w - - 3 39`\nIt is White's turn to move.\n\nMaterial advantage: Equal material (Rook + Queen vs Rook + Queen, plus pawns).\n\nPosition analysis:\nWhite has pieces on b5 (Queen), c2 (Pawn), f2 (Rook), g2 (King), c2 (Pawn). Wait, let's re-read the FEN carefully.\nWhite: K(g2), Q(b5), R(f2), P(c2, g3, c2?). No, the setup is:\nRank 8: empty\nRank 7: 6k1 (Black King)\nRank 6: 2q2pp1 (Black Queen, Pawns)\nRank 5: 1p5p (Black Pawn)\nRank 4: 1Q6 (White Queen)\nRank 3: 8 (empty)\nRank 2: 6P1 (White Pawn, Pawn, Pawn?) -> This seems wrong based on standard notation if we count from left to right. Let's parse it strictly.\na1 b1 c1 d1 e1 f1 g1 h1\n\nBoard representation:\n6k1 (a8, b8, c8, d8, e8, f8, g8) -> Black King on g8, Rook on c8? No, this is rank 8.\nIf the input is read literally:\nRow 8: 6k1 (a8=., b8=., c8=., d8=., e8=., f8=., g8=k, h8=1) -> Black King at g8.\nRow 7: 2q2pp1 (a7=., b7=., c7=q, d7=., e7=., f7=p, g7=p, h7=1) -> Black Queen at c7. Pawns at f7, g7.\nRow 6: 1p5p (a6=p, b6=., c6=., d6=., e6=., f6=p, g6=., h6=p) -> Black Pawn at a6, f6, h6.\nRow 5: 1Q6 (a5=Q, b5=., c5=., d5=., e5=., f5=., g5=.) -> White Queen at a5.\nRow 4: 8 (Empty)\nRow 3: 6P1 (a3=., b3=., c3=., d3=., e3=., f3=P, g3=., h3=1) -> White Pawn at f3.\nRow 2: 2P1 (a2=., b2=., c2=P, d2=., e2=., f2=R, g2=P, h2=1) -> White Pawns at c2, g2. White Rook at f2. White King at g2? No, K is usually represented by K. Here it is K at g2.\nWait, the FEN shows: `2P1`. This means a2=., b2=., c2=P, d2=., e2=., f2=R, g2=P, h2=1.\nLet's check the provided FEN again: `6k1/2q2pp1/1p5p/1Q6/8/6P1/2P1RPK1/2r5 w - - 3 39`\n\nWhite pieces: K(g2), Q(b5), R(f2), Ps(c2, g2, f3? Wait, where is the third pawn mentioned in Rank 2 '2P1'? It must be that the piece placement implies the structure.\nRank 2: 2P1. This typically means only two white pawns remaining on rank 2, or perhaps just those specified positions. Given the context of the rest of the board, I see White having pawns on c2 and g2. The 'P' might refer to c2 and g2 being present, but the notation is ambiguous if there are more than two pawns listed explicitly unless they are implicitly defined by the structure. Standard interpretation: P at c2, P at g2.\n\nBlack pieces: K(g8), Q(c7), R(c1), Ps(a6, f6, h6, g7, f7).\n\nIt is White to move. White needs to find a way to exploit the position or improve coordination. Black has a very active rook on c1 attacking the first rank indirectly, and the queen on c7 exerts pressure.\n\nCandidate Moves:\nMoveA: b5e8 (This looks like a typo or highly unusual notation. A move specifies a piece moving to a square. If it means Qb5 moves to e8, that's impossible as e8 is occupied by nothing relevant here, but why would the Queen move there? Or maybe it means something else entirely.)\nGiven the context of typical algebraic notation, $X Y$ means piece X moves to square Y.\nIf MoveA is `b5e8`, it suggests the Queen on b5 moves to e8. This is a long diagonal move, potentially aiming towards the kingside or center, but e8 is far away.\n\nMoveB: e2e8 (This suggests a piece on e2 moves to e8. If White has no piece on e2, this is illegal.)\nLooking at the FEN: `.../6P1/2P1RPK1/...`\nRank 2: `2P1`. Squares a2, b2, c2(P), d2, e2, f2(R), g2(P), h2.\nThere is NO piece on e2 according to the FEN. So MoveB is illegal unless the notation refers to a specific type of maneuver or capture sequence not immediately obvious, or if my reading of the FEN regarding piece locations is flawed.\n\nLet's re-examine the FEN parsing assuming standard conventions:\n`6k1/2q2pp1/1p5p/1Q6/8/6P1/2P1RPK1/2r5 w - - 3 39`\n\nWhite pieces: K(g2), Q(b5), R(f2), P(c2), P(g2). (Assuming these are the intended pieces based on visual inspection matching the pattern).\nIf so, MoveB (e2e8) is definitely illegal because there is no piece on e2.\n\nLet's assume the provided options *must* be valid moves, implying my identification of the starting position or the meaning of the move notation is constrained by the problem setter's intent.\n\nPossibility 1: Typo in the prompt/FEN/Moves.\nPossibility 2: The notation describes a forced sequence or a non-standard move definition used in this context.\n\nSince I must choose between A and B, I will analyze what makes sense strategically, even if the notation is strange.\n\n**Evaluation:**\nThe position is complex. Black's rook on c1 is annoying. White's Queen on b5 is centralized but somewhat exposed. White needs to coordinate the pieces, possibly targeting weaknesses around the black king or exploiting the open files/diagonals.\n\nIf MoveA: b5e8 (Qb5-e8)\nThis relocates the Queen aggressively. It attacks nothing immediately critical and moves away from potential tactical threats along the queenside/center.\n\nIf MoveB: e2e8",
+ "reasoning": "The user wants me to evaluate two candidate moves (MoveA and MoveB) for a chess position given by a FEN and choose the better one.\n\nFEN: `8/1p2kr2/p1p2R2/3pPK2/1P3P2/8/8/8 w - - 9 49`\nIt is White's turn to move.\n\n**Evaluation of the current position:**\nWhite has a King on f4 and a Rook on f6. Pawns are somewhat locked in the center/kingside. Black has a King on e7, Rook on f7, and paw",
  "finished": false,
  "token_usage": null,
  "phase": "generating",
@@ -23,158 +23,138 @@
  "move": null,
  "compliance": null,
  "correct": {
-  "move": "MoveB:e2e8",
+  "move": "MoveA:f5g6",
   "note": "MATE expert choice"
  },
  "oracle": {
   "kind": "mate_selection",
-  "candidate_a": "b5e8",
-  "candidate_b": "e2e8",
-  "truth_label": "B"
+  "candidate_a": "f5g6",
+  "candidate_b": "e5e6",
+  "truth_label": "A"
  },
- "fen": "6k1/2q2pp1/1p5p/1Q6/8/6P1/2P1RPK1/2r5 w - - 3 39",
+ "fen": "8/1p2kr2/p1p2R2/3pPK2/1P3P2/8/8/8 w - - 9 49",
  "pieces": [
   {
-   "sq": "c1",
+   "sq": "b4",
+   "color": "w",
+   "kind": "P"
+  },
+  {
+   "sq": "f4",
+   "color": "w",
+   "kind": "P"
+  },
+  {
+   "sq": "d5",
    "color": "b",
-   "kind": "R"
+   "kind": "P"
   },
   {
-   "sq": "c2",
+   "sq": "e5",
    "color": "w",
    "kind": "P"
   },
   {
-   "sq": "e2",
-   "color": "w",
-   "kind": "R"
-  },
-  {
-   "sq": "f2",
-   "color": "w",
-   "kind": "P"
-  },
-  {
-   "sq": "g2",
+   "sq": "f5",
    "color": "w",
    "kind": "K"
   },
   {
-   "sq": "g3",
+   "sq": "a6",
+   "color": "b",
+   "kind": "P"
+  },
+  {
+   "sq": "c6",
+   "color": "b",
+   "kind": "P"
+  },
+  {
+   "sq": "f6",
    "color": "w",
-   "kind": "P"
+   "kind": "R"
   },
   {
-   "sq": "b5",
-   "color": "w",
-   "kind": "Q"
-  },
-  {
-   "sq": "b6",
+   "sq": "b7",
    "color": "b",
    "kind": "P"
   },
   {
-   "sq": "h6",
+   "sq": "e7",
    "color": "b",
-   "kind": "P"
-  },
-  {
-   "sq": "c7",
-   "color": "b",
-   "kind": "Q"
+   "kind": "K"
   },
   {
    "sq": "f7",
    "color": "b",
-   "kind": "P"
-  },
-  {
-   "sq": "g7",
-   "color": "b",
-   "kind": "P"
-  },
-  {
-   "sq": "g8",
-   "color": "b",
-   "kind": "K"
+   "kind": "R"
   }
  ],
  "n": 8,
- "record_id": "mate-sel-08400",
+ "record_id": "mate-sel-04594",
  "position": {
-  "id": "mate-sel-08400",
+  "id": "mate-sel-04594",
   "n": 8,
   "turn": "w",
-  "fen": "6k1/2q2pp1/1p5p/1Q6/8/6P1/2P1RPK1/2r5 w - - 3 39",
+  "fen": "8/1p2kr2/p1p2R2/3pPK2/1P3P2/8/8/8 w - - 9 49",
   "pieces": [
    {
-    "sq": "c1",
+    "sq": "b4",
+    "color": "w",
+    "kind": "P"
+   },
+   {
+    "sq": "f4",
+    "color": "w",
+    "kind": "P"
+   },
+   {
+    "sq": "d5",
     "color": "b",
-    "kind": "R"
+    "kind": "P"
    },
    {
-    "sq": "c2",
+    "sq": "e5",
     "color": "w",
     "kind": "P"
    },
    {
-    "sq": "e2",
-    "color": "w",
-    "kind": "R"
-   },
-   {
-    "sq": "f2",
-    "color": "w",
-    "kind": "P"
-   },
-   {
-    "sq": "g2",
+    "sq": "f5",
     "color": "w",
     "kind": "K"
    },
    {
-    "sq": "g3",
+    "sq": "a6",
+    "color": "b",
+    "kind": "P"
+   },
+   {
+    "sq": "c6",
+    "color": "b",
+    "kind": "P"
+   },
+   {
+    "sq": "f6",
     "color": "w",
-    "kind": "P"
+    "kind": "R"
    },
    {
-    "sq": "b5",
-    "color": "w",
-    "kind": "Q"
-   },
-   {
-    "sq": "b6",
+    "sq": "b7",
     "color": "b",
     "kind": "P"
    },
    {
-    "sq": "h6",
+    "sq": "e7",
     "color": "b",
-    "kind": "P"
-   },
-   {
-    "sq": "c7",
-    "color": "b",
-    "kind": "Q"
+    "kind": "K"
    },
    {
     "sq": "f7",
     "color": "b",
-    "kind": "P"
-   },
-   {
-    "sq": "g7",
-    "color": "b",
-    "kind": "P"
-   },
-   {
-    "sq": "g8",
-    "color": "b",
-    "kind": "K"
+    "kind": "R"
    }
   ],
   "source": "MATE testset"
  },
- "worker_id": "noexplain-w1"
+ "worker_id": "tactic-w1"
 }
