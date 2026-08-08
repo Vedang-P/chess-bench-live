@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-08-08T21:15:19Z",
+ "updated_at": "2026-08-08T21:16:39Z",
  "cell": {
   "model": "deepseek-v4-flash",
   "task": "mate-selection-test",
@@ -9,79 +9,84 @@
  "task_kind": "mate_selection",
  "run_kind": "mate-selection",
  "run_id": "mate-tactic-w3",
- "sample_idx": 137,
+ "sample_idx": 138,
  "sample_total": 200,
- "position_id": "mate-sel-21524",
- "prompt": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves and their tactics.\nThe FEN of the given chess board is \"4r1k1/p1p2ppp/2pqp3/1r1p4/1P1Q4/P3P3/1B3PPP/1R3NK1 w - - 3 19\". Which move is better? MoveA:d4f6,tactic d4f6 g7f6 Trade the lower value piece for a higher value piece.  MoveB:d4g7,tactic d4g7 Checkmate! ",
- "model_input": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves and their tactics.\nThe FEN of the given chess board is \"4r1k1/p1p2ppp/2pqp3/1r1p4/1P1Q4/P3P3/1B3PPP/1R3NK1 w - - 3 19\". Which move is better? MoveA:d4f6,tactic d4f6 g7f6 Trade the lower value piece for a higher value piece.  MoveB:d4g7,tactic d4g7 Checkmate! \nAnswer with exactly one of: MoveA:<move> or MoveB:<move>. Only output the line, nothing else.\nYou MUST output an answer. If you cannot determine which move is better with confidence, output your best guess from the two candidates anyway. An answer is required; refusing to answer is not acceptable.",
- "output": "MoveB:d4g7",
- "reasoning": "We need answer chess move. Need evaluate moves. Need produce exactly line MoveA or MoveB.\n\nWe have FEN: \"4r1k1/p1p2ppp/2pqp3/1r1p4/1P1Q4/P3P3/1B3PPP/1R3NK1 w - - 3 19\"\n\nNeed identify board. White to move. Need choose better between d4f6 (Qxf6? Actually d4f6 means queen from d4 to f6, capture? Square f6 has black pawn? Let's parse FEN.\n\nFEN: 4r1k1/p1p2ppp/2pqp3/1r1p4/1P1Q4/P3P3/1B3PPP/1R3NK1 w - - 3 19\n\nRanks:\n8: \"4r1k1\" => a8 empty, b8 empty, c8 empty, d8 empty, e8 black rook, f8 empty, g8 black king, h8 empty.\n7: \"p1p2ppp\" => a7 black pawn, b7 empty, c7 black pawn, d7 empty, e7 empty, f7 black pawn, g7 black pawn, h7 black pawn.\n6: \"2pqp3\" => a6 empty,b6 empty,c6 black pawn,d6 black queen,e6 black pawn,f6 empty,g6 empty,h6 empty.\n5: \"1r1p4\" => a5 empty,b5 black rook,c5 empty,d5 black pawn,e5 empty,f5 empty,g5 empty,h5 empty.\n4: \"1P1Q4\" => a4 empty,b4 white pawn,c4 empty,d4 white queen,e4 empty,f4 empty,g4 empty,h4 empty.\n3: \"P3P3\" => a3 white pawn,b3 empty,c3 empty,d3 empty,e3 white pawn,f3 empty,g3 empty,h3 empty.\n2: \"1B3PPP\" => a2 empty,b2 white bishop,c2 empty,d2 empty,e2 empty,f2 white pawn,g2 white pawn,h2 white pawn.\n1: \"1R3NK1\" => a1 empty,b1 white rook,c1 empty,d1 empty,e1 empty,f1 white knight,g1 empty,h1 white king? Wait \"1R3NK1\": piece on b1 rook, then 3 empty c1,d1,e1, f1 knight, g1 empty, h1 king. So white king h1, knight f1, rook b1, bishop b2, queen d4, pawns a3,b4,e3,f2,g2,h2. Black king g8, queen d6, rooks e8,b5, pawns a7,c7,f7,g7,h7,c6,e6,d5. White to move.\n\nCandidate MoveA: d4f6. Queen from d4 to f6. f6 is empty according FEN? Wait rank6 \"2pqp3\": c6 pawn, d6 queen, e6 pawn, f6 empty. So d4f6 is queen move to f6, not capture. Tactic says \"d4f6 g7f6 Trade the lower value piece for a higher value piece.\" Actually Qf6+?? If queen goes f6, black king g8, rook e8. Queen f6 threatens? Black g7 pawn can capture queen? From g7 to f6 yes pawn captures queen. That would be Qxf6? Actually d4 queen to f6, then gxf6 pawn captures queen. White sacrifices queen for? No black piece on f6, so queen taken by pawn, no compensation \"Trade lower value piece for higher value piece\" maybe means queen captures something? Hmm f6 is empty, so Qf6+?? Not check? Queen f6 attacks g7 pawn and h8? Actually Queen f6 attacks g7 (pawn), h8, d8, etc. King g8? Queen f6 attacks g7/h8 diagonal, f-file? It does not attack g8 directly? Queen on f6 to g7 is diagonal one step, to h8 diagonal. King on g8 not in line? f6 to g7 (occupied pawn) not king; f6 to g8 same file? f6 to g8 vertical two squares: f7 pawn occupies, so blocked. So Qf6 is not check. Black can gxf6 capturing queen with pawn. Why would that be \"trade lower piece for higher\"? No.\n\nMoveB: d4g7: queen captures g7 pawn? Square g7 black pawn. Tactic d4g7 Checkmate! Let's verify: White queen from d4 to g7 captures pawn. Queen on g7 adjacent diagonally to black king on g8? Coordinates: g7 queen, g8 king vertical adjacent same file. Queen attacks g8 directly vertically. Black king in check. Is it checkmate? Need consider black responses. Black king at g8, queen g7. King can capture queen? King g8 to g7 occupied by queen protected by whom? White bishop b2 diagonal to g7? b2-c3-d4-e5-f6-g7 yes bishop b2 attacks g7! Also rook b1 along rank? no. Knight f1 maybe? King at g8 cannot capture g7 because queen protected by bishop b2 (diagonal). King moves: h8 (adjacent) attacked by queen g7 (horizontal/diagonal? Queen g7 attacks h8 diagonal yes). f8 attacked by queen g7 diagonal? g7 to f8 diagonal yes. f7 occupied black pawn, h7 black pawn, g8 occupied. Black pieces can capture queen? Let's see black rook e8 could move to e? doesn't block. Black queen d6 could capture queen g7? Queen d6 to g6? no. Queen d6 to g7 diagonal? d6-e7-f8-g9 no; d6-e5-f4-g3; d6-e7-f? Actually d6 to g7: d6-e7-f8-g9 (not g7). d6 to g7 requires steps (+1,+1): d6,e7,f8,g9 invalid; (+1,-1): d6,e5,f4,g3; (-1,+1): d6,c7,b8; (-1,-1): d6,c5,b4; vertical d6-d7-d8; horizontal d6-e6-f6-g6; no g7. Rook e8 along rank e? Could move e7? But e7 empty, e6 pawn, e5 empty. Rook e8 can move to e7? Still not block queen's vertical attack to g8? Queen at g7 attacks g8; to block need piece on g8? impossible occupied king; or capture queen. Rook e8 to g8? diagonal? e8 to g8 along rank e8-f8-g8, but f8 empty, g8 king occupied, so cannot. Rook e8 to e7? no. Rook b5 to g5? no. Black queen can capture queen g7? Need line from d6 to g7 no. Black pawn h7 could capture queen g7? Pawns move diagonally capture: h7 to g6 normally, not g7. f7 pawn could capture g6/e6; not g7. g? pawn captured? Actually black pawn on g7 was captured by queen, so no. Black knight none. Bishop none. So checkmate? Wait queen on g7 also defended by white bishop b2, but also king h1? h1 king adjacent? No g2 pawn blocks? Queen g7 defended by bishop b2 yes. Black king cannot capture. Black pieces maybe rook b5 to g5? no. Queen d6 can move to g6? queen d6 to g6 horizontal: d6-e6 black pawn blocks! Actually e6 black pawn between d6 and g6, so queen cannot. Queen d6 could capture g3? no. Rook e8 to g8? blocked by king? Actually to interpose on g8 impossible because king occupies; to capture queen at g7, rook e8 could move to e7? no. Rook e8 to e7? doesn't affect. Black queen d6 to g6? blocked by e6 pawn. Black queen d6 to e7? Could move d6-e7 (diagonal) empty, then e7 maybe? Does queen e7 block queen g7 attack on g8? Attack line g7-g8 is vertical directly adjacent; a piece on g8 only. Cannot block between adjacent squares. So checkmate. So MoveB Qxg7# seems legal and checkmate.\n\nBut need be careful: Is d4g7 legal? White queen d4 to g7 path: d4 to e5 (empty), f6 (empty), g7 (black pawn). Diagonal clear yes. After queen captures g7, black king g8 in check by queen directly vertical adjacent. Is black king actually in check by queen? Queen on g7 attacks g8 along same file adjacent, yes. Any black piece could capture queen? h8? King h8 would be attacked by queen g7 diagonal. Rook e8 maybe interpose on f8? Queen g7 attacks f8 diagonal, but interposition between g7 and g8? There is no empty square between g7 and g8; adjacent. So cannot interpose. Rook e8 could capture queen along rank? Rook e8 to g8 impossible occupied by king; to f8 empty doesn't capture queen. Rook b5 to g5? Queen g7 not on line. Black queen d6 to g6? blocked e6 pawn? Actually d6 to g6 horizontal passes through e6 black pawn, so blocked; d6 to g7 no; d6 to d7? etc. Black pawn f7 can move f6 maybe? Does moving f7-f6 block queen's attack? Queen g7 attacks g8 vertical; f7 not between. Black pawn h7-h6? no. Black king can move to h8? Queen g7 attacks h8 diagonal. King to f8? Queen g7 attacks f8 diagonal. King to f7 occupied by pawn but could king capture own? no. King to h7 occupied by pawn. So no legal king move. Any black piece can capture bishop on b2? irrelevant. Since queen protected by bishop b2, king cannot capture. Checkmate indeed.\n\nBut MoveA d4f6: queen to f6, likely a blunder because gxf6 captures queen for pawn. Why tactic says \"Trade the lower value piece for higher value piece.\" Maybe actually d4f6 is a capture of rook? Wait square f6 empty but maybe black piece? Let's re-evaluate FEN rank6 \"2pqp3\": characters: 2 empty, p, q, p, 3 empty. That's c6 pawn, d6 queen, e6 pawn, f6 empty. So Qf6 no capture. Could be queen forks? Qf6+?? Actually queen on f6 might give check to king on g8? Wait queen f6 attacks g7 pawn, g6, h8, etc. King g8 is diagonal from f7? Let's map: Queen at f6, king at g8. Difference dx=1, dy=2 (not straight/diagonal). Queen moves like rook+bishop, so f6 to g8 is (1,2) knight-like? Not queen. So not check. Black can gxf6, winning queen. So clearly terrible. Maybe candidate A notation \"d4f6\" could be from d4 to f6 capturing a piece if f6 had black knight? But FEN says f6 empty; maybe FEN wrong? Let's double-check FEN: \"4r1k1/p1p2ppp/2pqp3/1r1p4/1P1Q4/P3P3/1B3PPP/1R3NK1 w - - 3 19\"\nRank 6: 2 p q p 3 -> c6 black pawn, d6 black queen, e6 black pawn, f6 empty, g6 empty, h6 empty. Yes.\n\nCould MoveA d4f6 be a queen sacrifice to set up mate? Qf6 gxf6? Then what? White bishop b2? Actually after gxf6, white bishop b2 maybe takes? Let's analyze: Qf6+?? Not check. Black g7xf6 captures queen. Then maybe Rxf6? White rook? b1 rook no. White bishop b2 to? g7? Queen gone. So no compensation. So MoveA is illegal? Wait queen d4 to f6: Is f6 reachable? d4-e5-f6 diagonal. e5 empty. f6 empty. Legal but bad. Tactic \"Trade the lower value piece for a higher value piece\" maybe they mean Qxf6? But no piece.\n\nMaybe candidate move notation \"d4f6\" could mean pawn? In UCI, source square d4 piece queen, target f6. Yes.\n\nThus answer should be MoveB: d4g7.\n\nBut need be cautious: Is Qxg7 checkmate? Need ensure black could respond with Qxg7? Wait black queen d6 could capture g7? Let's re-evaluate diagonal d6 to g7: d6 (x=3,y=5?), using file indexes a=1, b=2, c=3, d=4, e=5, f=6, g=7, h=8; ranks 1-8. Queen d6: file d=4, rank 6. Queen g7: file g=7, rank 7. Diff x=3, y=1 (dx=+3, dy=+1) not diagonal/straight. So black queen cannot capture. Rook e8: file e=5, rank 8; queen g7 file7 rank7 diff 2,1 no. Rook b5: diff 5,2 no. Pawns:\n- h7 pawn could capture g6 or g? Black pawn h7 captures diagonally to g6 (down one rank) not g7.\n- f7 pawn captures e6/g6.\n- e6 pawn captures d5/f5.\n- c6 pawn captures b5/d5.\n- c7 pawn captures b6/d6.\nNone capture g7.\nKing captures g7? King at g8 to g7: vertical down one square. Queen on g7 protected by bishop b2. Is bishop b2 line to g7 clear? b2-c3-d4-e5-f6-g7. d4 originally white queen, after queen moved to g7, d4 empty. c3 empty, e5 empty, f6 empty. Clear. So king cannot.\nCan black block queen's check by moving f7-f6? Queen at g7 attacks king g8 vertically. The ray from g7 to g8 has no intervening square, so no block. Can black move rook e8 to e7 interpose? no. King can capture queen if protected? protected.\nCan black capture defender bishop b2? Maybe black rook b5 could capture bishop b2? Rook b5 to b2: along b-file: b5-b4 white pawn occupied, so cannot. Queen d6 to b4? diagonal d6-c5-b4: b4 white pawn, blocked. Queen d6 to b2? diagonal d6-c5-b4 (blocked). So no.\nCan black rook e8 capture bishop b2? no.\nCould black queen d6 capture h2? irrelevant.\nWhat about black rook e8 to e1? check counter? Not relevant; in check must respond.\nSo checkmate yes.\n\nNeed produce exactly \"MoveB:d4g7\" maybe with no spaces? User says Answer with exactly one of: MoveA:<move> or MoveB:<move>. Only output line. So should output \"MoveB:d4g7\". Need no additional text.\n\nBut let's consider if there is any nuance: Candidate MoveA tactic \"Trade the lower value piece for a higher value piece.\" Lower value piece for higher value piece? Queen is higher, pawn lower. Qf6 gxf6 is queen loses to pawn (lower captures higher) not trade. Maybe they mean white queen captures black queen? Wait d4f6: from d4 to f6 if black piece on f6 maybe? But FEN has d6 queen, e6 pawn, etc. Could f6 be black pawn? Rank6 \"2pqp3\": Let's parse \"2pqp3\" length: 2 empty (a6,b6), p (c6), q (d6), p (e6), 3 empty (f6,g6,h6). Yes f6 empty. So MoveA definitely bad.\n\nCould MoveB d4g7 be illegal because own bishop b2 blocks path? No bishop b2 diagonals: b2-c3-d4-e5-f6-g7. Queen at d4 moving to g7 passes through e5/f6 empty. Bishop b2 is behind? b2 to d4 diagonal: b2-c3-d4, but bishop at b2 is not on d4? Actually bishop b2 occupies b2; queen at d4; path from d4 to g7 is d4-e5-f6-g7, does not pass through b2. Legal.\n\nNeed answer.\n\nWait the instruction: \"You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves and their tactics. The FEN ... Which move is better? MoveA:d4f6,tactic d4f6 g7f6 Trade the lower value piece for a higher value piece. MoveB:d4g7,tactic d4g7 Checkmate! Answer with exactly one of: MoveA:<move> or MoveB:<move>. Only output the line, nothing else.\"\n\nMaybe they expect comparing \"trade lower value for higher\" vs \"checkmate\"; obviously checkmate better. So MoveB.\n\nNeed ensure formatting: \"MoveB:d4g7\" exactly? They used \"MoveB:d4g7,tactic...\" So answer line \"MoveB:d4g7\".",
+ "position_id": "mate-sel-21551",
+ "prompt": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves and their tactics.\nThe FEN of the given chess board is \"3qr1k1/1b2bpp1/pB2p2p/Np1pn3/8/P4P1P/1PrQN1P1/3RR2K w - - 0 25\". Which move is better? MoveA:b6c7,tactic b6c7 c2c7 b2b4 e5f3 g2f3 Trade the lower value piece for a higher value piece.  MoveB:b6d8,tactic b6d8 c2d2 Trade the lower value piece for a higher value piece. ",
+ "model_input": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves and their tactics.\nThe FEN of the given chess board is \"3qr1k1/1b2bpp1/pB2p2p/Np1pn3/8/P4P1P/1PrQN1P1/3RR2K w - - 0 25\". Which move is better? MoveA:b6c7,tactic b6c7 c2c7 b2b4 e5f3 g2f3 Trade the lower value piece for a higher value piece.  MoveB:b6d8,tactic b6d8 c2d2 Trade the lower value piece for a higher value piece. \nAnswer with exactly one of: MoveA:<move> or MoveB:<move>. Only output the line, nothing else.\nYou MUST output an answer. If you cannot determine which move is better with confidence, output your best guess from the two candidates anyway. An answer is required; refusing to answer is not acceptable.",
+ "output": "MoveB:b6d8",
+ "reasoning": "We need answer chess move better. Need evaluate position. Need produce exactly one line MoveA:... or MoveB:....\n\nWe need analyze chess position FEN: \"3qr1k1/1b2bpp1/pB2p2p/Np1pn3/8/P4P1P/1PrQN1P1/3RR2K w - - 0 25\"\n\nLet's parse. Board FEN:\n3qr1k1/1b2bpp1/pB2p2p/Np1pn3/8/P4P1P/1PrQN1P1/3RR2K w - - 0 25\n\nLet's reconstruct.\n\nRank 8: \"3qr1k1\" = a8 empty, b8 empty, c8 empty, d8 black queen, e8 black rook? Wait \"3qr1k1\": positions: a8=3 empty? Actually string length 8: 3 (a8-c8 empty), q at d8, r at e8, 1 (f8 empty), k at g8, 1 (h8 empty). So black queen d8, black rook e8, black king g8.\n\nRank 7: \"1b2bpp1\" = a7 empty, b7 black bishop, c7 empty, d7 empty, e7 black bishop, f7 black pawn, g7 black pawn, h7 empty.\n\nRank 6: \"pB2p2p\" = a6 black pawn, b6 white bishop, c6 empty, d6 empty, e6 black pawn, f6 empty, g6 empty? Wait \"p B 2 p 2 p\": a6 p, b6 B, c6 empty, d6 empty, e6 p, f6 empty, g6 empty? Actually 8 chars: a6 p, b6 B, c6-.? Let's parse: \"pB2p2p\": char1 p (a6), char2 B (b6), char3 '2' means c6,d6 empty, char4 p (e6), char5 '2' means f6,g6 empty, char6 p (h6). Length: 1+1+2+1+2+1=8 yes. So h6 black pawn.\n\nRank 5: \"Np1pn3\" = a5 white knight, b5 black pawn, c5 empty, d5 black pawn, e5 empty? Wait string: N p 1 p n 3? Actually \"Np1pn3\": chars: N at a5, p at b5, 1 at c5 empty, p at d5, n at e5, 3 at f5,g5,h5 empty. So black knight e5.\n\nRank 4: \"8\" empty.\n\nRank 3: \"P4P1P\" = a3 white pawn, b3 empty,c3 empty,d3 empty,e3 empty? Wait \"P4P1P\": chars: P at a3, 4 means b3,c3,d3,e3 empty, P at f3, 1 means g3 empty, P at h3. Yes.\n\nRank 2: \"1PrQN1P1\" = a2 empty, b2 white pawn, c2 black rook? Let's parse: 1 (a2 empty), P (b2 white pawn), r (c2 black rook), Q (d2 white queen), N (e2 white knight), 1 (f2 empty), P (g2 white pawn), 1 (h2 empty). So black rook c2, white queen d2, white knight e2.\n\nRank 1: \"3RR2K\" = a1 empty, b1 empty, c1 empty, d1 white rook, e1 white rook, f1 empty, g1 empty, h1 white king. Actually \"3RR2K\": 3 empty a-c, R d1, R e1, 2 empty f-g, K h1.\n\nSide: w to move. Black pieces: king g8, queen d8, rooks e8 and c2, bishops b7,e7, knights e5, pawns a6,b5,d5,e6,f7,g7,h6. White: king h1, queen d2, rooks d1,e1, bishop b6, knights a5,e2, pawns a3,b2,f3,g2,h3? Actually h3 white pawn yes.\n\nNeed choose between MoveA: b6c7 (bishop captures c7? Square c7 empty? Wait bishop at b6 captures c7? c7 empty, so move Bxc7? Actually c7 is empty according rank 7 \"1b2bpp1\": c7 is empty. So b6c7 means bishop moves to c7, not capture? But tactic says b6c7 c2c7 b2b4 e5f3 g2f3 Trade the lower value piece for a higher value piece. Wait b6c7 is Bishop move to c7 perhaps attacking d8 queen? If bishop on c7, it attacks d8 queen and e5 knight? But c7 square empty, so MoveA is Bc7 (not capture). But tactic line: b6c7 c2c7 b2b4 e5f3 g2f3 Trade lower value piece for higher value piece. Hmm MoveA b6c7 maybe bishop takes? Actually bishop at b6 could capture piece on c7? But c7 empty. However notation b6c7 indicates from b6 to c7, if no capture. But tactic says \"b6c7 c2c7 b2b4 e5f3 g2f3\" weird: after Bc7, black Rxc2 (c2 rook captures d2 queen? Actually black rook c2 to d2? notation c2c7 maybe rook from c2 to c7? Wait c2c7 would be black rook c2 to c7 capturing bishop? Rook c2 can move up to c7 along c-file, but c7 is where bishop just moved, so black rook captures bishop on c7: Rxc7. So after 1.Bc7, black can play 1...Rxc7 capturing bishop? But tactic says \"b6c7 c2c7 b2b4 e5f3 g2f3\": b6c7 Bc7; c2c7 Rxc7; b2b4 maybe white pawn b2-b4 attacking rook c7? Wait after Rxc7, white pawn b2 to b4 attacks rook c5? Actually b2-b4 attacks c5, not c7. Or b2b4 is black? No white move? Let's parse: MoveA b6c7, tactic \"b6c7 c2c7 b2b4 e5f3 g2f3 Trade the lower value piece for a higher value piece.\" Maybe sequence: Move b6c7 (bishop to c7), black c2c7 (rook takes bishop on c7), white b2b4 (pawn attacks knight maybe? b4 attacks c5? knight on a5? Actually white pawn b2-b4 attacks a5 knight and c5 square; black knight is e5). Then black e5f3 (knight e5 captures f3 pawn? e5-f3), white g2f3 recaptures. So white sacrifices bishop for? Trade lower value piece for higher? Bishop (3) for rook? Wait black rook c2 captures bishop on c7: black rook (5) captures bishop (3), but white then? Actually black recaptures bishop, so white loses bishop and gains? Black Rxc7 captures bishop, white b2b4 attacks rook? No, b4 attacks c5 not c7. So not recapture. Maybe b2b4 is black's move? No, notation maybe generated includes both sides? Actually \"b6c7 c2c7 b2b4 e5f3 g2f3\": after white Bc7, black Rxc7, white b4 (attack rook? Wait b2-b4 attacks c5 and a5 knight, not rook c7; it attacks knight a5? Yes pawn from b2 to b4 attacks a5 knight and c5 square. So b4 attacks black knight a5, not rook c7. Then black e5f3 knight takes pawn f3, white gxf3. So white didn't regain bishop, but maybe bishop b6 was under attack? Actually b6 bishop is attacked by pawn a5? Black pawn b5? Wait bishop on b6 is protected by pawn a5? Actually white knight a5 adjacent? Bishop b6 is attacked by black pawn a5? Black pawn at a5? No black pawn at a5? Rank 5 \"Np1pn3\": a5 white knight, b5 black pawn. So black pawn b5 attacks a6/c6, not b6. Black bishop b7 on same diagonal b7-c6-d5-e4-f3-g2-h1 attacks b6? Bishop b7 diagonal to c6,d5,e4,f3,g2,h1; also diagonal a6? no. It does not attack b6. Black queen d8 along d-file? Queen d8 attacks d2? blocked by pieces? Rank 7 e7 bishop, d7 empty, d6 empty, d5 black pawn, d4 empty, d3 empty, d2 white queen. Queen d8 attacks d2 along file with d5 black pawn blocking? Actually d8 to d5: d7 empty, d6 empty, d5 black pawn; so blocked at d5. So bishop b6 maybe not attacked. Why Bc7? It moves bishop to c7 attacking black queen d8 and rook e8? Actually bishop on c7 diagonal to d8 queen and b8, a? Also attacks e5 knight? c7-d8 queen yes, c7-d8; c7-b8 empty; c7-d6 empty-e5 knight? Bishop diagonal c7-d6-e5: yes bishop c7 attacks knight e5 through d6 empty. So Bc7 forks queen d8 and knight e5? It attacks both queen and knight. Black responds Rxc7 (rook from c2 to c7) capturing bishop, avoiding? But queen still? Wait bishop on c7 attacks queen d8; but if black Rxc7 captures bishop, threat gone. So black sacrifices rook? Actually rook captures bishop, so black gives up rook for bishop? Wait black rook c2 to c7 captures bishop, yes black loses rook? No black's own rook captures white bishop, so black trades rook for bishop (bad for black: 5 vs 3). But tactic says \"Trade the lower value piece for a higher value piece.\" For MoveA, white sacrifices bishop (3) to? Actually MoveA Bc7 offers bishop, black can take with rook c7, black loses rook? Wait black rook captures bishop, so black gains bishop and loses his rook? No, the rook moves to c7 and captures bishop; the rook remains on c7. Black does not lose rook, he loses? Actually his rook was on c2, after Rxc7 it's now on c7, still a rook. So black traded his rook? No, he didn't lose the rook; he moved it. So white loses bishop, black still has rook. That's not trade lower for higher; white loses piece without compensation. But maybe Rxc7 exposes black queen? Actually after Bc7, bishop attacks queen d8. Black can play Rxc7 capturing bishop, solving attack; black rook moved from c2 to c7, no loss. So MoveA seems blunder? But maybe because bishop on c7 also pins something? Let's see after Rxc7, white can play b4 attacking knight a5? But black knight a5 is white? Actually a5 is white knight, not black. Wait rank 5 \"Np1pn3\": a5 white knight, b5 black pawn, d5 black pawn, e5 black knight. So b2-b4 attacks a5 white knight? No, pawn b4 attacks a5 and c5; a5 is white own knight, cannot attack own piece. So b4 doesn't attack black. Actually b4 attacks c5 empty, not black knight on e5. So b2b4 in tactic seems not plausible as white? Maybe after Rxc7, white b4? It attacks nothing black except? It may give pawn support? e5 knight attacks? Hmm.\n\nLet's parse MoveA tactic maybe \"b6c7 c2c7 b2b4 e5f3 g2f3 Trade the lower value piece for a higher value piece.\" Could be move sequence: 1. Bxc7 (bishop b6 captures c7? Wait c7 maybe black rook? No c7 empty), 1... Rxc7 (black rook c2 captures bishop c7), 2. b4 (white pawn b2-b4 attacks black knight a5? Wait a5 is white knight; but black pawn at b5 could be attacked by b4? b4-b5 push? Actually b2-b4 attacks a5 (white knight) and c5 (empty). It also threatens bxa5? Cannot capture own knight. So no). Then 2... Nxf3 (black knight e5 captures f3 pawn), 3. gxf3 recaptures. So white bishop lost for a pawn? Actually after 3 gxf3, white captured black knight with pawn, so white traded bishop (3) for black knight (3) maybe equal, plus black rook moved. Not \"higher value piece\". Maybe \"Trade the lower value piece for a higher value piece\" indicates Bc7 is a sacrifice of bishop to lure rook away from c2, then b4 forks? Wait after Rxc7, black rook is on c7; white b4 maybe attacks c5? Hmm.\n\nNeed evaluate MoveB: b6d8 (bishop captures queen on d8? Bishop b6 to d8 captures black queen on d8). Tactic \"b6d8 c2d2 Trade the lower value piece for a higher value piece.\" This seems obvious: white bishop captures black queen (Bxd8), winning queen for bishop (3 vs 9). But then black rook c2 captures white queen d2 (Rxd2) after? Sequence: 1.Bxd8 Rxd2 2.??? White bishop captures queen, then black rook captures white queen, so white traded bishop+queen for black queen? Actually white loses bishop and queen (3+9=12), black loses queen only (9), net -3? Wait after 1.Bxd8, white bishop captures queen. Black 1...Rxd2 captures white queen. So white has captured black queen (9) and lost bishop (3) and queen (9): net white -3? Actually black gained queen+? Let's calculate material before: White queen, bishop; Black queen. After Bxd8, white lost bishop, black lost queen, white queen remains. Then black Rxd2, white loses queen, black rook remains; material: white lost bishop+queen (12), black lost queen (9), so black gains +3 advantage. That seems bad? Wait MoveB tactic says \"Trade the lower value piece for a higher value piece\": bishop (3) for queen (9) initially, but then black takes white queen with rook (5? actually rook captures queen), so white loses queen too. But white also has other pieces maybe recapture? After 1.Bxd8 Rxd2, what can white do? White king h1, rooks d1 e1, knight e2, pawns. Black queen gone; black rook d2 sits on d2 adjacent to white king? Actually d2 queen was protected by knight e2? White knight e2 attacks d4/c3/c1? Knight e2 attacks c1,c3,d4,f4,g1,g3; not d2. Rooks d1/e1: d1 rook attacks d2 along file, so after Rxd2, white can play Rxd2 recapturing rook! Ah yes white rook on d1 can capture rook on d2. Sequence: 1.Bxd8 Rxd2 2.Rxd2. So white trades bishop+rook? Wait black rook captures queen, then white rook captures rook. Net: White captured black queen (9) and black rook (5) = 14; Black captured white bishop (3) and queen (9) =12; white gains +2. Actually plus black queen for bishop, black rook for queen? Let's compute: White gave bishop and queen, took queen and rook: net +2 for white. So MoveB wins queen+rook for bishop+queen = +2. Good.\n\nBut need consider after 1.Bxd8 Rxd2 2.Rxd2, is there any issue? White rook d1 captures d2, yes. Black maybe has e5 knight attacks f3, etc. Position after: White has rooks d2/e1, queen gone, bishop gone, knights a5/e2, pawns. Black has rooks e8, bishops b7/e7, knight e5, pawns. Material: White rooks 10, knights 6, pawns 6? Black rooks 5, bishops 6, knight 3, pawns 7? Let's count: Initially white: Q9 R10 N6 B3? Actually bishop b6 =3, pawns a3,b2,f3,g2,h3 =5 = total 33? Black: Q9 R10 B6 N3 P7=35. After MoveB sequence: White lost Q9+B3=12, gained Q9+R5=14 -> +2 net, material white 35? Wait initial white total maybe 33, black 35. After white captures queen and rook, loses queen and bishop: white 33-12+14=35; black 35-14+12=33, so white +2. Yes.\n\nMoveA Bc7 maybe maybe wins queen? Let's analyze 1.Bc7 attacks queen d8 and knight e5. Black options:\n- Rxc7 capturing bishop, then queen still? Actually after Bc7, black queen d8 is attacked by bishop c7. If black doesn't address, white next Bxd8 captures queen. So black can play Rxc7, capturing bishop. Then white can play? After Rxc7, black rook moved from c2 to c7, leaving d2 queen perhaps? White queen d2 is no longer attacked by rook c2 (rook now c7). But black queen d8 still safe and attacks c7? Wait queen d8 and rook c7 same file? Queen d8 along d-file blocked by d5 pawn; queen c8? Queen d8 diagonal to c7: queen attacks c7! Actually after Rxc7, black queen on d8 attacks c7 along diagonal, but rook on c7 is black so fine. Also black rook c7 attacks? White can play b4 maybe attacks? No.\n\nSo 1.Bc7 just loses bishop to Rxc7, and white gets nothing? But bishop attacked queen, black evades by capturing bishop with rook, so white gained? Black used rook move to capture bishop; but the rook was on c2 attacking white queen d2? Before, black rook c2 attacked white queen d2 along rank c2-d2? Rook c2 attacks d2 yes adjacent, so white queen was under attack. After Bc7, black could instead capture queen: Rxd2+? Actually black rook c2 can capture white queen on d2: 1...Rxd2! But queen d2 is protected by rook d1? White rook d1 protects d2, so if 1...Rxd2 2.Rxd2 (rook d1 captures) then black gains queen for rook? Wait black rook captures queen, white rook recaptures: black loses rook (5) for queen (9), good for white? Actually black would not. But black bishop b7 also attacks g2? Hmm.\n\nLet's analyze MoveA: 1.Bc7! attacks queen d8 and knight e5? Actually bishop c7 also attacks d8 queen and e5 knight. It may be a double attack: queen and knight. If black moves queen, white can capture knight? But black can also play Rxc7 capturing bishop. So Bc7 is likely bad because rook simply captures bishop, not losing queen. However after Rxc7, rook moves from c2 to c7, so black rook no longer attacks d2 queen; but bishop is gone, queen safe. White got nothing, black still has rook and queen. So MoveA loses bishop for no compensation? But wait bishop b6 was maybe pinned? Let's see black rook c2 currently attacks? Rook c2 along second rank attacks b2 pawn, d2 queen, e2 knight. White queen d2 is attacked by rook c2. White might need address queen. MoveB Bxd8 removes queen and then Rxd2 Rxd2 trading queen+rook for bishop+queen. MoveA Bc7 maybe deflects rook c2 by attacking queen, forcing Rxc7, so rook no longer attacks queen, but white lost bishop. Then white can play b4? Actually after 1.Bc7 Rxc7, white could play Qxd8+? Wait queen d2 can capture d8? No, queen d2 to d8 along d-file blocked by d5 black pawn? Actually d2 queen, d3 empty, d4 empty, d5 black pawn blocks. So no. Bishop c7 was the only attacker of queen. So queen safe. White lost bishop for nothing. So MoveA seems bad.\n\nBut tactic given says MoveA: b6c7,tactic \"b6c7 c2c7 b2b4 e5f3 g2f3 Trade the lower value piece for a higher value piece.\" Maybe engine line after Bc7 Rxc7 b4 Nxf3 gxf3? Let's see after 1.Bc7 Rxc7 2.b4 (maybe white attacks black pawn b5 with a3? Actually b4 attacks a5? no, black knight e5 attacks f3; black Nxf3, gxf3. White recaptures knight, so black gained bishop (3) for knight (3)? Wait sequence: White Bc7, black Rxc7 (black captures bishop), white b4, black Nxf3 (black knight captures pawn f3), white gxf3 recaptures black knight. Net after sequence: White lost bishop and pawn; Black lost knight. White traded bishop+pawn for knight = -1? Actually bishop 3 + pawn 1 =4 vs knight 3 = -1. Not good. But maybe b2b4 creates threats: pawn b4-b5 attacks bishop? Let's inspect: black bishop b7 is on b7, pawn b4 attacks b5? Actually white pawn b4 would attack a5 and c5, not b5. Black pawn b5 blocks b-file; b4 pawn attacks a5 (white knight, own) and c5 empty. It doesn't attack black bishop b7. So b4 is weird.\n\nMaybe parse FEN ranks differently? Candidate move b6c7 maybe bishop on b6 captures piece on c7? Wait FEN rank 7 \"1b2bpp1\": Could it be: square a7 empty, b7 black bishop, c7 empty? Yes \"1 b 2 b p p 1\": after b at b7, \"2\" means c7,d7 empty, then b at e7. So c7 empty. So Bc7 is not capture.\n\nMaybe MoveA \"b6c7\" could be Bishop to c7, and tactic line \"b6c7 c2c7 b2b4 e5f3 g2f3\" actually black c2c7 captures bishop, then white b2b4 maybe discovered attack on rook c7 by queen d2? Wait queen d2 on same file d? No. White pawn b2-b4 opens bishop? Bishop gone. It attacks c5, maybe if black knight e5 moves to f3, gxf3 opens g2 pawn controlling? Not.\n\nMaybe MoveA actually wins queen because after 1.Bc7, black cannot play Rxc7? Wait c7 square maybe occupied by black bishop? No. Let's verify FEN \"1b2bpp1\": We assumed b at b7, e at e7. What if string is \"1b2bpp1\": positions: a7 empty, b7 black bishop, c7 empty, d7 empty, e7 black bishop, f7 black pawn, g7 black pawn, h7 empty. Yes c7 empty.\n\nBut maybe bishop b6 to c7 gives check? Bishop on c7 attacks d8 queen, not king. King g8 not in check.\n\nWhat about black rook c2 to c7: path c2-c7 passes through c3,c4,c5,c6? Are there pieces? c3 empty? FEN rank 3 \"P4P1P\": c3 empty, d3 empty, e3 empty, f3 pawn. c4 empty, c5 empty, c6 empty. So Rxc7 legal. After Rxc7, rook on c7, queen d8 still, but now queen and rook on same diagonal c7-d8? Queen d8 adjacent to rook c7? Actually queen at d8, rook c7 diagonal adjacent; queen protects rook. White bishop captured. So black fine.\n\nCould white after 1.Bc7 Rxc7 2.b4? does b4 threaten b5? Wait black pawn b5 is attacked by white knight a5? White knight a5 attacks b7, c6,c4,b3? Knight a5 attacks b7, c6, c4, b3. It attacks bishop b7, not pawn b5. White pawn a3 could capture b4? no. White bishop gone. White queen d2 maybe attacks b2? no.\n\nMaybe MoveA is not a move but \"b6c7\" could be a pawn? No, b6 is white bishop, c7 empty. So Bc7.\n\nGiven MoveB is definitely better: captures queen with bishop, then if rook takes queen, white recaptures rook, net advantage. MoveA likely loses bishop. So answer MoveB.\n\nBut need ensure MoveB legal and exact notation: b6d8 means bishop from b6 to d8 capturing black queen. In PGN, Bxd8. Candidate answer should \"MoveB:b6d8\" perhaps. User says Answer with exactly one of: MoveA:<move> or MoveB:<move>. Only output line. So \"MoveB:b6d8\".\n\nNeed be confident. Let's examine if after 1.Bxd8 Rxd2 2.Rxd2, is there any even better? Actually black could not recapture queen with rook? Let's see after 1.Bxd8, black queen gone, white bishop now on d8. Black rook e8 may capture bishop on d8? Wait black rook e8 is adjacent diagonal to d8? Rook moves horizontally/vertically, e8 to d8 is rook move left one: yes! After 1.Bxd8 (white bishop lands on d8 capturing queen), black rook e8 could capture bishop on d8: 1...Rxd8! Wait I missed: black rook on e8 can capture bishop d8! Because bishop on d8 is protected? White queen d2? White rook? d1 rook along d-file blocked by d5 pawn? Actually d1 rook to d8 blocked by d5 pawn and queen? Queen d2, d3,d4 empty, d5 black pawn. So rook d1 cannot protect d8. White queen d2 along diagonal? Queen d2 to d8 diagonal d3-e4-f5-g6-h7? Not d8. So bishop on d8 may be captured by rook e8. Then black rook e8 moves to d8 capturing bishop, not Rxd2. So MoveB sequence might be 1.Bxd8 Rxd8! Then white queen still on d2, black rook c2 attacks queen, but queen can move? Wait black rook e8 captures bishop on d8, so black recaptures queen with rook, not queen with rook c2. Then material: White lost bishop (3), captured queen (9) => +6 for white, black still rooks e8? Actually rook moved e8-d8, so black lost queen only, bishop captured by rook, black rook remains d8. White queen remains. That's even better for white: win queen for bishop (+6), no queen trade. Is 1...Rxd8 legal? Rook e8 moves to d8, but square d8 occupied by white bishop after capture, yes capture bishop. But black queen was on d8 originally; bishop captures queen and occupies d8; rook e8 adjacent horizontally can capture bishop. So black can recapture bishop with rook, losing queen but keeping rook. Then white queen remains and still maybe attacked by rook c2. Actually after 1.Bxd8 Rxd8, black rook c2 still attacks white queen d2. White can address queen. White gained queen for bishop (net +6). But is there any issue: White bishop on d8 perhaps pinned? It captures queen, then rook e8 recaptures. So MoveB wins queen for bishop indeed, with black rook recapturing. Then black rook c2 still attacks queen; white queen can move say Qxd8? Wait white queen d2 to d8 along d-file blocked by d5 pawn at d5, so cannot capture rook d8. But queen can move to e3 etc, or white can capture rook c2 with knight? Let's analyze after 1.Bxd8 Rxd8 2.??? White to move? Actually sequence: White 1.Bxd8, Black 1...Rxd8, then White move 2. Need choose. Black threatens Rxc2? The black rook c2 attacks queen d2. White can move queen to safety, e.g. Qc3? Qd2-c3? d2-c3 diagonal? Queen moves to c3 (diagonal), safe? But black rook c2 attacks c2 not c3; bishop b7 attacks? Bishop b7 diagonal c6-d5-e4-f3-g2-h1, not c3. Knight e5 attacks c4,d3,f3,g4,c6,d7,f7,g6; not c3. Queen gone. So 2.Qc3 might be okay. Or White can capture rook c2 with? Queen d2 can capture c2? Queen d2 to c2 captures rook? Yes queen moves horizontally to c2, captures black rook! Wait after 1.Bxd8 Rxd8, black rook c2 still on c2 and attacks queen on d2. But queen is on d2; queen can simply capture the rook on c2: 2.Qxc2! Because queen moves one square left to c2 capturing rook. But is c2 defended? Black bishop b7? Bishop b7 attacks c6,d5,e4,f3,g2,h1, not c2. Black rook d8 maybe attacks d2? Rook d8 along d-file blocked by d5 pawn. Black knight e5 attacks c4,d3,f3,g4,c6,d7,f7,g6, not c2. King? So Qxc2 wins rook. So after 1.Bxd8, black probably should not recapture with rook e8? Wait can black instead play 1...Rxd2 (queen capture) to gain queen for rook/bishop maybe? Sequence 1.Bxd8 (bishop captures queen) black could 1...Rxd2+ capturing white queen with rook c2. Then white 2.Rxd2 recaptures rook. Then black has lost queen and rook for white bishop and queen: white gained +2? Actually black lost queen9+rook5=14, white lost bishop3+queen9=12 => white +2. But if black instead 1...Rxd8, black loses queen9 for bishop3 => white +6, and black still has rook c2 but white queen can capture it, leading white +? Sequence 1.Bxd8 Rxd8 2.Qxc2: White gained queen9+rook5=14, lost bishop3 => +11. So black would prefer 1...Rxd2 to limit damage to -2. So MoveB line likely 1.Bxd8 Rxd2 2.Rxd2, winning queen+rook for bishop+queen = +2. But is 1...Rxd2 legal? Black rook c2 to d2 captures white queen on d2; but queen on d2 protected by rook d1 and knight? Knight e2 not protect d2; rook d1 protects d2. So white can recapture. However after 1...Rxd2, white rook d1 recaptures, but is d1 rook pinned by queen? Queen gone, no. So yes.\n\nBut wait: after 1.Bxd8, the square d8 now occupied by white bishop. Is black queen actually on d8? Yes. But can bishop b6 move to d8 if d5 black pawn blocks? Bishop moves diagonally b6-c7-d8. c7 empty, yes legal. Capture queen.\n\nSo MoveB is strong.\n\nNeed consider if MoveA perhaps also captures queen? b6c7 attacks queen, but if black doesn't capture bishop, white next Bxd8 wins queen. However black can capture bishop with rook c2? c2 to c7 yes. So loses bishop. But maybe after 1.Bc7 Rxc7 2.Qd8?? Wait white queen d2 to d8? blocked by d5 pawn, no. But queen d2 can capture c2? Rook moved away, c2 empty, queen could capture? No piece. So no.\n\nCould white after 1.Bc7 Rxc7 2.b4 intends to trap rook? Rook c7 attacked by? White queen d2 along diagonal? Queen d2 to c3-b4-a5 diagonal, not c7. Rook d1 along d-file not c-file. Knight e2 attacks c3,d4,f4,g1,g3; not c7. Knight a5 attacks b7,c6,c4,b3; not c7. Pawn b2-b4 attacks a5,c5; not c7. So rook c7 safe. So MoveA loses piece.\n\nThus MoveB definitely better. Need output only line.\n\nBut let's ensure exact move string: \"b6d8\" maybe lower-case piece? FEN uses white bishop at b6, move from b6 to d8 captures black queen. Candidate says MoveB:b6d8. We'll output \"MoveB:b6d8\".",
  "finished": true,
  "token_usage": {
-  "input_tokens": 291,
-  "output_tokens": 3905,
-  "reasoning_tokens": 3898,
-  "total_tokens": 4196,
+  "input_tokens": 315,
+  "output_tokens": 7477,
+  "reasoning_tokens": 7470,
+  "total_tokens": 7792,
   "cache_read_tokens": 0,
   "cache_write_tokens": null,
   "cache_hit_tokens": 0,
-  "cache_miss_tokens": 291,
+  "cache_miss_tokens": 315,
   "usage_source": "opencode_go",
   "usage_complete": true,
-  "stream_events": 3904,
-  "time_to_first_token_ms": 1931.3044548034668,
-  "generation_seconds": 43.014705657958984,
-  "output_tokens_per_second": 90.78290645649136,
-  "reasoning_tokens_per_second": 90.62017141290738
+  "stream_events": 7476,
+  "time_to_first_token_ms": 2065.1509761810303,
+  "generation_seconds": 80.36445569992065,
+  "output_tokens_per_second": 93.03864419761611,
+  "reasoning_tokens_per_second": 92.95154101326634
  },
  "phase": "scored",
  "status": "correct",
- "move": "d4g7",
+ "move": "b6d8",
  "compliance": true,
  "correct": {
-  "move": "MoveB:d4g7",
+  "move": "MoveB:b6d8",
   "note": "MATE expert choice"
  },
  "oracle": {
   "kind": "mate_selection",
-  "candidate_a": "d4f6",
-  "candidate_b": "d4g7",
+  "candidate_a": "b6c7",
+  "candidate_b": "b6d8",
   "truth_label": "B"
  },
- "fen": "4r1k1/p1p2ppp/2pqp3/1r1p4/1P1Q4/P3P3/1B3PPP/1R3NK1 w - - 3 19",
+ "fen": "3qr1k1/1b2bpp1/pB2p2p/Np1pn3/8/P4P1P/1PrQN1P1/3RR2K w - - 0 25",
  "pieces": [
   {
-   "sq": "b1",
+   "sq": "d1",
    "color": "w",
    "kind": "R"
   },
   {
-   "sq": "f1",
+   "sq": "e1",
    "color": "w",
-   "kind": "N"
+   "kind": "R"
   },
   {
-   "sq": "g1",
+   "sq": "h1",
    "color": "w",
    "kind": "K"
   },
   {
    "sq": "b2",
    "color": "w",
-   "kind": "B"
+   "kind": "P"
   },
   {
-   "sq": "f2",
+   "sq": "c2",
+   "color": "b",
+   "kind": "R"
+  },
+  {
+   "sq": "d2",
    "color": "w",
-   "kind": "P"
+   "kind": "Q"
+  },
+  {
+   "sq": "e2",
+   "color": "w",
+   "kind": "N"
   },
   {
    "sq": "g2",
-   "color": "w",
-   "kind": "P"
-  },
-  {
-   "sq": "h2",
    "color": "w",
    "kind": "P"
   },
@@ -91,24 +96,24 @@
    "kind": "P"
   },
   {
-   "sq": "e3",
+   "sq": "f3",
    "color": "w",
    "kind": "P"
   },
   {
-   "sq": "b4",
+   "sq": "h3",
    "color": "w",
    "kind": "P"
   },
   {
-   "sq": "d4",
+   "sq": "a5",
    "color": "w",
-   "kind": "Q"
+   "kind": "N"
   },
   {
    "sq": "b5",
    "color": "b",
-   "kind": "R"
+   "kind": "P"
   },
   {
    "sq": "d5",
@@ -116,14 +121,19 @@
    "kind": "P"
   },
   {
-   "sq": "c6",
+   "sq": "e5",
+   "color": "b",
+   "kind": "N"
+  },
+  {
+   "sq": "a6",
    "color": "b",
    "kind": "P"
   },
   {
-   "sq": "d6",
-   "color": "b",
-   "kind": "Q"
+   "sq": "b6",
+   "color": "w",
+   "kind": "B"
   },
   {
    "sq": "e6",
@@ -131,14 +141,19 @@
    "kind": "P"
   },
   {
-   "sq": "a7",
+   "sq": "h6",
    "color": "b",
    "kind": "P"
   },
   {
-   "sq": "c7",
+   "sq": "b7",
    "color": "b",
-   "kind": "P"
+   "kind": "B"
+  },
+  {
+   "sq": "e7",
+   "color": "b",
+   "kind": "B"
   },
   {
    "sq": "f7",
@@ -151,9 +166,9 @@
    "kind": "P"
   },
   {
-   "sq": "h7",
+   "sq": "d8",
    "color": "b",
-   "kind": "P"
+   "kind": "Q"
   },
   {
    "sq": "e8",
@@ -167,45 +182,50 @@
   }
  ],
  "n": 8,
- "record_id": "mate-sel-21524",
+ "record_id": "mate-sel-21551",
  "position": {
-  "id": "mate-sel-21524",
+  "id": "mate-sel-21551",
   "n": 8,
   "turn": "w",
-  "fen": "4r1k1/p1p2ppp/2pqp3/1r1p4/1P1Q4/P3P3/1B3PPP/1R3NK1 w - - 3 19",
+  "fen": "3qr1k1/1b2bpp1/pB2p2p/Np1pn3/8/P4P1P/1PrQN1P1/3RR2K w - - 0 25",
   "pieces": [
    {
-    "sq": "b1",
+    "sq": "d1",
     "color": "w",
     "kind": "R"
    },
    {
-    "sq": "f1",
+    "sq": "e1",
     "color": "w",
-    "kind": "N"
+    "kind": "R"
    },
    {
-    "sq": "g1",
+    "sq": "h1",
     "color": "w",
     "kind": "K"
    },
    {
     "sq": "b2",
     "color": "w",
-    "kind": "B"
+    "kind": "P"
    },
    {
-    "sq": "f2",
+    "sq": "c2",
+    "color": "b",
+    "kind": "R"
+   },
+   {
+    "sq": "d2",
     "color": "w",
-    "kind": "P"
+    "kind": "Q"
+   },
+   {
+    "sq": "e2",
+    "color": "w",
+    "kind": "N"
    },
    {
     "sq": "g2",
-    "color": "w",
-    "kind": "P"
-   },
-   {
-    "sq": "h2",
     "color": "w",
     "kind": "P"
    },
@@ -215,24 +235,24 @@
     "kind": "P"
    },
    {
-    "sq": "e3",
+    "sq": "f3",
     "color": "w",
     "kind": "P"
    },
    {
-    "sq": "b4",
+    "sq": "h3",
     "color": "w",
     "kind": "P"
    },
    {
-    "sq": "d4",
+    "sq": "a5",
     "color": "w",
-    "kind": "Q"
+    "kind": "N"
    },
    {
     "sq": "b5",
     "color": "b",
-    "kind": "R"
+    "kind": "P"
    },
    {
     "sq": "d5",
@@ -240,14 +260,19 @@
     "kind": "P"
    },
    {
-    "sq": "c6",
+    "sq": "e5",
+    "color": "b",
+    "kind": "N"
+   },
+   {
+    "sq": "a6",
     "color": "b",
     "kind": "P"
    },
    {
-    "sq": "d6",
-    "color": "b",
-    "kind": "Q"
+    "sq": "b6",
+    "color": "w",
+    "kind": "B"
    },
    {
     "sq": "e6",
@@ -255,14 +280,19 @@
     "kind": "P"
    },
    {
-    "sq": "a7",
+    "sq": "h6",
     "color": "b",
     "kind": "P"
    },
    {
-    "sq": "c7",
+    "sq": "b7",
     "color": "b",
-    "kind": "P"
+    "kind": "B"
+   },
+   {
+    "sq": "e7",
+    "color": "b",
+    "kind": "B"
    },
    {
     "sq": "f7",
@@ -275,9 +305,9 @@
     "kind": "P"
    },
    {
-    "sq": "h7",
+    "sq": "d8",
     "color": "b",
-    "kind": "P"
+    "kind": "Q"
    },
    {
     "sq": "e8",
