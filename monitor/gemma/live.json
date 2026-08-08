@@ -1,21 +1,21 @@
 {
- "updated_at": "2026-08-08T18:08:17Z",
+ "updated_at": "2026-08-08T18:11:58Z",
  "cell": {
   "model": "gemma4-e2b",
   "task": "mate-selection-test",
-  "variant": "tactic"
+  "variant": "noexplain"
  },
  "task_category": "Short Tactics",
  "task_kind": "mate_selection",
  "run_kind": "mate-selection",
- "run_id": "mate-gemma-tactic-w1",
- "sample_idx": 45,
+ "run_id": "mate-gemma-noexplain-w1",
+ "sample_idx": 38,
  "sample_total": 500,
- "position_id": "mate-sel-01884",
- "prompt": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves and their tactics.\nThe FEN of the given chess board is \"8/5Q1p/1p4pk/p7/4b1P1/1B5P/P4P2/q4K2 w - - 5 38\". Which move is better? MoveA:f1e2,tactic f1e2 a1d4 f7f8 h6g5 f8e7 g5h6   MoveB:b3d1,tactic b3d1 a1d1 Checkmate! ",
- "model_input": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves and their tactics.\nThe FEN of the given chess board is \"8/5Q1p/1p4pk/p7/4b1P1/1B5P/P4P2/q4K2 w - - 5 38\". Which move is better? MoveA:f1e2,tactic f1e2 a1d4 f7f8 h6g5 f8e7 g5h6   MoveB:b3d1,tactic b3d1 a1d1 Checkmate! \nAnswer with exactly one of: MoveA:<move> or MoveB:<move>. Only output the line, nothing else.\nYou MUST output an answer. If you cannot determine which move is better with confidence, output your best guess from the two candidates anyway. An answer is required; refusing to answer is not acceptable.",
+ "position_id": "mate-sel-03861",
+ "prompt": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves.\nThe FEN of the given chess board is \"r1bqkb2/3p4/p3p1rp/np2P1nQ/2p4P/1B6/PPP2PP1/R1B1K2R w KQq - 0 18\". Which move is better? MoveA:h4g5 MoveB:h5g4 ",
+ "model_input": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves.\nThe FEN of the given chess board is \"r1bqkb2/3p4/p3p1rp/np2P1nQ/2p4P/1B6/PPP2PP1/R1B1K2R w KQq - 0 18\". Which move is better? MoveA:h4g5 MoveB:h5g4 \nAnswer with exactly one of: MoveA:<move> or MoveB:<move>. Only output the line, nothing else.\nYou MUST output an answer. If you cannot determine which move is better with confidence, output your best guess from the two candidates anyway. An answer is required; refusing to answer is not acceptable.",
  "output": "",
- "reasoning": "The user wants me to evaluate two candidate moves (MoveA and MoveB) for a chess position given by a FEN and determine which one is better.\n\nFEN: `8/5Q1p/1p4pk/p7/4b1P1/1B5P/P4P2/q4K2 w - - 5 38`\nIt is White's turn to move.\n\n**Evaluation of the current position:**\nWhite has pieces on b3, f2, g4, a2, f1. King on f1. Queen on f7.\nBlack has pieces on b2 (queen?), p6, g6, h6, e4 (bishop), b1 (queen?). Wait, the FEN shows:\nWhite: K on f1, Q on f7, B on b3, Pawns on a2, b2 (no, b2 is empty in the diagram if we look at standard notation, but let's check the FEN structure).\nBoard setup:\nRank 8: 8/5Q1p (White Q on f7, Black p on h7)\nRank 7: 1p4pk (Black p on b7, k on g7, p on h7?) -> This interpretation seems slightly off based on typical FEN parsing where ranks are listed top to bottom.\n\nLet's parse the FEN precisely: `8/5Q1p/1p4pk/p7/4b1P1/1B5P/P4P2/q4K2 w - - 5 38`\n\nWhite pieces: K(f1), Q(f7), B(b3), P(a2, g4, f2, h3).\nBlack pieces: Q(a1), B(e4), P(b7, a5, h7? No, wait, looking at rank 7: `1p4pk`. So Black has pawns on b7, and a pawn somewhere? The 'p' at b7 means black has a pawn there. The 'k' at g7 means black king is there.\nWait, the FEN indicates:\nRank 8: Empty\nRank 7: 1p4pk (Black pawn on b7, Black King on g7)\nRank 6: p7 (Black pawn on a6? No, this must be part of the previous rank description if it was written poorly, or it implies only one piece per rank unless specified.) Let's assume standard representation:\nR8: 8\nR7: 5 Q 1 p (White Q on f7, Black p on h7? Or maybe the 'p' is on h7)\nIf we count characters:\n8 / 5 Q 1 p (Rank 7)\n1 p 4 p k (Rank 6) -- This looks highly irregular if interpreted literally as separate ranks.\n\nStandard FEN breakdown:\nR8: 8\nR7: 5 Q 1 p (This usually means squares a7-h7. If Q is on f7, then a7=5, b7=Q, c7=1, d7=p...) This suggests the input FEN might have errors or unusual spacing if read strictly character by character without knowing the exact square mapping convention used by the parser generating this specific string.\n\nHowever, I must treat the provided FEN as gospel.\nWhite to move.\n\nCandidate Moves:\nMoveA: f1e2\nMoveB: b3d1\n\n**Analyzing MoveA: f1e2**\nThis is a pawn move. It moves the pawn from f2 to e2.\nDoes this improve White's position or lead to tactical advantage?\n\n**Analyzing MoveB: b3d1**\nThis is a Bishop move. The Bishop on b3 moves to d1.\nThis attacks the Queen on a1 (if that's where the queen is located, which it is according to the FEN: `q4K2`).\nIf the Queen is on a1, moving Bb3 to d1 attacks Qa1.\n\nLet's re-examine the FEN state regarding the Black Queen location.\n`q4K2` means",
+ "reasoning": "The user wants me to evaluate two candidate moves for a chess position given by a FEN and choose the better one.\n\nFEN: `r1bqkb2/3p4/p3p1rp/np2P1nQ/2p4P/1B6/PPP2PP1/R1B1K2R w KQq - 0 18`\nIt is White's turn to move.\n\n**Evaluation:**\nMaterial is equal. The position is complex, involving kingside tension and potential tactical shots. White has a Queen on h4 exerting pressure, but Black has active pieces (Knights on b5 and g5). White has a space advantage due to the pawn on e5.\n\n**Candidate Moves:**\nMoveA: h4g5\nMoveB: h5g4\n\nLet's analyze the position structure around the kingside.\n\nCurrent setup:\nWhite King on e1, Rook on h1, Bishop on b3, Bishop on c1, Queen on h4, Pawns on a2, b2, c2, f2, g2, h2, e5, h4.\nBlack King on e8, Rook on g6, Knight on g5, Knight on b5, Bishop on f8, Queen on d8, Pawns on a6, b7, d7, e6, c4, g7, h7.\n\n**Analysis of MoveA: h4g5**\nThis move attacks the rook on g6 indirectly if the queen moves, but here it directly challenges the knight on g5. It also creates complications on the kingside pawns.\nIf 18. h4 g5:\nBlack must decide how to respond.\n1. 18... gxh4 (Capturing the pawn)\n   19. Qxh4 (White recaptures, centralizing the Queen further, attacking the weak dark squares if any, and maintaining pressure.)\n   Now Black might play something like 19... Nf7 or 19... Qd7. White seems slightly better developed after this exchange, though the structure remains messy.\n2. 18... Nf7 (Retreating the knight)\n   White can continue developing or improving position, perhaps 19. O-O or maneuvering the Queen.\n3. 18... Ne4 (Attacking the bishop on b3 or putting pressure)\n   This looks dangerous for White as the center opens up.\n\n**Analysis of MoveB: h5g4**\nThis move pushes the h-pawn forward while simultaneously challenging the knight on g5 via the g4 square. This feels more aggressive immediately regarding the kingside structure.\nIf 18. h5 g4:\nThis forces Black to commit the knight or allow structural damage.\n1. If 18... gxh5 (Black captures the pawn)\n   19. Qxh5 (White takes, keeping the initiative.) Now the h-file is open for White's rook potentially later, and the Queen is strongly placed.\n2. If 18... Nf7 (Knight retreats)\n   White has gained space and forced the knight away from its strong post. White can follow up with O-O or other positional improvements.\n\n**Comparison:**\nBoth moves aim to disrupt Black's kingside setup (Ng5, Rg6).\n\nMove A (h4g5): Puts immediate pressure on Ng5, forcing a decision about capturing or retreating.\nMove B (h5g4): Creates",
  "finished": false,
  "token_usage": null,
  "phase": "generating",
@@ -23,29 +23,49 @@
  "move": null,
  "compliance": null,
  "correct": {
-  "move": "MoveA:f1e2",
+  "move": "MoveA:h4g5",
   "note": "MATE expert choice"
  },
  "oracle": {
   "kind": "mate_selection",
-  "candidate_a": "f1e2",
-  "candidate_b": "b3d1",
+  "candidate_a": "h4g5",
+  "candidate_b": "h5g4",
   "truth_label": "A"
  },
- "fen": "8/5Q1p/1p4pk/p7/4b1P1/1B5P/P4P2/q4K2 w - - 5 38",
+ "fen": "r1bqkb2/3p4/p3p1rp/np2P1nQ/2p4P/1B6/PPP2PP1/R1B1K2R w KQq - 0 18",
  "pieces": [
   {
    "sq": "a1",
-   "color": "b",
-   "kind": "Q"
+   "color": "w",
+   "kind": "R"
   },
   {
-   "sq": "f1",
+   "sq": "c1",
+   "color": "w",
+   "kind": "B"
+  },
+  {
+   "sq": "e1",
    "color": "w",
    "kind": "K"
   },
   {
+   "sq": "h1",
+   "color": "w",
+   "kind": "R"
+  },
+  {
    "sq": "a2",
+   "color": "w",
+   "kind": "P"
+  },
+  {
+   "sq": "b2",
+   "color": "w",
+   "kind": "P"
+  },
+  {
+   "sq": "c2",
    "color": "w",
    "kind": "P"
   },
@@ -55,76 +75,141 @@
    "kind": "P"
   },
   {
+   "sq": "g2",
+   "color": "w",
+   "kind": "P"
+  },
+  {
    "sq": "b3",
    "color": "w",
    "kind": "B"
   },
   {
-   "sq": "h3",
-   "color": "w",
+   "sq": "c4",
+   "color": "b",
    "kind": "P"
   },
   {
-   "sq": "e4",
-   "color": "b",
-   "kind": "B"
-  },
-  {
-   "sq": "g4",
+   "sq": "h4",
    "color": "w",
    "kind": "P"
   },
   {
    "sq": "a5",
    "color": "b",
+   "kind": "N"
+  },
+  {
+   "sq": "b5",
+   "color": "b",
    "kind": "P"
   },
   {
-   "sq": "b6",
+   "sq": "e5",
+   "color": "w",
+   "kind": "P"
+  },
+  {
+   "sq": "g5",
+   "color": "b",
+   "kind": "N"
+  },
+  {
+   "sq": "h5",
+   "color": "w",
+   "kind": "Q"
+  },
+  {
+   "sq": "a6",
+   "color": "b",
+   "kind": "P"
+  },
+  {
+   "sq": "e6",
    "color": "b",
    "kind": "P"
   },
   {
    "sq": "g6",
    "color": "b",
-   "kind": "P"
+   "kind": "R"
   },
   {
    "sq": "h6",
    "color": "b",
-   "kind": "K"
+   "kind": "P"
   },
   {
-   "sq": "f7",
-   "color": "w",
+   "sq": "d7",
+   "color": "b",
+   "kind": "P"
+  },
+  {
+   "sq": "a8",
+   "color": "b",
+   "kind": "R"
+  },
+  {
+   "sq": "c8",
+   "color": "b",
+   "kind": "B"
+  },
+  {
+   "sq": "d8",
+   "color": "b",
    "kind": "Q"
   },
   {
-   "sq": "h7",
+   "sq": "e8",
    "color": "b",
-   "kind": "P"
+   "kind": "K"
+  },
+  {
+   "sq": "f8",
+   "color": "b",
+   "kind": "B"
   }
  ],
  "n": 8,
- "record_id": "mate-sel-01884",
+ "record_id": "mate-sel-03861",
  "position": {
-  "id": "mate-sel-01884",
+  "id": "mate-sel-03861",
   "n": 8,
   "turn": "w",
-  "fen": "8/5Q1p/1p4pk/p7/4b1P1/1B5P/P4P2/q4K2 w - - 5 38",
+  "fen": "r1bqkb2/3p4/p3p1rp/np2P1nQ/2p4P/1B6/PPP2PP1/R1B1K2R w KQq - 0 18",
   "pieces": [
    {
     "sq": "a1",
-    "color": "b",
-    "kind": "Q"
+    "color": "w",
+    "kind": "R"
    },
    {
-    "sq": "f1",
+    "sq": "c1",
+    "color": "w",
+    "kind": "B"
+   },
+   {
+    "sq": "e1",
     "color": "w",
     "kind": "K"
    },
    {
+    "sq": "h1",
+    "color": "w",
+    "kind": "R"
+   },
+   {
     "sq": "a2",
+    "color": "w",
+    "kind": "P"
+   },
+   {
+    "sq": "b2",
+    "color": "w",
+    "kind": "P"
+   },
+   {
+    "sq": "c2",
     "color": "w",
     "kind": "P"
    },
@@ -134,57 +219,102 @@
     "kind": "P"
    },
    {
+    "sq": "g2",
+    "color": "w",
+    "kind": "P"
+   },
+   {
     "sq": "b3",
     "color": "w",
     "kind": "B"
    },
    {
-    "sq": "h3",
-    "color": "w",
+    "sq": "c4",
+    "color": "b",
     "kind": "P"
    },
    {
-    "sq": "e4",
-    "color": "b",
-    "kind": "B"
-   },
-   {
-    "sq": "g4",
+    "sq": "h4",
     "color": "w",
     "kind": "P"
    },
    {
     "sq": "a5",
     "color": "b",
+    "kind": "N"
+   },
+   {
+    "sq": "b5",
+    "color": "b",
     "kind": "P"
    },
    {
-    "sq": "b6",
+    "sq": "e5",
+    "color": "w",
+    "kind": "P"
+   },
+   {
+    "sq": "g5",
+    "color": "b",
+    "kind": "N"
+   },
+   {
+    "sq": "h5",
+    "color": "w",
+    "kind": "Q"
+   },
+   {
+    "sq": "a6",
+    "color": "b",
+    "kind": "P"
+   },
+   {
+    "sq": "e6",
     "color": "b",
     "kind": "P"
    },
    {
     "sq": "g6",
     "color": "b",
-    "kind": "P"
+    "kind": "R"
    },
    {
     "sq": "h6",
     "color": "b",
-    "kind": "K"
+    "kind": "P"
    },
    {
-    "sq": "f7",
-    "color": "w",
+    "sq": "d7",
+    "color": "b",
+    "kind": "P"
+   },
+   {
+    "sq": "a8",
+    "color": "b",
+    "kind": "R"
+   },
+   {
+    "sq": "c8",
+    "color": "b",
+    "kind": "B"
+   },
+   {
+    "sq": "d8",
+    "color": "b",
     "kind": "Q"
    },
    {
-    "sq": "h7",
+    "sq": "e8",
     "color": "b",
-    "kind": "P"
+    "kind": "K"
+   },
+   {
+    "sq": "f8",
+    "color": "b",
+    "kind": "B"
    }
   ],
   "source": "MATE testset"
  },
- "worker_id": "tactic-w1"
+ "worker_id": "noexplain-w1"
 }
