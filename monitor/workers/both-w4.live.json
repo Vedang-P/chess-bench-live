@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-08-09T18:23:06Z",
+ "updated_at": "2026-08-09T18:23:57Z",
  "cell": {
   "model": "deepseek-v4-flash",
   "task": "mate-selection-test",
@@ -9,106 +9,96 @@
  "task_kind": "mate_selection",
  "run_kind": "mate-selection",
  "run_id": "mate-both-w4",
- "sample_idx": 70,
+ "sample_idx": 71,
  "sample_total": 200,
- "position_id": "mate-sel-26911",
- "prompt": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves with their strategy explanations and tactics.\nThe FEN of the given chess board is \"8/4R1p1/4Qpkp/6q1/2P2P2/3p3P/r5P1/5RK1 b - - 0 35\". Which move is better? MoveA:a2g2, Sacrifice a piece to unlock a file or diagonal in proximity to the opposing king TacticA: a2g2 g1h1 g5g3 e6e4 g6h5 e4g2   MoveB:g5g2, Offer a piece to clear a file or diagonal close to the enemy king TacticB: g5g2 Checkmate! ",
- "model_input": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves with their strategy explanations and tactics.\nThe FEN of the given chess board is \"8/4R1p1/4Qpkp/6q1/2P2P2/3p3P/r5P1/5RK1 b - - 0 35\". Which move is better? MoveA:a2g2, Sacrifice a piece to unlock a file or diagonal in proximity to the opposing king TacticA: a2g2 g1h1 g5g3 e6e4 g6h5 e4g2   MoveB:g5g2, Offer a piece to clear a file or diagonal close to the enemy king TacticB: g5g2 Checkmate! \nAnswer with exactly one of: MoveA:<move> or MoveB:<move>. Only output the line, nothing else.\nYou MUST output an answer. If you cannot determine which move is better with confidence, output your best guess from the two candidates anyway. An answer is required; refusing to answer is not acceptable.",
- "output": "MoveB:g5g2",
- "reasoning": "We need answer chess move comparison. Need decide better between MoveA a2g2 and MoveB g5g2. Need output exactly one line. Need analyze board FEN: \"8/4R1p1/4Qpkp/6q1/2P2P2/3p3P/r5P1/5RK1 b - - 0 35\"\n\nLet's parse FEN. Black to move. Board:\n8/4R1p1/4Qpkp/6q1/2P2P2/3p3P/r5P1/5RK1 b - - 0 35\n\nRows:\nrank8: 8 empty\nrank7: 4R1g1? Wait \"4R1p1\" => e7=R, g7=pawn black? Actually pieces: White R on e7, black pawn g7.\nrank6: \"4Qpkp\" => e6=White Q, f6=black pawn, g6=black king? Let's decode: 4Q p k p => e6 Q, f6 p, g6 k, h6 p. Yes black king g6, black pawns f6,h6.\nrank5: \"6q1\" => g5=black queen? 6 empty then q at g5, h5 empty.\nrank4: \"2P2P2\" => c4 white pawn, f4 white pawn.\nrank3: \"3p3P\" => d3 black pawn, h3 white pawn.\nrank2: \"r5P1\" => a2 black rook, g2 white pawn? Wait \"r5P1\": r at a2, five empty b2-f2, P at g2 white pawn, h2 empty? Actually 1 after P => h2 empty. So g2 is white pawn.\nrank1: \"5RK1\" => f1 white rook, g1 white king, h1 empty? 5 empty a1-e1, R f1, K g1.\n\nSo black: King g6, Queen g5, Rook a2, pawns d3 f6 g7 h6. White: King g1, Queen e6, Rooks e7 f1, pawns c4 f4 g2 h3.\n\nFEN says black to move. Candidates:\nMoveA: a2g2: black rook from a2 captures g2 pawn? Rook takes g2. TacticA: a2g2 g1h1 g5g3 e6e4 g6h5 e4g2. Sequence: 1... Rxg2+? Actually a2g2 gives check? Rook to g2 adjacent to white king g1 on same file? Rook g2 attacks g1 along file, yes check. White likely Kh1. Then black queen g5-g3? Wait g5g3 is queen to g3, giving? Then white e6e4 maybe block/check? Then Kh5? Hmm.\nMoveB: g5g2: black queen captures g2 pawn? Actually queen g5 to g2 captures pawn, but g2 occupied white pawn, yes Qxg2+. TacticB says Checkmate! Let's verify: After Qxg2+ (queen on g2, white king g1), can white capture queen? White king g1 adjacent to g2, protected? King could capture Qg2 if g2 not defended by black. Is g2 defended by black rook a2? Rook on a2 attacks g2 horizontally along rank 2? There are pieces between? Rank2: a2 black rook, b2 empty, c2 empty, d2 empty, e2 empty, f2 empty, g2 white pawn occupied, h2 empty. So black rook attacks g2 through empty squares, yes Qg2 is protected by rook a2. Also black king g6? Queen g2 maybe protected by rook only? Black rook a2 protects g2. So Kxg2 illegal (king cannot move into attacked square by rook a2). White king cannot capture queen. Could white rook f1 take Qg2? Rook f1 to g1? Actually f1 rook can move to g1? occupied by king. To g2 diagonal? Rook moves vertical/horizontal, from f1 to g1/f? no. Queen e6 can capture g2? e6 to g2 diagonal is e6-f5-g4-h3? not g2; no. Rook e7 to g7? no capture g2? e7 to g2 vertical? e7-e2-g2 no. King has moves: Kxg2 illegal due rook; Kh1? From g1 to h1, is h1 attacked by Qg2? Queen on g2 attacks h1 diagonally yes. So Kh1 illegal. Kf2? Is f2 attacked by queen g2? Queen g2 attacks f2 horizontally? same rank 2, yes adjacent -> attacked. Also rook a2 attacks f2? yes. So Kf2 illegal. White can block with rook? After Qxg2+ if king cannot move, can white capture with something? White queen e6 could take g6? No. Could interpose something between g2 and g1? White f1 rook could move to g1? But square g1 occupied by king; to block check on g-file, need piece between g2 and g1: square g1 occupied king, cannot interpose adjacent? In chess, if checking piece adjacent on same file, king must move/capture, cannot block because no square between. So Qxg2+ is checkmate if queen protected and all king moves covered, no captures. Need check white could play Rf1xg1? No. White queen e6 to g4? Might capture queen? Queen from e6 to g2 diagonal not possible (e6-f5-g4-h3), not. White rook e7 to g7 maybe? no. White h3 pawn could capture g2? Pawn h3 captures g2? White pawn moves upward to lower rank? White pawn h3 captures diagonally to g4 (toward rank increase? Actually white moves toward rank8, from h3 to h4; captures g4). Not g2. g2 pawn moved/captured, no. So Qxg2# indeed likely checkmate. Let's verify black king status? Black king g6. White queen e6 attacks g6? Queen e6 to g6 same file? e6-f6-g6: f6 occupied by black pawn, so blocked. White rook e7 attacks g7? no. So black king not in check. MoveB is Qxg2#. Seems clearly mate, best.\n\nMoveA Rxg2+ maybe not mate because after Kh1, black can Qg3+ then etc. But MoveB immediate checkmate. So MoveB better.\n\nNeed output exactly \"MoveB:g5g2\" or \"MoveB:g5g2\"? Candidate MoveB text \"g5g2\". So line: MoveB:g5g2.\n\nBut need ensure FEN validity and move legality: Is black queen g5 to g2 path? Queen moves diagonally: g5-f4-e3-d2-c1? Actually g5 to g2 is vertical down same file g: g5-g4-g3-g2. Are g4 and g3 empty? FEN rank4 \"2P2P2\": g4 empty yes. rank3 \"3p3P\": d3 pawn, h3 pawn, g3 empty yes. So path clear; g2 occupied white pawn. Queen captures, checkmate. Correct.\n\nNeed answer only line.",
+ "position_id": "mate-sel-26947",
+ "prompt": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves with their strategy explanations and tactics.\nThe FEN of the given chess board is \"6B1/p2P4/1b3kpp/1P3p2/4bK1P/6P1/4R3/8 b - - 0 42\". Which move is better? MoveA:f6e7, Displace the piece to a more promising position, strengthening its board authority. TacticA: f6e7 e2d2 g6g5 f4e5 b6a5 d7d8r   MoveB:g6g5, When a black pawn advances, it widens the kingside, allowing black greater liberty in moving pieces. TacticB: g6g5 h4g5 h6g5 Checkmate! ",
+ "model_input": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves with their strategy explanations and tactics.\nThe FEN of the given chess board is \"6B1/p2P4/1b3kpp/1P3p2/4bK1P/6P1/4R3/8 b - - 0 42\". Which move is better? MoveA:f6e7, Displace the piece to a more promising position, strengthening its board authority. TacticA: f6e7 e2d2 g6g5 f4e5 b6a5 d7d8r   MoveB:g6g5, When a black pawn advances, it widens the kingside, allowing black greater liberty in moving pieces. TacticB: g6g5 h4g5 h6g5 Checkmate! \nAnswer with exactly one of: MoveA:<move> or MoveB:<move>. Only output the line, nothing else.\nYou MUST output an answer. If you cannot determine which move is better with confidence, output your best guess from the two candidates anyway. An answer is required; refusing to answer is not acceptable.",
+ "output": "MoveB:g6g5",
+ "reasoning": "We need answer chess move. Need determine better between MoveA f6e7 (king from f6 to e7?) Wait FEN: \"6B1/p2P4/1b3kpp/1P3p2/4bK1P/6P1/4R3/8 b - - 0 42\". Black to move. Black pieces: king f6, bishop b6, bishop e4, pawns a7, g6, h6, f5. White: king f4, rook e2, bishop g8, pawns d7, b5, h4, g3. Need evaluate moves.\n\nLet's parse FEN:\n8th rank: \"6B1\" => a8 empty b8 empty c8 empty d8 empty e8 empty f8 empty g8 White bishop, h8 empty.\n7th rank: \"p2P4\" => a7 black pawn, b7 empty, c7 empty, d7 white pawn, e7 empty f7 empty g7 empty h7 empty.\n6th rank: \"1b3kpp\" => b6 black bishop, c6 empty d6 empty e6 empty f6 black king, g6 black pawn, h6 black pawn.\n5th rank: \"1P3p2\" => b5 white pawn, c5 empty d5 empty e5 empty f5 black pawn, g5 empty h5 empty.\n4th rank: \"4bK1P\" => e4 black bishop, f4 white king, h4 white pawn.\n3rd rank: \"6P1\" => g3 white pawn.\n2nd rank: \"4R3\" => e2 white rook.\n1st rank empty.\n\nSo black to move, material: black has two bishops + 4 pawns? Actually black pawns a7,g6,h6,f5 = 4 pawns, 2 bishops, king. White rook, bishop, pawns d7,b5,h4,g3 = 4 pawns, bishop, rook. Material: Black bishops ~6, pawns 4 =10; White rook 5 + bishop 3 + pawns 4=12. White up slightly. Position critical.\n\nCandidate MoveA: f6e7 (black king moves from f6 to e7). TacticA line: f6e7 e2d2 g6g5 f4e5 b6a5 d7d8r (white promotes? after d7d8=Q? Actually \"d7d8r\" maybe promotion to rook? But d7 pawn can move to d8 and promote. If black plays ...b6a5, White plays d7-d8=Q? notation r maybe queen? likely \"d7d8=Q\" but r means rook? In SAN \"d8=Q\"; TacticA \"d7d8r\" maybe promotion to rook? Hmm.)\n\nCandidate MoveB: g6g5 (black pawn g6 to g5). TacticB: g6g5 h4g5 h6g5 Checkmate! Is that true? Let's analyze. Black to move: ... g6-g5+. White h4xg5 en passant? Wait black pawn from g6 to g5, white h4 pawn can capture en passant? En passant: if black moves g7-g5? But g6 to g5 is one square, not double, so no en passant. White h4 pawn is adjacent horizontally to g5? h4 attacks g5, yes if black pawn lands on g5, white h4 can capture g5 normally. So ...g6g5, h4xg5, h6xg5#? Need see checkmate: After black king remains f6, white king f4, white rook e2, bishop g8, white pawns d7,b5,g3. Black pawns f5,g5,h6,a7; bishops b6,e4. If ...g6g5+, white king f4 is in check from g5 pawn? A pawn at g5 attacks f4 yes. White king maybe can capture g5? White king at f4 could capture g5 if square g5 is protected by black h6 pawn? h6 pawn attacks g5? Pawns attack diagonally: h6 pawn attacks g5 and ... yes h6 pawn controls g5. Also black bishop e4 controls? Bishop e4 controls f5,g6,h7 and d3,c2,b1 etc, also f3,g2,h1, d5,c6,b7,a8. It controls f3,g2,h1; not g5. Bishop b6 controls g1? diagonal b6-c5-d4-e3-f2-g1; also a5-c4-d3-e2-f1; c7-d8; a7-b8. Not g5. f5 pawn controls e4,g4. So g5 protected by h6 pawn. Thus Kxg5 illegal. White can respond h4xg5, removing checking pawn, but then h6xg5# maybe discovered by bishop e4? Let's see: after 1...g6g5+ 2 h4xg5 h6xg5+? Black pawn g5 at g5 gives check to white king f4 (adjacent diagonal? pawn at g5 attacks f4 yes). White king at f4 is in check. Can white capture g5 pawn? White king could move to g? The g5 pawn is protected by? black king f6 controls g5? King f6 controls e5,e6,e7,f5,f7,g5,g6,g7. Yes! Black king f6 protects g5. Also black bishop e4 controls g2, h1, d3 etc not g5, bishop b6 controls d4/e3/f2/g1 etc, not g5. So g5 is protected by black king. White king at f4 cannot capture g5 because black king f6 protects g5? Distance f4 to g5 diagonal, yes square g5 adjacent to black king f6 (diagonal) so protected. Thus white king in check from g5 pawn, no legal capture of g5 with king. Can white block? Move something to f4? King can move to e3? White king at f4 options: e3? attacked by bishop e4? Bishop e4 controls d3, f3, g2, h1, d5, c6, b7, a8; e3? Bishop e4 controls? Bishop moves diagonally: e4-d3-c2-b1 and e4-f3-g2-h1; e4-d5-c6-b7-a8; e4-f5-g6-h7; e4-d? Actually e4 to e? No. So e3 is not attacked by bishop e4? Bishop e4 to d3 then c2 b1; to f3 g2 h1; to d5 c6 b7 a8; to f5 g6 h7. e3 not on diagonal from e4? Actually e4 to d3 diagonal yes e4-d3, but e3 is horizontal no. White king e3 may be attacked by black bishop b6? b6-c5-d4-e3-f2-g1 yes bishop b6 controls e3. So e3 is attacked by bishop b6. Also f5 black pawn controls e4/g4, not e3. g5 pawn controls f4/h4. Black king f6 controls e5,e6,e7,f5,f7,g5,g6,g7. So e3 safe? Need check other black pieces: bishop b6 controls e3 indeed. So e3 illegal. King to e5? attacked by black king f6 (adjacent) and bishop b6 (b6-c5-d4-e3-f2-g1 not e5), bishop e4 controls d5/f5/g6/h7, f5 pawn controls e4/g4, g5 pawn controls f4/h4. e5 adjacent to black king f6, illegal. King to g4? attacked by f5 pawn (f5 controls e4,g4) and maybe bishop e4 controls g2/h1, not g4; h6 pawn controls g5/g? h6 attacks g5; black king f6 controls g5 not g4; e? g4 attacked by f5 pawn yes. King to f3? attacked by bishop e4 (e4-f3) illegal. King to g3? White pawn on g3 occupies. King to g5? occupied by black pawn and protected. So only check response could capture with h pawn? After ...g6g5+, white h4 pawn can capture g5, then ...h6xg5#. Is it checkmate? Position after 1...g6g5+ 2 hxg5 hxg5#: White king f4, white rook e2, bishop g8, pawns d7,b5,g3. Black king f6, bishops b6,e4, pawns a7,f5,g5,h6? Wait black h6 captured g5: black pawn now at g5, h6 empty. Check from black pawn g5 to f4. White legal responses: King captures g5? protected by black king f6 and f5 pawn? Black king f6 protects g5 yes. King move? squares:\n- e3 attacked by bishop b6 (b6-c5-d4-e3) and bishop e4? e4-d3 not e3, but b6 enough.\n- e5 attacked by black king f6, bishop e4? e4-f5-g6-h7 not e5; f5 pawn attacks e4/g4; g5 pawn attacks f4/h4; black king controls e5, so illegal.\n- g4 attacked by f5 pawn (f5 controls e4,g4) and bishop e4? e4-f5-g6-h7 not g4; h? Actually black pawn g5 attacks f4/h4; not g4. f5 pawn attacks g4 yes.\n- f3 attacked by bishop e4 (e4-f3) and bishop b6? b6-c5-d4-e3-f2-g1, not f3.\n- g3 occupied by white pawn.\n- e4? attacked by bishop e4 same square? occupied by black bishop e4, cannot.\n- g5 occupied black pawn.\nCan white block by moving something to f4? Rook e2 to e? Block check along diagonal? Check from g5 to f4 is adjacent diagonal, cannot block (no square between). Capture g5: white king cannot; white bishop g8 could capture g5? Bishop g8 to f7-e6-d5-c4-b3-a2? Or g8-h7; diagonal g8-f7-e6-d5-c4-b3-a2. Not g5. Rook e2? Rook moves along rank/file, not diagonal; cannot capture g5 because rook at e2 no. White pawn g3 can capture? Pawns capture diagonally: g3 attacks f4 and h4, not g5. White pawn d7/b5 cannot. So checkmate indeed. Candidate B claims Checkmate! So MoveB seems winning if tactic valid: 1...g6g5+ 2 hxg5 hxg5#. Need verify initial position after 1...g6g5: Is white h4 pawn forced to capture? White king in check by g5 pawn. White could capture g5 with h4 pawn but \"h4g5\" in TacticB means h4 pawn takes g5. Could White instead move king to f3? Wait initial check from g5 pawn: pawn at g5 attacks f4, yes in check. Other legal responses? Capture checking piece: only h4 pawn can capture g5? White king could capture g5? As noted g5 protected by black king f6 and h6 pawn? In position before hxg5, black h6 pawn at h6 protects g5? Pawns attack diagonally: h6 attacks g5, yes. So king cannot. Could white move a piece to block? Check is adjacent diagonal no block. Could white move king to e3? In position after ...g6g5+, white king f4 in check. Is e3 safe? Black bishop b6 controls e3; bishop e4 controls? e4-d3-c2-b1 and e4-f3-g2-h1; not e3. Black king f6 controls e5/e6/e7/f5/f7/g5/g6/g7, not e3. f5 pawn controls e4,g4; g5 pawn controls f4,h4; h6 pawn controls g5; bishop b6 controls e3 yes. So e3 illegal. e5? adjacent to black king f6 illegal; also bishop e4 controls f5-g6-h7 diagonal, not e5; bishop b6 controls c5-d4-e3-f2-g1, not e5; f5 pawn controls e4/g4; g5 pawn controls f4/h4. e5 adjacent to black king f6 so illegal. g4 attacked by f5 pawn; also bishop e4? e4-f5-g6-h7, no; h? no. f3 attacked by bishop e4 (e4-f3) yes. g3 occupied by own pawn; g5 occupied by black pawn and protected by king/h6. e4 occupied black bishop. So king moves all illegal. White could capture g5 with h4 pawn, only legal move? What about bishop g8 to f7? Does that block check? King f4 checked by pawn g5 along diagonal g5-f4. Blocking requires piece go to f4? Can't because f4 occupied by king; or capture g5. Bishop g8 can capture? Bishop diagonal g8-f7-e6-d5-c4-b3-a2, not g5. Rook e2 to e? no. Pawn d7? no. So hxg5 forced. Then h6xg5# as above. So MoveB is Checkmate! Wait black move sequence: MoveB is g6g5, but TacticB says \"g6g5 h4g5 h6g5 Checkmate!\" After 1...g6g5+ 2 hxg5 hxg5# indeed checkmate. That means black can force checkmate immediately. So MoveB is clearly better.\n\nBut need ensure no issue: Is black currently in check? FEN turn b, white bishop on g8 along diagonal to f7/e6/d5/c4/b3/a2, not king f6? Bishop g8 controls f7, e6, d5, c4, b3, a2. Black king f6 not on diagonal. Rook e2 attacks e-file, king f6 not same. White pawn d7 attacks c8/e8, not f6. White pawn b5 attacks a6/c6; no. White pawn h4 attacks g5; no check. White king f4 adjacent? Kings cannot be adjacent; f4 to f6 distance 2, no. So black not in check. Legal to move g6-g5? Need ensure g6 pawn not pinned? White bishop g8 diagonal g8-f7-e6-d5-c4-b3-a2; g6 not on that diagonal. White rook e2 along second rank/file; g6 not same. White king f4 attacks g5/e5/e3/g3; not g6. So pawn can move.\n\nAfter 1...g6g5+, white h4 pawn captures g5. Is h4 pawn pinned to king f4? A pawn on h4 attacks g5; if black king f6 etc no pin. Legal. After h4xg5, black h6 pawn captures g5#. Need see if h6 pawn pinned by bishop g8? Bishop g8 diagonal g8-f7-e6-d5-c4-b3-a2; h6 not on diagonal. Rook e2? no. King f6? h6 pawn moves to g5, after move black king f6 remains adjacent? Black king at f6, pawn at g5; okay. Is black king f6 currently in check from white rook e2 after black moves? Rook e2 attacks e-file: e3,e4,e5,e6,e7,e8; black king f6 not on e-file. Bishop g8 attacks f7/e6/d5 etc; not f6. Pawn d7 attacks c8/e8; not f6. Pawn b5 attacks a6/c6; not f6. Pawn h4 after capture gone; pawn g3 attacks f4/h4; no. So black king not in check. White to move in checkmate. Need verify white king f4 has no legal capture of g5 after hxg5 because black king f6 protects g5, also f5 pawn? f5 pawn at f5 attacks e4/g4, not g5. h6 pawn no longer at h6; black pawn now at g5 itself. Black king f6 controls g5 yes. White king f4 to g5 would be adjacent to black king? f4 to g5 diagonal, distance 1, so illegal because kings adjacent? Actually kings attack squares adjacent including diagonals; moving to g5 would put white king adjacent to black king f6 (diagonal), illegal because kings cannot be adjacent. Also g5 occupied by black pawn; capture would put white king on g5 adjacent to black king f6, illegal. So cannot capture. Other king moves we analyzed illegal due to bishops/pawn. Can white capture g5 with bishop? Bishop g8 diagonal to f7-e6-d5-c4-b3-a2, not g5. Rook e2? Rook e2 to e5? Rook along e-file: e2-e5 possible, but does not address check. Could rook capture g5? Rook e2 to g2 then g5? two moves no. Rook cannot capture diagonal. White pawn g3 could move to g4? Does moving g3-g4 block check? Check from g5 to f4, line adjacent, no. White pawn d7 could promote? Not a response to check unless capture g5? no. White bishop g8 could move to h7? still check persists. So only legal move hxg5. Then hxg5#.\n\nThus MoveB is checkmate, definitely better than MoveA which maybe king move f6e7? Let's see f6e7 legality: black king from f6 to e7. Is e7 controlled by white? White bishop g8 controls f7,e6,d5,c4,b3,a2; not e7. White rook e2 on e-file attacks e3,e4,e5,e6,e7,e8! Yes rook e2 controls e7 along e-file, but is there piece between? e2 to e7 squares: e3 empty, e4 black bishop, e5 empty, e6 empty, e7 target. The rook's line to e7 is blocked by black bishop on e4! Because bishop e4 sits on e4 between e2 and e7. So e7 not attacked by rook? Actually rook attacks along file until blocked by e4 bishop. Since e4 is occupied by black bishop, rook attacks e3/e4, not beyond e5/e6/e7. So e7 safe from rook. White king f4 controls e5,e3,g5,g3, not e7. White pawn d7 controls c8/e8, not e7. White pawn b5 controls a6/c6; h4 controls g5; g3 controls f4/h4. Bishop g8 controls f7,e6,d5,c4,b3,a2; not e7. So e7 safe? But wait black king at e7 could be in check by White bishop g8? Diagonal g8-f7-e6-d5... not e7. Rook? blocked by e4 bishop. So legal. MoveA f6e7 maybe moves king out of danger? But TacticA line weird: f6e7 e2d2 g6g5 f4e5 b6a5 d7d8r. Actually after black king e7, white rook e2 could move d2? Rook e2-d2 legal. Then black g6g5+? White king f4e5? But if black king e7 controls e6/e7/f? Let's not need.\n\nQuestion asks \"Which move is better? MoveA ... TacticA ... MoveB ... TacticB ... Answer MoveA:<move> or MoveB:<move>.\" Since MoveB is immediate checkmate, answer MoveB:g6g5. Need output exactly line \"MoveB:g6g5\". Ensure move notation maybe \"g6g5\" as given. Final answer only line.",
  "finished": true,
  "token_usage": {
-  "input_tokens": 328,
-  "output_tokens": 1636,
-  "reasoning_tokens": 1628,
-  "total_tokens": 1964,
+  "input_tokens": 343,
+  "output_tokens": 4436,
+  "reasoning_tokens": 4428,
+  "total_tokens": 4779,
   "cache_read_tokens": 0,
   "cache_write_tokens": null,
   "cache_hit_tokens": 0,
-  "cache_miss_tokens": 328,
+  "cache_miss_tokens": 343,
   "usage_source": "opencode_go",
   "usage_complete": true,
-  "stream_events": 1635,
-  "time_to_first_token_ms": 2677.2818565368652,
-  "generation_seconds": 21.679848670959473,
-  "output_tokens_per_second": 75.46178134497082,
-  "reasoning_tokens_per_second": 75.09277507922525
+  "stream_events": 4435,
+  "time_to_first_token_ms": 3074.1565227508545,
+  "generation_seconds": 50.62838387489319,
+  "output_tokens_per_second": 87.61883474222114,
+  "reasoning_tokens_per_second": 87.46082061283931
  },
  "phase": "scored",
  "status": "correct",
- "move": "g5g2",
+ "move": "g6g5",
  "compliance": true,
  "correct": {
-  "move": "MoveB:g5g2",
+  "move": "MoveB:g6g5",
   "note": "MATE expert choice"
  },
  "oracle": {
   "kind": "mate_selection",
-  "candidate_a": "a2g2",
-  "candidate_b": "g5g2",
+  "candidate_a": "f6e7",
+  "candidate_b": "g6g5",
   "truth_label": "B"
  },
- "fen": "8/4R1p1/4Qpkp/6q1/2P2P2/3p3P/r5P1/5RK1 b - - 0 35",
+ "fen": "6B1/p2P4/1b3kpp/1P3p2/4bK1P/6P1/4R3/8 b - - 0 42",
  "pieces": [
   {
-   "sq": "f1",
+   "sq": "e2",
    "color": "w",
    "kind": "R"
   },
   {
-   "sq": "g1",
+   "sq": "g3",
    "color": "w",
-   "kind": "K"
+   "kind": "P"
   },
   {
-   "sq": "a2",
+   "sq": "e4",
    "color": "b",
-   "kind": "R"
-  },
-  {
-   "sq": "g2",
-   "color": "w",
-   "kind": "P"
-  },
-  {
-   "sq": "d3",
-   "color": "b",
-   "kind": "P"
-  },
-  {
-   "sq": "h3",
-   "color": "w",
-   "kind": "P"
-  },
-  {
-   "sq": "c4",
-   "color": "w",
-   "kind": "P"
+   "kind": "B"
   },
   {
    "sq": "f4",
    "color": "w",
+   "kind": "K"
+  },
+  {
+   "sq": "h4",
+   "color": "w",
    "kind": "P"
   },
   {
-   "sq": "g5",
-   "color": "b",
-   "kind": "Q"
+   "sq": "b5",
+   "color": "w",
+   "kind": "P"
   },
   {
-   "sq": "e6",
-   "color": "w",
-   "kind": "Q"
+   "sq": "f5",
+   "color": "b",
+   "kind": "P"
+  },
+  {
+   "sq": "b6",
+   "color": "b",
+   "kind": "B"
   },
   {
    "sq": "f6",
    "color": "b",
-   "kind": "P"
+   "kind": "K"
   },
   {
    "sq": "g6",
    "color": "b",
-   "kind": "K"
+   "kind": "P"
   },
   {
    "sq": "h6",
@@ -116,83 +106,78 @@
    "kind": "P"
   },
   {
-   "sq": "e7",
-   "color": "w",
-   "kind": "R"
-  },
-  {
-   "sq": "g7",
+   "sq": "a7",
    "color": "b",
    "kind": "P"
+  },
+  {
+   "sq": "d7",
+   "color": "w",
+   "kind": "P"
+  },
+  {
+   "sq": "g8",
+   "color": "w",
+   "kind": "B"
   }
  ],
  "n": 8,
- "record_id": "mate-sel-26911",
+ "record_id": "mate-sel-26947",
  "position": {
-  "id": "mate-sel-26911",
+  "id": "mate-sel-26947",
   "n": 8,
   "turn": "b",
-  "fen": "8/4R1p1/4Qpkp/6q1/2P2P2/3p3P/r5P1/5RK1 b - - 0 35",
+  "fen": "6B1/p2P4/1b3kpp/1P3p2/4bK1P/6P1/4R3/8 b - - 0 42",
   "pieces": [
    {
-    "sq": "f1",
+    "sq": "e2",
     "color": "w",
     "kind": "R"
    },
    {
-    "sq": "g1",
+    "sq": "g3",
     "color": "w",
-    "kind": "K"
+    "kind": "P"
    },
    {
-    "sq": "a2",
+    "sq": "e4",
     "color": "b",
-    "kind": "R"
-   },
-   {
-    "sq": "g2",
-    "color": "w",
-    "kind": "P"
-   },
-   {
-    "sq": "d3",
-    "color": "b",
-    "kind": "P"
-   },
-   {
-    "sq": "h3",
-    "color": "w",
-    "kind": "P"
-   },
-   {
-    "sq": "c4",
-    "color": "w",
-    "kind": "P"
+    "kind": "B"
    },
    {
     "sq": "f4",
     "color": "w",
+    "kind": "K"
+   },
+   {
+    "sq": "h4",
+    "color": "w",
     "kind": "P"
    },
    {
-    "sq": "g5",
-    "color": "b",
-    "kind": "Q"
+    "sq": "b5",
+    "color": "w",
+    "kind": "P"
    },
    {
-    "sq": "e6",
-    "color": "w",
-    "kind": "Q"
+    "sq": "f5",
+    "color": "b",
+    "kind": "P"
+   },
+   {
+    "sq": "b6",
+    "color": "b",
+    "kind": "B"
    },
    {
     "sq": "f6",
     "color": "b",
-    "kind": "P"
+    "kind": "K"
    },
    {
     "sq": "g6",
     "color": "b",
-    "kind": "K"
+    "kind": "P"
    },
    {
     "sq": "h6",
@@ -200,14 +185,19 @@
     "kind": "P"
    },
    {
-    "sq": "e7",
-    "color": "w",
-    "kind": "R"
-   },
-   {
-    "sq": "g7",
+    "sq": "a7",
     "color": "b",
     "kind": "P"
+   },
+   {
+    "sq": "d7",
+    "color": "w",
+    "kind": "P"
+   },
+   {
+    "sq": "g8",
+    "color": "w",
+    "kind": "B"
    }
   ],
   "source": "MATE testset"
