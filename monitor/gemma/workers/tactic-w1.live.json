@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-08-09T00:30:40Z",
+ "updated_at": "2026-08-09T00:35:42Z",
  "cell": {
   "model": "gemma4-e2b",
   "task": "mate-selection-test",
@@ -9,235 +9,139 @@
  "task_kind": "mate_selection",
  "run_kind": "mate-selection",
  "run_id": "mate-gemma-tactic-w1",
- "sample_idx": 325,
+ "sample_idx": 329,
  "sample_total": 500,
- "position_id": "mate-sel-13657",
- "prompt": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves and their tactics.\nThe FEN of the given chess board is \"6k1/1pq2pp1/p1p1r2p/8/1P6/b3BQ1P/5PP1/3R2K1 w - - 0 26\". Which move is better? MoveA:f3f7,tactic f3f7 c7f7 d1d3 a3b4 d3d1 f7e7   MoveB:e3f4,tactic e3f4 c7e7 f3a3 e6e1 d1e1 e7e1  ",
- "model_input": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves and their tactics.\nThe FEN of the given chess board is \"6k1/1pq2pp1/p1p1r2p/8/1P6/b3BQ1P/5PP1/3R2K1 w - - 0 26\". Which move is better? MoveA:f3f7,tactic f3f7 c7f7 d1d3 a3b4 d3d1 f7e7   MoveB:e3f4,tactic e3f4 c7e7 f3a3 e6e1 d1e1 e7e1  \nAnswer with exactly one of: MoveA:<move> or MoveB:<move>. Only output the line, nothing else.\nYou MUST output an answer. If you cannot determine which move is better with confidence, output your best guess from the two candidates anyway. An answer is required; refusing to answer is not acceptable.",
- "output": "MoveA:f3f7",
- "reasoning": "The user wants me to evaluate two candidate moves (MoveA and MoveB) for a chess position given by a FEN and choose the better one.\n\nFEN: `6k1/1pq2pp1/p1p1r2p/8/1P6/b3BQ1P/5PP1/3R2K1 w - - 0 26`\nIt is White's turn to move.\n\n**Evaluation of the current position:**\nWhite has pieces somewhat awkwardly placed. Black has a bishop on b3 pinning the pawn structure indirectly, and a rook on e6 exerting pressure. The material is equal. White needs to find an active plan.\n\n**Candidate Moves Analysis:**\n\n**MoveA: f3f7**\nThis seems like a highly unusual move notation if it means moving the pawn from f3 to f7. Let's check the starting position of the pawns.\nWhite pawns are at: a2, b4, b3 (no, b3 is occupied by a black bishop), c2 (no, c-file is empty), f2, g2, h3. Wait, let's re-examine the FEN carefully.\n\nFEN breakdown: `6k1/1pq2pp1/p1p1r2p/8/1P6/b3BQ1P/5PP1/3R2K1 w - - 0 26`\n\nWhite pieces: K(g1), Q(f3), B(f3), R(d1), Pawns (b4, b3 is wrong, looking at rank 3: b3 is empty, but there is a black bishop on b3).\nWhite pawns: b4, b3 (Wait, the FEN shows `1P6` on rank 4, so White has a pawn on b4. Rank 3: `b3` is empty according to standard interpretation unless specified otherwise. Ah, wait, the piece placement matters.)\n\nLet's list the pieces based on the FEN:\nWhite: K on g1, Q on f3, B on f3 (this implies the Queen and Bishop share a square, which is impossible in standard notation unless this is a typo in my reading or the input FEN itself is slightly non-standard regarding piece identity mapping, but usually, they occupy distinct squares).\nRank 3: `b3` is empty. `3` indicates three empty squares before the next piece.\nIf we look at the setup:\nWhite pieces: K(g1), Q(f3), B(f3)? No, the FEN shows `b3BQ1P`. This means: b3 (Black Bishop?), B (White Bishop?) Q (White Queen?) 1 (empty).\nLet's assume standard algebraic notation where letters denote color.\n`b3`: Black Bishop.\n`B`: White Bishop.\n`Q`: White Queen.\n`1`: Empty square.\n`P`: White Pawn.\n\nSo, White has a Bishop on f3 and a Queen on f3? That is definitely illegal. A single square can only hold one piece.\n\nLet's re-read the FEN string provided: `6k1/1pq2pp1/p1p1r2p/8/1P6/b3BQ1P/5PP1/3R2K1 w - - 0 26`\n\nBoard representation (8x8):\nRank 8: 6k1 (Black King on g8, Rook on f8? No, k on g8, 1 empty) -> Wait, the first row is rank 8. `6k1` means a6=empty, b6=empty, c6=empty, d6=empty, e6=empty, f6=empty, g6=k, h6=1 (empty). This looks very strange for a starting position context, but I must analyze the given FEN state.\n\nRank 7: `1pq2pp1` (b7=empty, c7=p, d7=q, e7=2, f7=p, g7=p, h7=1)\nRank 6: `p1p1r2p` (a6=p, b6=1, c6=p, d6=1, e6=r, f6=2, g6=p)\nRank 5: `8`\nRank 4: `1P6` (a4=P, b4=empty, c4=empty, d4=empty, e4=empty, f4=empty, g4=empty)\nRank 3: `b3BQ1P` (a3=b, b3=3, c3=B, d3=Q, e3=1, f3=P) <-- THIS IS THE PROBLEM AREA. It lists 'b', '3', 'B', 'Q', '1', 'P'. This suggests multiple pieces stacked or invalid parsing if read literally as characters separated by indices. Standard FEN uses capital letters for white pieces and lowercase for black pieces.\n\nAssuming standard FEN parsing rules apply strictly:\nPiece locations:\nBlack: K(g8), Q(d7), P(c7), P(f7), P(g7), R(e6), B(b3).\nWhite: K(g1), R(d1), B(f3), Q(d3), P(b4), P(f2), P(g2), P(h3).\n\nLet's verify the specific problematic section: `/3R2K1 w - - 0 26`\nRank 3: `b3BQ1P`\nIf this means: b3 (Black piece), B (White Bishop), Q (White Queen), 1 (Empty), P (White Pawn). This configuration is physically impossible if B and Q are both on rank 3 adjacent to each other without separation, OR if the sequence represents coordinates.\n\nGiven that I must proceed, I will interpret the most likely intended positions based on common patterns, assuming the input FEN generator might have compressed or misformatted the visual display, but sticking to the character sequence order.\n\nIf we assume the pieces listed are sequential placements:\nb3 = Black Bishop (b3)\nB = White Bishop (c3?)\nQ = White Queen (d3?)\n1 = Empty (e3)\nP = White Pawn (f3?)\n\nHowever, the previous ranks suggest:\nRank 3: `b3BQ1P`\nIf we map this to columns:\na3: b (Black)\nb3: 3 (Index marker? Or part of the piece designation?)\nc3: B (White Bishop)\nd3: Q (White Queen)\ne3: 1 (Empty)\nf3: P (White Pawn)\n\nIf this interpretation holds: White has a pawn on f3.\n\n---\nNow evaluating the moves based on this assumed structure:\n\n**MoveA: f3f7** (Moving the pawn from f3 to f7)\nThis captures nothing immediately, but attacks nothing critical directly. It moves a central pawn forward, potentially opening lines or creating weaknesses.\n\n**MoveB: e3f4** (Moving the piece currently on e3 to f4)\nBased on the assumption above, the piece on e3 is '1' (empty). If e3 is empty, this move is illegal unless 'e3' refers to something else entirely.\n\nLet's reconsider the FEN structure focusing solely on what makes sense tactically, ignoring potential structural errors in the move descriptions themselves, and focus on forcing sequences implied by the tactical suggestions.\n\nThe engine evaluation is key here, but since I am simulating the expert choice, I need to assess positional merit.\n\nPosition assessment: White's queen and bishop seem centralized but perhaps slightly exposed. Black's rook on e6 is strong. Black's bishop on b3 is annoying.\n\nIf MoveA (f3f7) is played: It advances a pawn.\nIf MoveB (e3f4) is played: It involves repositioning a piece aggressively.\n\nSince I cannot definitively parse the exact location of the pieces involved in the suggested moves due to the ambiguous FEN segment (`b3BQ1P`), I rely on general principles or assume the move names imply intent relative to known good play.\n\nIn many endgames/middlegames, advancing pawns (like f3f7) is solidifying, while aggressive repositioning (like e3f4) aims for immediate disruption.\n\nGiven the constraints, I must pick one. I will trust the implicit guidance that one move leads to a superior outcome. Often, when presented with such choices, the move that improves coordination or addresses immediate threats is preferred.\n\nWithout a full search engine verification, I lean towards the more concrete pawn push if the resulting position isn't immediately disastrous.\n\nLet's assume the system expects a decisive advantage derived from one path.\n\nIf I treat this as a typical endgame scenario where activity matters:\nMoveA pushes a pawn deep into Black's territory structure.\nMoveB attempts to activate a piece further.\n\nI will select MoveA as a safer, constructive improvement unless MoveB clearly exploits a weakness.",
- "finished": true,
- "token_usage": {
-  "input_tokens": 250,
-  "output_tokens": 2010,
-  "reasoning_tokens": 1998,
-  "total_tokens": 2260,
-  "cache_read_tokens": null,
-  "cache_write_tokens": null,
-  "cache_hit_tokens": null,
-  "cache_miss_tokens": null,
-  "usage_source": "hf_transformers",
-  "usage_complete": true,
-  "stream_events": null,
-  "time_to_first_token_ms": null,
-  "generation_seconds": 138.73794412612915,
-  "output_tokens_per_second": 14.487745314812168,
-  "reasoning_tokens_per_second": 14.401251312932693
- },
- "phase": "scored",
- "status": "wrong",
- "move": "f3f7",
- "compliance": false,
+ "position_id": "mate-sel-13744",
+ "prompt": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves and their tactics.\nThe FEN of the given chess board is \"8/5p2/4pP1k/3pP2p/5K2/5PP1/8/8 b - - 0 56\". Which move is better? MoveA:h6g6,tactic h6g6 f4e3 g6g5 e3d3 h5h4 g3h4   MoveB:h5h4,tactic h5h4 g3h4 h6h5 f4g3 d5d4 f3f4  ",
+ "model_input": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves and their tactics.\nThe FEN of the given chess board is \"8/5p2/4pP1k/3pP2p/5K2/5PP1/8/8 b - - 0 56\". Which move is better? MoveA:h6g6,tactic h6g6 f4e3 g6g5 e3d3 h5h4 g3h4   MoveB:h5h4,tactic h5h4 g3h4 h6h5 f4g3 d5d4 f3f4  \nAnswer with exactly one of: MoveA:<move> or MoveB:<move>. Only output the line, nothing else.\nYou MUST output an answer. If you cannot determine which move is better with confidence, output your best guess from the two candidates anyway. An answer is required; refusing to answer is not acceptable.",
+ "output": "",
+ "reasoning": "The user wants me to evaluate two candidate moves (MoveA and MoveB) for a chess position given by a FEN and determine which one is better.\n\nFEN: `8/5p2/4pP1k/3pP2p/5K2/5PP1/8/8 b - - 0 56`\nIt is Black's turn to move.\n\n**Evaluation of the current position:**\nWhite has pawns on f6, e5, d5, f3, g3. White also has a King on f4.\nBlack has pawns on f7, e6, d5, h5, h2 (Wait, looking at the FEN: `8/5p2/4pP1k/3pP2p/5K2/5PP1/8/8`).\nBlack pieces: King on h6. Pawns on f7, e6, d5, h5, h2 (No, wait, let's re-read the FEN carefully).\n\nBoard setup:\nRank 8: empty\nRank 7: empty\nRank 6: empty p (f7)\nRank 5: empty p (e6) P (f6) K (h6)\nRank 4: empty p (d5) P (e5) P (h4) K (f4)\nRank 3: empty P (f3) P (g3)\nRank 2: empty\n\nLet's reconstruct based on standard notation interpretation:\n8 / 5p2 (Rank 7: Black pawn on f7)\n4p1k (Rank 6: Empty, Pawn on e6, King on h6) -> Wait, this implies Rank 6 starts with 4 empty squares, then 'p', then '1' (which means 4 empty, p, 1 empty?). No, it's standard piece placement.\nR6: . . . . p . . k (If we assume standard representation where pieces are listed left to right)\nLet's parse `8/5p2/4pP1k/3pP2p/5K2/5PP1/8/8`:\n\nRank 8: 8 (Empty)\nRank 7: 5p2 (Black pawn on f7, empty g7, h7)\nRank 6: 4p1k (Empty, Black pawn on e6, empty f6, King on h6) -> This seems highly irregular if interpreted strictly as 4 empty, p, 1 empty, k. Usually, it lists pieces present. Let's assume standard algebraic notation parsing:\nRow 6: Empty, Black pawn on e6, Empty f6, King on h6. (This doesn't match `4p1k`)\n\nLet's use a visual check based on the provided string structure:\n`8/5p2` (Rank 7): Empty, Empty, Black Pawn (f7), Empty, Empty.\n`4p1k` (Rank 6): Empty, Empty, Empty, Black Pawn (e6), Empty, Empty, King (h6)? This still feels wrong regarding spacing.\n\nStandard FEN parsing: Pieces are listed sequentially.\nRank 6: `4p1k`. This usually means 4 empty squares, a black pawn, 1 empty square, a black king. This suggests positions like: [., ., ., ., p, ., k] or similar configuration across ranks.\n\nGiven the context of tactical problems, I must trust the FEN input precisely.\n\nMaterial advantage: Equal material (Pawns vs Pawns + Kings). The position is highly locked.\n\nIt is Black's turn (b).\n\n**Candidate Moves Analysis:**\n\n**MoveA: h6g6**\nThis involves moving the King from h6 to g6.\nTactic sequence suggested: `h6g6 f4e3 g6g5 e3d3 h5h4 g3h4`\nThis looks like a series of aggressive pawn pushes and king maneuvering attempts.\n\nIf 56... Kg6:\nWhite's main threat is advancing pawns or exploiting weaknesses. White has passed pawns on e5, f6, d5.\n\n**MoveB: h5h4**\nThis involves pushing the h-pawn forward, attacking the white King on f4 indirectly or preparing further advances.\nTactic sequence suggested: `h5h4 g3h4 h6h5 f4g3 d5d4 f3f4`\nThis focuses on creating threats on the kingside and center.\n\n**Positional Assessment:**\nThe position is extremely closed. White's central pawns (d5, e5, f6) restrict Black significantly. Black needs activity, likely involving the King or pawn breaks.\n\nLet's analyze the immediate consequences of the proposed moves based on the FEN state:\nKing locations: Black K on h6. White K on f4.\n\nIf Black plays **56... h5h4**:\nThis attacks nothing immediately critical but prepares potential breakthroughs or repositioning. It forces White to react to the pressure on the kingside structure.\n\nIf Black plays **56... h6g6**:\nMoving the King away from the corner might be defensive or preparatory.\n\nSince this is a simplified endgame scenario, finding a winning technique often relies on forcing concessions or creating a passed pawn.\n\nLet's look closely at the pawn structure around the kingside:\nWhite has pawns on f6, e5, d5, f3, g3.\nBlack has pawns on f7, e6, d5 (wait, Black has a pawn on d5 according to the FEN analysis above, if that was correct, but the FEN shows `3pP2` on rank 4, meaning d5 is occupied by Black, and e5 by",
+ "finished": false,
+ "token_usage": null,
+ "phase": "generating",
+ "status": null,
+ "move": null,
+ "compliance": null,
  "correct": {
-  "move": "MoveB:e3f4",
+  "move": "MoveA:h6g6",
   "note": "MATE expert choice"
  },
  "oracle": {
   "kind": "mate_selection",
-  "candidate_a": "f3f7",
-  "candidate_b": "e3f4",
-  "truth_label": "B"
+  "candidate_a": "h6g6",
+  "candidate_b": "h5h4",
+  "truth_label": "A"
  },
- "fen": "6k1/1pq2pp1/p1p1r2p/8/1P6/b3BQ1P/5PP1/3R2K1 w - - 0 26",
+ "fen": "8/5p2/4pP1k/3pP2p/5K2/5PP1/8/8 b - - 0 56",
  "pieces": [
   {
-   "sq": "d1",
+   "sq": "f3",
    "color": "w",
-   "kind": "R"
+   "kind": "P"
   },
   {
-   "sq": "g1",
+   "sq": "g3",
+   "color": "w",
+   "kind": "P"
+  },
+  {
+   "sq": "f4",
    "color": "w",
    "kind": "K"
   },
   {
-   "sq": "f2",
-   "color": "w",
-   "kind": "P"
-  },
-  {
-   "sq": "g2",
-   "color": "w",
-   "kind": "P"
-  },
-  {
-   "sq": "a3",
-   "color": "b",
-   "kind": "B"
-  },
-  {
-   "sq": "e3",
-   "color": "w",
-   "kind": "B"
-  },
-  {
-   "sq": "f3",
-   "color": "w",
-   "kind": "Q"
-  },
-  {
-   "sq": "h3",
-   "color": "w",
-   "kind": "P"
-  },
-  {
-   "sq": "b4",
-   "color": "w",
-   "kind": "P"
-  },
-  {
-   "sq": "a6",
+   "sq": "d5",
    "color": "b",
    "kind": "P"
   },
   {
-   "sq": "c6",
+   "sq": "e5",
+   "color": "w",
+   "kind": "P"
+  },
+  {
+   "sq": "h5",
    "color": "b",
    "kind": "P"
   },
   {
    "sq": "e6",
    "color": "b",
-   "kind": "R"
+   "kind": "P"
+  },
+  {
+   "sq": "f6",
+   "color": "w",
+   "kind": "P"
   },
   {
    "sq": "h6",
    "color": "b",
-   "kind": "P"
-  },
-  {
-   "sq": "b7",
-   "color": "b",
-   "kind": "P"
-  },
-  {
-   "sq": "c7",
-   "color": "b",
-   "kind": "Q"
+   "kind": "K"
   },
   {
    "sq": "f7",
    "color": "b",
    "kind": "P"
-  },
-  {
-   "sq": "g7",
-   "color": "b",
-   "kind": "P"
-  },
-  {
-   "sq": "g8",
-   "color": "b",
-   "kind": "K"
   }
  ],
  "n": 8,
- "record_id": "mate-sel-13657",
+ "record_id": "mate-sel-13744",
  "position": {
-  "id": "mate-sel-13657",
+  "id": "mate-sel-13744",
   "n": 8,
-  "turn": "w",
-  "fen": "6k1/1pq2pp1/p1p1r2p/8/1P6/b3BQ1P/5PP1/3R2K1 w - - 0 26",
+  "turn": "b",
+  "fen": "8/5p2/4pP1k/3pP2p/5K2/5PP1/8/8 b - - 0 56",
   "pieces": [
    {
-    "sq": "d1",
+    "sq": "f3",
     "color": "w",
-    "kind": "R"
+    "kind": "P"
    },
    {
-    "sq": "g1",
+    "sq": "g3",
+    "color": "w",
+    "kind": "P"
+   },
+   {
+    "sq": "f4",
     "color": "w",
     "kind": "K"
    },
    {
-    "sq": "f2",
-    "color": "w",
-    "kind": "P"
-   },
-   {
-    "sq": "g2",
-    "color": "w",
-    "kind": "P"
-   },
-   {
-    "sq": "a3",
-    "color": "b",
-    "kind": "B"
-   },
-   {
-    "sq": "e3",
-    "color": "w",
-    "kind": "B"
-   },
-   {
-    "sq": "f3",
-    "color": "w",
-    "kind": "Q"
-   },
-   {
-    "sq": "h3",
-    "color": "w",
-    "kind": "P"
-   },
-   {
-    "sq": "b4",
-    "color": "w",
-    "kind": "P"
-   },
-   {
-    "sq": "a6",
+    "sq": "d5",
     "color": "b",
     "kind": "P"
    },
    {
-    "sq": "c6",
+    "sq": "e5",
+    "color": "w",
+    "kind": "P"
+   },
+   {
+    "sq": "h5",
     "color": "b",
     "kind": "P"
    },
    {
     "sq": "e6",
     "color": "b",
-    "kind": "R"
+    "kind": "P"
+   },
+   {
+    "sq": "f6",
+    "color": "w",
+    "kind": "P"
    },
    {
     "sq": "h6",
     "color": "b",
-    "kind": "P"
-   },
-   {
-    "sq": "b7",
-    "color": "b",
-    "kind": "P"
-   },
-   {
-    "sq": "c7",
-    "color": "b",
-    "kind": "Q"
+    "kind": "K"
    },
    {
     "sq": "f7",
     "color": "b",
     "kind": "P"
-   },
-   {
-    "sq": "g7",
-    "color": "b",
-    "kind": "P"
-   },
-   {
-    "sq": "g8",
-    "color": "b",
-    "kind": "K"
    }
   ],
   "source": "MATE testset"
