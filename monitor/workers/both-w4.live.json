@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-08-09T20:29:06Z",
+ "updated_at": "2026-08-09T20:29:47Z",
  "cell": {
   "model": "deepseek-v4-flash",
   "task": "mate-selection-test",
@@ -9,121 +9,126 @@
  "task_kind": "mate_selection",
  "run_kind": "mate-selection",
  "run_id": "mate-both-w4",
- "sample_idx": 98,
+ "sample_idx": 99,
  "sample_total": 200,
- "position_id": "mate-sel-27860",
- "prompt": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves with their strategy explanations and tactics.\nThe FEN of the given chess board is \"r4r2/ppp1R1k1/1bnp2p1/5pN1/3P2qB/1PPQ4/P5PP/5R1K b - - 3 24\". Which move is better? MoveA:c6e7, Exchange the lower value piece for a higher value piece, and gain an edge. TacticA: c6e7 g5e6 g7f7 e6g5 f7g8 d3e3   MoveB:g7h6, Settle the piece in a more energetic spot, where it has better board supervision. TacticB: g7h6 e7h7 Checkmate! ",
- "model_input": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves with their strategy explanations and tactics.\nThe FEN of the given chess board is \"r4r2/ppp1R1k1/1bnp2p1/5pN1/3P2qB/1PPQ4/P5PP/5R1K b - - 3 24\". Which move is better? MoveA:c6e7, Exchange the lower value piece for a higher value piece, and gain an edge. TacticA: c6e7 g5e6 g7f7 e6g5 f7g8 d3e3   MoveB:g7h6, Settle the piece in a more energetic spot, where it has better board supervision. TacticB: g7h6 e7h7 Checkmate! \nAnswer with exactly one of: MoveA:<move> or MoveB:<move>. Only output the line, nothing else.\nYou MUST output an answer. If you cannot determine which move is better with confidence, output your best guess from the two candidates anyway. An answer is required; refusing to answer is not acceptable.",
- "output": "MoveB:g7h6",
- "reasoning": "We need answer chess move. Need determine better between MoveA c6e7 and MoveB g7h6. Need analyze board FEN: \"r4r2/ppp1R1k1/1bnp2p1/5pN1/3P2qB/1PPQ4/P5PP/5R1K b - - 3 24\"\n\nLet's parse FEN. Board ranks 8 to 1:\n8: r 4 . r 2 => a8 black rook, e8 empty? Actually \"r4r2\" length 8: a8=r, b8 empty, c8 empty, d8 empty, e8=r, f8 empty, g8 empty, h8 empty.\n7: \"ppp1R1k1\" => a7 p, b7 p, c7 p, d7 empty, e7 white Rook, f7 empty, g7 black King, h7 empty.\n6: \"1bnp2p1\" => a6 empty, b6 black bishop, c6 black knight, d6 black pawn, e6 empty, f6 empty, g6 black pawn, h6 empty.\n5: \"5pN1\" => a5 empty b5 empty c5 empty d5 empty e5 empty f5 black pawn, g5 white Knight, h5 empty.\n4: \"3P2qB\" => a4 empty b4 empty c4 empty d4 white pawn, e4 empty f4 empty g4 black queen, h4 white bishop.\n3: \"1PPQ4\" => a3 empty, b3 white pawn, c3 white pawn, d3 white queen, e3 empty f3 empty g3 empty h3 empty.\n2: \"P5PP\" => a2 white pawn, b2 empty c2 empty d2 empty e2 empty f2 empty g2 white pawn h2 white pawn.\n1: \"5R1K\" => a1 empty b1 empty c1 empty d1 empty e1 empty f1 white rook, g1 empty h1 white king.\n\nBlack to move. Candidate MoveA: c6e7 means knight c6 captures e7 white rook: Nxe7. TacticA: c6e7 g5e6 g7f7 e6g5 f7g8 d3e3. So sequence: 24... Nxe7 25. Nxe7? Wait c6e7 captures e7 rook, then g5e6? White knight g5 moves e6+? Actually after black Nxe7, white knight g5 to e6 (check?), black king g7 to f7, white knight e6 to g5, black king f7 to g8, white queen d3 to e3? Hmm TacticA maybe after Nxe7, White recaptures? Let's parse: MoveA:c6e7, Exchange higher value piece? Black knight (3) captures white rook (5), so gain edge. TacticA: c6e7 g5e6 g7f7 e6g5 f7g8 d3e3. But white could just play g5xe6? Wait e7 is rook occupied. If black Nxe7, white knight g5 can capture e7? Actually e7 square has black knight after capture. White knight on g5 could move to e6 (not capture) giving check? Yes knight g5-e6 attacks g7 king? Knight on e6 attacks g7? Knight moves from e6 to g7 or f8/f4/g5/c5/c7/d8/d4? Actually e6 knight attacks g7 yes. So Nxe7 threatens? After 24... Nxe7, white could play 25. Nxe7? White knight g5 can capture e7? Knight from g5 to e7 is not a knight move (delta -2,+2? g5->e7 = -2,+2 yes knight move! Wait knight moves two in one direction and one perpendicular: g5 to e7: file g to e = -2, rank 5 to 7 = +2, yes it's a knight move (2,2) not valid because knight must (1,2) or (2,1); (2,2) is diagonal not knight. So g5 cannot capture e7. White could recapture e7 with queen d3? Queen d3 to e7 diagonal? d3-e4-f5-g6-h7 not e7; file? d3 to e3-f3 etc; rook? f1 to e1-d1 etc; bishop h4 to e7? h4-g5-f6-e7 diagonal yes bishop h4 can capture e7 if path clear? h4-g5 occupied by white knight, so not. Queen d3 to e7? d3-e4-f5-g6-h7 no. Queen d3 to g6? Not e7. So black Nxe7 wins rook maybe no immediate recapture? But white knight g5 can check with e6; black king f7; then knight g5; king g8; queen d3-e3? Hmm maybe TacticA line is not recapture but forcing king.\n\nMoveB: g7h6 means black king moves to h6. TacticB: g7h6 e7h7 Checkmate! Wait e7h7: white rook e7 captures h7? White rook at e7 to h7 horizontally along rank 7: squares f7 empty, g7 empty after king moved, h7 empty => Rook h7+ check. But black king at h6 would be in check by rook h7 adjacent horizontally? Rook at h7 attacks h6 vertically down same file, yes king on h6 is adjacent to rook on h7? Actually h7 is one square above h6; rook attacks down h-file to h6, so king in check. But is it checkmate? Black king h6 has escape squares: g5? occupied by white knight; h5? empty; g6? black pawn; h7 occupied by white rook; g7 empty but attacked by rook e7? Let's analyze mate possibilities: Black king h6, white rook h7 gives check along file. Potential king moves: h5, g6, g5, maybe g7. Need see if all controlled. White pieces: rook h7, rook f1, queen d3, bishop h4, knight g5, pawns g2,h2,b3,c3,d4. Black pieces: rooks a8,f8, bishop b6, knight c6, pawns a7,b7,c7,d6,f5,g6, queen g4? Wait black queen on g4. King h6 after move. Also black queen on g4 defends g5? Queen g4 attacks g5? Same file adjacent, yes queen protects g5? Actually black queen own knight? White knight on g5. Black queen on g4 attacks g5 square (occupied by white knight), so if black king moves to g5, it would be moving onto a square occupied by white knight? Actually g5 occupied by white knight, not empty, so cannot move there unless capture knight, but queen g4 protects? White knight on g5 is protected by? h4 bishop? Bishop h4 attacks g5 diagonally yes; queen d3 attacks g3/h3? Not g5? d3-g3? same rank no; pawn h2 attacks g3; f1 rook attacks g1. Black king h6 could capture white rook h7? King from h6 to h7: square h7 occupied by rook protected by bishop h4? Bishop h4-g5-f6-e7-d8; h4-g3-f2-e1; not h7. Queen d3-h7? d3-e4-f5-g6-h7 diagonal, but g6 occupied by black pawn, so not. Rook f1-h1? no. Pawn g2? g2 attacks h3. So h7 rook might not be protected by white pieces? Actually bishop h4 along diagonal h4-g5 (white knight), f6, e7 (white rook original? after move e7 vacated if rook to h7, so e7 empty), d8; not h7. Queen d3 diagonal to h7 blocked by black pawn g6 (d3-e4-f5-g6 black pawn). So rook h7 may be unprotected? White rook f1 along f-file? f1-f2-f3-f4-f5 black pawn, blocked. Knight g5 attacks h7! Ah knight g5 to h7: delta +2, +2? No, knight g5 to h7 is +2 file, +2 rank invalid; h3 is +2,-2; f7 -2,+2; e6 -1,+1? Wait knight moves: g5 to h7 = file +1, rank +2 => valid! (1,2). Yes knight g5 attacks h7. So rook h7 protected by knight. Therefore black king cannot capture h7. Escape h5: white rook h7 attacks h5 along file (h7-h6-h5) yes controlled. g6: occupied by black pawn; could king capture own pawn? no. g7: square adjacent to h6 diagonally, is it attacked by rook e7? After rook moved to h7, e7 empty, so g7 not attacked by e7. White bishop h4? h4-g5-f6-e7-d8; not g7. White queen d3 to g6? d3-e4-f5-g6 diagonal, f5 black pawn blocks; queen d3 to g3-h3; not g7. White knight g5 attacks h7, e6, f7, e4, f3, h3; not g7. White pawns g2 attacks h3/f3; h2 attacks g3. Rook f1 attacks f-file up to f5 black pawn. So g7 might be available? But black king h6 to g7: is g7 empty? In FEN rank7 after black king moved from g7 to h6, g7 empty yes. Is g7 controlled by any white piece? White rook on h7 controls h-file not g7. Queen d3? queen controls g6? diagonal d3-e4-f5-g6 blocked by black pawn f5? Actually d3-e4-f5 is black pawn, so diagonal blocked at f5; d3-g6 no. Queen d3 to g3 (same rank), g6? no. Bishop h4 diagonal to g5 (white knight), f6, e7; not g7. Knight g5 attacks e6, f7, h7, e4, f3, h3; not g7. Rook f1 along f-file to f5 blocked by black pawn; along rank f1-g1-h1 no. Pawn g2 attacks h3/f3; h2 attacks g3. So g7 is not attacked by white? Wait white queen d3 along diagonal d3-e4-f5-g6-h7: f5 black pawn blocks, so no. Bishop h4 along diagonal h4-g5 (own knight) blocks. So g7 seems safe, so not checkmate. But TacticB claims after g7h6 e7h7 Checkmate! Is g7 actually attacked by rook h7? Rook h7 attacks vertically down h7-h6 (king), h5..., horizontally h7-g7 (adjacent) yes! Ah rook on h7 attacks g7 horizontally along rank 7 because same rank, adjacent g7 empty, so g7 is controlled by rook h7. Yes rook attacks g7. So g7 controlled by rook. h5 controlled by rook vertically. g5 occupied by white knight and controlled by queen but not empty, king could capture knight on g5? From h6 to g5 diagonal adjacent: square g5 occupied by white knight, could king capture it if safe? Knight g5 protected by bishop h4 and queen? Bishop h4 protects g5, queen d3? queen d3-g3-h3; not g5. Also queen g4 black attacks g5 but irrelevant. White bishop h4 protects g5, so king cannot capture protected knight. Also rook h7 maybe attacks g7/h5, not g5. So g5 controlled by bishop h4. What about h5 controlled by rook h7. g6 black pawn occupied; king cannot move to occupied own. h7 occupied by white rook protected by knight. So king h6 has no legal moves. Can black block/capture checking piece? Check by white rook h7 along file/rank? Rook h7 attacks king h6 vertically adjacent. Black could capture rook h7 with queen? Black queen g4 to h4? Queen g4 to h4 horizontally adjacent but h4 occupied by white bishop; queen could capture bishop h4? If in check, must handle check; capturing rook h7 by queen g4? Queen from g4 to h7: path g4-h5? Actually queen moves diagonal g4-h5-h6-h7 but h6 occupied by king, so cannot jump. Queen to g7? From g4 to g7 vertical along g-file: g5 occupied by white knight, blocked; queen to h5? g4-h5 diagonal then h6 king? Queen could interpose on g7? Rook h7 attacks king h6 vertically down file, line between h7 and h6 is adjacent no interposition. Capture rook h7 possible by queen g4 to h7? Need path g4-h5 (empty? h5 empty) then h6 occupied by king so no; queen cannot pass through king. Bishop b6 to e7? no. Knight c6 to e7? Could capture rook e7? But check is by rook h7, need capture h7 or king move. Knight c6 could maybe e5? no. Bishop b6 to d8? no. So if white rook e7 to h7+ indeed checkmate? Need confirm black king at h6, white rook e7 to h7 legal? Rook moves e7-f7 (empty? f7 empty yes), g7 (empty), h7 (empty). Yes legal. It delivers check along file h7-h6. Also rook vacates e7, opening? Black bishop b6 maybe covers e7 etc. Is black king at h6 in check by white knight g5 too? Knight g5 attacks h7/e6/f7/e4/f3/h3; not h6. Bishop h4 attacks g5/f6/e7/d8; not h6. Queen d3 attacks h7 diagonal blocked by g6 pawn? d3-e4-f5 black pawn blocks, so no. Rook f1 f-file to f5 blocked. So check only rook h7.\n\nNeed ensure black king g7 to h6 is legal before move? Black king currently g7, is g7 in check? White rook e7 on same rank e7 to g7? Rook at e7 attacks f7, g7? e7-f7-g7 path f7 empty, so king on g7 is in check! Wait FEN: black king g7, white rook e7 same rank with f7 empty, so black king is in check currently! Black to move must respond to check. Ah important. Let's verify FEN: \"r4r2/ppp1R1k1/1bnp2p1/5pN1/3P2qB/1PPQ4/P5PP/5R1K b - - 3 24\". Rank 7: \"ppp1R1k1\": a7 p b7 p c7 p d7 empty e7 R f7 empty g7 k h7 empty. White rook e7 attacks along rank: d7 empty, f7 empty, g7 black king, so yes black king is in check from rook e7. Thus black to move must get out of check. Candidate MoveB g7h6 moves king to h6, but after white e7h7 is checkmate? Need consider if moving to h6 is legal given check: King moves from g7 to h6 (diagonal one) escaping rook e7's attack? Rook e7 after move attacks h7? Rook e7 controls e-file and rank 7 including h7 not h6; h6 not attacked by rook e7. h6 attacked by white knight g5? Knight g5 attacks h3, f3, e4, e6, f7, h7; not h6. White bishop h4 attacks g5/f6/e7/d8; not h6. Queen d3 attacks h7? diagonal d3-e4-f5-g6-h7: f5 black pawn blocks, so no. Pawns? h2 attacks g3; g2 attacks h3/f3. So h6 is legal if not occupied (h6 empty) and not attacked by white knight? Wait knight g5 to h6? Knight from g5 to h6: file +1, rank +1? No. Knight to e6/f7/h7/f3/e4/h3. So h6 safe from knight. Rook f1 attacks f-file to f5 blocked. Queen d3 to h3? Not h6. Bishop h4 to f6/e7/d8; g5; not. So g7kh6 legal.\n\nThen white rook e7 to h7 checkmate? Need verify whether black can interpose/capture? Check by rook h7 along rank? Rook h7 to king h6 adjacent vertical. Black could move king to g5? occupied by white knight protected by bishop h4; h5 attacked by rook h7; g6 own pawn; g7 attacked by rook h7; h7 occupied by protected rook; so no moves. Capture rook h7 by queen g4? Queen g4 to h5? h5 empty but then h6 king; cannot pass king. Queen g4 to g7? g5 occupied by white knight, blocked. Queen g4 to h7 diagonal: g4-h5 empty, h6 king, blocked by king. Bishop b6 to g1? no. Knight c6 to e7? no. Black could play g5? Wait knight g5 occupies g5; black queen g4 could capture g5 knight? That doesn't address check. Black rook f8 can move to f7 blocking? Rook h7 checks vertically along h-file from h7 to h6, line adjacent; no square between to interpose. Could move rook f8 to h8 to capture h7? Rook f8-h8 along rank: g8 empty, h8 empty; then rook h8 attacks h7 horizontally? Actually after black intercept? In check, black could move rook f8 to h8, but does that capture/block? Rook h8 on same file h? It would attack h7, but black rook does not block line from h7 to h6; line passes through h6 king only. Check remains. Could move rook a8 to a7? no.\n\nTherefore MoveB g7h6 seems strong: after e7h7 Checkmate! But wait, is e7h7 actually legal if h7 square empty? h7 empty yes. But is h7 occupied by black pawn? Rank7 h7 empty in FEN. Yes.\n\nBut TacticB says e7h7 Checkmate! likely correct? Let's ensure no hidden defense: Black king h6, white rook h7 check. Black queen g4 can capture rook h7? Let's re-evaluate queen path: Queen on g4 to h7 is diagonal g4-h5-h6-h7. h5 empty, h6 occupied by black king. Cannot jump over king. Queen to h5? Then interpose on h5? The check line is rook h7 to king h6 vertical; interposing on h5 would block if a piece could move to h5 between h7 and h6? Wait line is vertical from h7 to h6: squares between are none, because adjacent. Interposition impossible. But queen could capture h7 via another path? Queen can move diagonally g4-h5-h6-h7 blocked by king; vertically g4-g5 (white knight) blocked; horizontally g4-h4 (white bishop) could capture bishop h4 but not rook; diagonally g4-h3 etc. So no capture. Rook f8 could move to f7? Does that block rook e7 original? After rook moved h7, e7 empty, no. Black rook f8 to f7 maybe blocks something? No. Knight c6 to d4? no. Bishop b6 to e3? Would it block queen? no. Thus checkmate.\n\nThus MoveB is likely checkmate, better than MoveA which wins rook but allows continuation maybe not immediate mate. But need consider black is in check from e7 rook; MoveA c6e7 captures the checking rook with knight! Indeed black can respond to check by capturing e7 knight? Wait c6e7: black knight c6 captures white rook e7, eliminating check. That wins rook for knight (gain material: black up exchange? Actually black knight 3 captures rook 5, net +2). But is c6e7 legal? Black knight c6 to e7: delta +2 file, +1 rank, yes knight move to e7 occupied white rook, capture. This resolves check by capturing checking piece. TacticA includes white knight g5-e6+ etc. But after Nxe7, white can play Nxe7? Wait we determined g5 cannot capture e7 (delta -2,+2 invalid). But knight g5 can capture e7? Let's verify knight move: From g5 to e7: file g->e = -2, rank 5->7 = +2. Knight moves are (\u00b11,\u00b12) or (\u00b12,\u00b11). (-2,+2) is not knight move because both coordinates 2, not allowed. So White cannot recapture with knight. White bishop h4 to e7 diagonal: h4-g5 (occupied by white knight) blocks, so cannot. Queen d3 to e7? Queen d3-e4-f5-g6-h7 diagonal not e7; d3-d7 vertical? d4 white pawn blocks; d3-e3-f3-g3-h3 rank; no. Rook f1 to e1? no. So black Nxe7 wins the rook with no immediate recapture? But white may have tactics: after 24... Nxe7, black king remains? Let's see position after Nxe7: Black knight on e7, black king g7 no longer in check because rook gone. White to move can play 25. Nxe7? not legal. White could play 25. Qxg4? Black queen g4 en prise? Actually black queen on g4 is attacked by white bishop h4? Bishop h4 to g5? no queen g4 same diagonal h4-g5-f6-e7; not g4. Queen d3 to g4? d3-e4-f5-g6? no. Rook f1 attacks f-file to f5 pawn. White knight g5 attacks h7/e6/f7/e4/f3/h3; not queen g4. Pawn h2? h2-h3? not capture. So queen safe. White might play 25. Nxe6+? Knight g5 to e6 check (knight attacks g7). Black king g7 could move f7? or h6? f7 attacked by knight e6? Knight e6 attacks f8/g7/g5/f4/d4/c5/c7/d8; not f7. Actually e6 knight attacks g7 (check), f8, d8, c7, c5, d4, f4, g5. King g7 escapes to f7? Is f7 attacked by rook f1 along f-file? Rook f1 to f7 path f2-f3-f4 empty? f5 black pawn blocks, so no. f7 attacked by bishop h4? h4-g5-f6-e7; no. Queen d3 to f5? d3-e4-f5 black pawn; no. So king f7 safe maybe. Then 25. Ne6+ Kg7? Wait after 25. Ne6+ (knight g5-e6), black king g7 is in check by knight e6. Legal moves: Kf7 (not attacked by knight? e6 knight attacks f8/g7/g5/f4/d4/c5/c7/d8; not f7). Also Kf8? e6 knight attacks f8, so no. Kh6? e6 knight attacks g7/g5/f8/d8/c7/c5/f4/d4, not h6; but h6 maybe attacked by queen d3? d3-h7 diagonal blocked f5; bishop h4? no; h6 maybe safe? But f7 maybe. So TacticA line: c6e7 g5e6 g7f7 e6g5 f7g8 d3e3. After 24...Nxe7 25. Ne6+ Kf7 26. Ng5+ Kg8 27. Qe3? They show white improves queen? This line is weird: White gives checks and retreats, black wins rook. So MoveA material advantage.\n\nMoveB is checkmate immediately if White chooses e7h7, but black moving king to h6 from check: Is h6 square possibly attacked by white bishop h4? Bishop h4 diagonal g5 (occupied by white knight), f6, e7, d8; not h6. Attacked by white queen d3 along diagonal d3-e4-f5-g6-h7; f5 black pawn blocks, but wait queen d3 also moves along rank to h3, file to d7 blocked by d4 pawn; diagonal c4-b5-a6; diagonal e4-f5-g6-h7 blocked at f5. So h6 not attacked. attacked by rook f1? no. So legal.\n\nNeed decide better move: If MoveB is checkmate after one move (assuming white plays e7h7), that's better than winning rook. But we must be certain \"g7h6\" is legal and \"e7h7\" is actually checkmate given full board. Let's fully analyze position for MoveB: after 24... Kh6, White has a very strong move e7h7#? Need check if h7 square is actually protected by white knight g5, yes. Need check if black king h6 has any legal moves to g5 capturing knight? Square g5 occupied by white knight; black king could capture if knight protected? White bishop h4 protects g5 (diagonal h4-g5), yes. Also queen d3? Queen d3 to g3/h3 not g5. Knight e6? no. So protected. h5 attacked by rook h7, g6 occupied by black pawn, g7 attacked by rook h7, h7 occupied by rook protected by knight. No other black piece can capture rook? Let's list black pieces: Queen g4, rooks a8/f8, bishop b6, knight c6, pawns a7 b7 c7 d6 f5 g6. Check by rook h7 along vertical h-file to king h6. Black could play Qh5? Queen g4-h5 (diagonal to h5) would place queen on h5 between h7 and h6? Actually line is h7-h6 adjacent, h5 is beyond king, not between; queen on h5 does not block check from h7 to h6. Could queen capture h7? As above blocked by king h6? Wait queen g4 diagonal to h5 then h6 (king) then h7; cannot jump king. Could queen move to g6? Own pawn. Could queen move to h4 capture bishop? That doesn't address check. Could bishop b6 to g1? no. Knight c6 to e7, d8, b8, a5, a7, b4, d4, e5. None capture h7 or block? Knight c6-e5 attacks g4? not h7; e5 maybe attacks g6? Knight e5 attacks g6 (own pawn) and f7/h? no h7? e5 to g6 = +2,+1 yes attacks g6, not h7. Knight c6-d4 attacks e6/f5/f3/e2/b3/b5; could block queen? no. Rook f8 to f7: could interpose on f7? Check line is h-file; no. Rook f8 to h8: moves horizontally to h8, then rook h8 attacks h7 along file; but does moving rook to h8 block check? The check line from h7 to h6 is unaffected; black rook on h8 does not capture h7 nor block. King h6 could move to g5? Knight protected; h5 attacked by rook; g7 attacked by rook; h7 rook protected; g6 occupied. Also could black play g6-g5? Pawn g6 captures knight g5? Actually black pawn on g6 moves to g5 captures white knight on g5 if in check? But moving pawn doesn't address rook check. Could black play Qg5 capturing knight? Queen g4 to g5 vertically adjacent: g5 occupied by white knight; queen could capture knight, but check from rook h7 remains because king h6 still attacked by rook h7. So illegal. Could black play Qh4+? no. So checkmate.\n\nBut wait, what if after 24...Kh6, White has even better or immediate mate, but candidate MoveB states \"e7h7 Checkmate!\" so yes.\n\nNeed answer exactly one of MoveA:<move> or MoveB:<move>. Probably MoveB. Need ensure no issue: FEN indicates black is in check from e7 rook. Candidate MoveB g7h6 moves king to h6, but h6 is attacked by white queen d3? Let's re-evaluate queen d3 to h6 maybe diagonal? d3-e4-f5-g6-h7? No h6 not on same diagonal. Queen moves like bishop diagonal d3-e4-f5-g6-h7, h6 is not diagonal. Queen moves horizontally d3-e3-f3-g3-h3, vertically d3-d4 (occ white pawn) blocked upward, d3-d2 own? No. So h6 not attacked by queen. Rook f1 along f-file to f6? f5 black pawn blocks. Bishop h4 diagonal h4-g5 (white knight) blocks; h4-g3-f2-e1; h4 to h6 vertical? Bishop doesn't. Knight g5 attacks h7, f7, e6, e4, f3, h3; not h6. So legal.\n\nPotential hidden: Black king moving from g7 to h6 passes adjacent to white rook e7? Rook e7 controls h7, not h6. King cannot move to square attacked by rook e7? Rook e7 attacks h7 horizontally; h6 not. So legal.\n\nThus MoveB is checkmate and better. Final should be \"MoveB:g7h6\". Need output exactly line.",
+ "position_id": "mate-sel-27880",
+ "prompt": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves with their strategy explanations and tactics.\nThe FEN of the given chess board is \"r5k1/4b1pp/1p1p2N1/1PpP1q1r/P1B5/6Pn/5PK1/1RBQ3R b - - 0 23\". Which move is better? MoveA:h7g6, Trade a minor piece for a major piece to gain strategic leverage. TacticA: h7g6 d1e2 f5b1 e2e6 g8f8 e6e3   MoveB:f5f2, Sacrifice a piece to carve open a file or diagonal close to the enemy king TacticB: f5f2 Checkmate! ",
+ "model_input": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves with their strategy explanations and tactics.\nThe FEN of the given chess board is \"r5k1/4b1pp/1p1p2N1/1PpP1q1r/P1B5/6Pn/5PK1/1RBQ3R b - - 0 23\". Which move is better? MoveA:h7g6, Trade a minor piece for a major piece to gain strategic leverage. TacticA: h7g6 d1e2 f5b1 e2e6 g8f8 e6e3   MoveB:f5f2, Sacrifice a piece to carve open a file or diagonal close to the enemy king TacticB: f5f2 Checkmate! \nAnswer with exactly one of: MoveA:<move> or MoveB:<move>. Only output the line, nothing else.\nYou MUST output an answer. If you cannot determine which move is better with confidence, output your best guess from the two candidates anyway. An answer is required; refusing to answer is not acceptable.",
+ "output": "MoveB:f5f2",
+ "reasoning": "We need answer chess move better. Need evaluate position FEN: r5k1/4b1pp/1p1p2N1/1PpP1q1r/P1B5/6Pn/5PK1/1RBQ3R b - - 0 23\n\nBlack to move. Candidates:\nMoveA: h7g6 (capture Ng6 with pawn? Actually h7g6 means pawn h7 captures knight g6. TacticA: h7g6 d1e2 f5b1 e2e6 g8f8 e6e3. Trade minor for major? Wait hxg6 captures a knight (minor) and black gives? Actually white knight on g6, black pawn h7 captures. Then white queen d1e2, black queen f5b1 captures rook on b1? Let's see board: white rook b1, queen d1, bishop c4, king g2, etc. h7g6: black pawn captures knight on g6. Then white d1e2, black f5b1: black queen takes white rook b1. Then white e2e6+ (check?), black g8f8, white e6e3. So black gains exchange? White knight (3) + rook (5) for black pawn +? Actually black pawn h7 (1) + queen? No black queen takes rook, so material: White loses N + R =8; Black loses pawn =1. That's terrible? Wait \"Trade a minor piece for a major piece\" maybe black pawn captures knight, then queen captures rook? Let's parse: h7g6 captures white knight on g6. That's black pawn takes Knight (minor). Then white queen d1e2, black queen f5b1 captures white rook b1. So black got knight and rook (8) for pawn (1)?? Actually black queen survives, so black is up huge? White queen e2e6 check maybe. But black queen on b1 is in danger? Need analyze. Wait after hxg6, white knight gone, black queen on f5 attacks b1 rook? Initial position black queen f5 already attacks b1? Let's board coordinates: White rook b1 yes on same diagonal? Queen f5 to b1 diagonal down-left? f5-e4-d3-c2-b1 yes diagonal, bishop c4 blocks? Actually c4 is white bishop on c4, so queen f5 to b1 diagonal passes through e4,d3,c2,b1. c2 empty? c4 is bishop on c4 not on line. So queen attacks b1 unseen? Wait diagonal f5-e4-d3-c2-b1: c2 is empty, d3 empty, e4 empty. So queen attacks b1 already. So why h7g6 first? Because after h7g6, white queen d1e2 maybe defends? Then queen takes b1.\n\nMoveB: f5f2 checkmate? TacticB: f5f2 Checkmate! Need verify if black queen f5 to f2 is checkmate on white king g2. Board: White king g2, pawn f2? Wait initial FEN: \"r5k1/4b1pp/1p1p2N1/1PpP1q1r/P1B5/6Pn/5PK1/1RBQ3R b - - 0 23\"\nLet's reconstruct board.\n\nFEN parts:\nr5k1/4b1pp/1p1p2N1/1PpP1q1r/P1B5/6Pn/5PK1/1RBQ3R b - - 0 23\n\nRows 8 to 1:\nrank8: r5k1 => a8 black rook, e8 empty? Let's: squares a8 r, b8 empty, c8 empty, d8 empty, e8 empty, f8 empty, g8 k (black king), h8 empty.\nrank7: 4b1pp => a7 empty, b7 empty, c7 empty, d7 empty, e7 b (black bishop), f7 empty, g7 p, h7 p.\nrank6: 1p1p2N1 => a6 empty, b6 p, c6 empty, d6 p, e6 empty, f6 empty, g6 N (white knight), h6 empty.\nrank5: 1PpP1q1r => a5 empty, b5 P (white pawn), c5 p (black pawn), d5 P (white pawn), e5 empty, f5 q (black queen), g5 empty, h5 r (black rook).\nrank4: P1B5 => a4 P (white pawn), b4 empty, c4 B (white bishop), d4 empty, e4 empty, f4 empty, g4 empty, h4 empty.\nrank3: 6Pn => a3 empty,b3 empty,c3 empty,d3 empty,e3 empty,f3 empty,g3 P (white pawn),h3 n (black knight).\nrank2: 5PK1 => a2 empty,b2 empty,c2 empty,d2 empty,e2 empty,f2 P (white pawn),g2 K (white king),h2 empty.\nrank1: 1RBQ3R => a1 empty,b1 R (white rook),c1 B (white bishop),d1 Q (white queen),e1 empty,f1 empty,g1 empty,h1 R (white rook).\n\nBlack pieces: King g8, Queen f5, Rooks a8/h5, Bishop e7, Knight h3, Pawns b6,c5,d6,g7,h7. White: King g2, Queen d1, Rooks b1/h1, Bishop c4/c1? Actually c1 bishop from rank1: yes c1 B. Pawns a4,b5,d5,f2,g3. Knight g6. Also? Yes.\n\nPosition: Black to move. Candidates:\nMoveB: f5f2 (queen from f5 to f2 capturing white pawn f2?) White pawn f2 yes. Queen f5 moves along diagonal f5-e4-d3-c2-b1 or vertical? f5 to f2 is same file f: f5-f4-f3-f2. f4 empty, f3 empty, f2 white pawn. So Qxf2+ (captures f2 pawn) check on g2 king. Is it checkmate? Let's analyze: White king on g2 after Qxf2+ (queen on f2). Legal king moves:\n- Kg1? g1 square: empty? rank1 g1 empty. Is g1 attacked by queen f2? Queen f2 attacks g1 diagonal adjacent yes, so g1 attacked.\n- Kh1? h1 square occupied by white rook? Wait rank1 h1 is white rook. King can move to h1 if own rook there? No occupied by own piece; cannot move onto own rook unless capture? Own piece blocks, not legal.\n- Kh3? h3 is black knight, but also attacked by black knight? King cannot move into occupied by enemy piece? Actually can capture if defended/undefended? Need check if h3 square attacked by black knight h3? It's occupied by black knight; King could capture knight on h3 if h3 is not protected by any black piece. But is h3 protected by queen f2? Queen f2 attacks h2? Let's compute queen f2 attacks: row f: f1,f3,f4,f5... f3 empty, f4 empty, f5 black queen? Hmm Queen at f2 after MoveB, original queen moved, so f5 empty. Queen f2 attacks h2? Diagonal f2-g3-h4; f2-e3-d4-c5-b6-a7; f2-g1-h0; f2-e1; horizontal a-f? Actually rank 2: a2? Queen f2 attacks along rank: b2,c2,d2,e2,g2 (king),h2. So h2 attacked; g1 attacked; g3 attacked; e1 attacked; e3,d4,c5,b6,a7 diagonal; d3? diagonal f2-e3-d4-c5-b6-a7, not d3. f-file: f1,f3,f4,f5... So h3 square? Queen f2 attacks h3? Diagonal f2-g3-h4, so h3 not attacked. Black knight on h3 protects? Knight at h3 protects g1, f2, f4, g5? Actually knight from h3 attacks g1, f2, f4, g5. It does not protect h3 itself (knight doesn't protect own square). Can white king capture h3? From g2 to h3: h3 occupied by black knight. Is h3 controlled by black queen? No. Controlled by black rook h5? Rook h5 attacks h-file: h4,h3,h2,h1, etc. Yes black rook on h5 attacks h3 vertically (h5-h4-h3). So h3 is protected by rook h5. Thus king cannot capture h3.\n- g3? White pawn at g3. King could move to g3? occupied by own pawn, no.\n- f2 occupied by black queen; king could capture queen? From g2 to f2, if f2 protected by black knight h3? Knight h3 attacks f2, yes so queen protected by knight. Also rook? Rook f? no. But queen protected by knight h3. So cannot capture.\n- g1? attacked by queen.\n- h2? occupied? rank2 h2 empty, attacked by queen f2 horizontal, also black rook h5? h5 rook attacks h2 vertical? Yes rook h5 attacks h4,h3,h2; so h2 attacked.\n- f1? attacked by queen f2 vertical.\n- f3? attacked by queen f2 vertical.\n- g? Also king could maybe block? Check from queen f2 to king g2 adjacent diagonal? Queen f2 attacks g2 diagonal (f2-g1? wait f2 to g2 is horizontal, yes queen on f2 attacks g2 horizontally). So king in check by queen adjacent.\n\nCan any white piece block/capture queen? White queen d1 can capture f2? From d1 to f2 diagonal: d1-e2-f3? Not same line. d1 to f2: (2,1) no. White bishop c1? diagonal? c1-d2-e3-f4; no. Bishop c4? c4-d3-e2-f1; no. Rook h1? h1-f1? no. Rook b1? b1-f1 horizontal yes but queen f2 not in line. Knight? g6 no. Pawns? none. So checkmate? Need ensure white king has escape via capturing h3 protected by rook h5, but also is h3 protected by queen f2? Queen f2 to h4 diagonal, h3 not. Rook h5 protects h3. Also black pawn g7? g7 protects? g7 pawn protects f6/h6 not h3. Bishop e7? Diagonal e7-f6-g5-h4, not h3. Knight h3 itself? no. So h3 is protected by rook h5. King cannot capture h3. What about moving king to h2? attacked by queen f2 and rook h5? Actually from g2 to h2: h2 attacked by queen f2 horizontally and rook h5 vertical, yes illegal. g1 attacked queen. f1 attacked queen. f3 attacked queen. g3 own pawn. h1 own rook. Capture queen f2 protected by knight h3. So Qxf2# seems checkmate indeed. Need verify black queen f5 can move to f2: f5 to f2 vertical same file, squares f4 and f3 empty? Initial f4 empty yes; f3 empty yes. So legal. Captures white pawn on f2 (white piece). Checkmate? Need consider white king g2 could capture queen on f2 if queen protected by knight h3. Yes knight h3 protects f2. Also queen f2 protected by rook? Rook h5? Rook h5 attacks h-file not f2. Bishop e7? Bishop e7 attacks f6,g5,h4; d6? Actually e7-f6-g5-h4; e7-d6-c5-b4-a3; not f2. Knight g6? white. So knight h3 protects f2. So king cannot capture. Thus checkmate indeed.\n\nBut we need be careful: In chess, is white king currently on g2 and white pawn f2, black queen f5 to f2 captures pawn, gives check. Are there any white pieces able to interpose? White queen d1 could move to e2? Interpose between f2 and g2? Check line is horizontal f2-g2 adjacent, no interposition possible. Capture queen? White queen d1 to f1? no. King capture insufficient due knight. So mate.\n\nBut MoveA maybe also wins material? However MoveB is immediate checkmate, so definitely better if legal. But need ensure \"Better move\" maybe both? We need output MoveB:f5f2.\n\nLet's ensure no subtle issue: In FEN, black to move. Black queen at f5, white king g2, white pawn f2, black knight h3, white pawn g3, black rook h5, white rook h1, etc. MoveB f5f2 captures f2 pawn and checkmate? Let's check all escape squares from g2:\ng1: is it attacked by queen f2? yes queen on f2 attacks g1 diagonal (one step NE? Actually f2 to g1 is down-right? Coordinates: f2 to g1: rank decrease 1, file increase 1, diagonal yes). Also protected by knight h3? Knight h3 attacks g1, yes. So g1 attacked.\nh1: occupied by white rook h1. Could king move to h1? No own rook blocks, but if checking piece not occupying h1, king cannot move to own piece. Could capture own rook? no.\nh2: attacked by queen f2 horizontally; also rook h5 vertical (h5-h4-h3-h2). yes.\nh3: occupied by black knight. King could capture h3 if not protected. Rook h5 protects h3 vertically. Also queen f3? Wait queen f2 diagonal to h4; not h3. Bishop e7? e7-f6-g5-h4, not h3. So h3 protected by rook h5. Additionally white pawn? no. So illegal.\ng3: occupied by white pawn. Own piece blocks, no.\nf1: queen f2 attacks f1 vertical same file, also knight h3? Knight h3 attacks f2, f4, g1, g5 not f1. Queen attacks f1.\nf2: queen itself, protected by knight h3 and maybe king? no.\nf3: queen attacks f3 vertical.\nSo no legal moves. Are there any white pieces that can capture queen on f2? White king would but knight protects. White rook h1? Can rook h1 move to f1? No f1 empty, h1 to f1 horizontal through g1 empty, so rook could move to f1, but does that block check? Check is queen f2 to king g2 adjacent horizontal. A piece on f1 does not block adjacent diagonal/horizontal? The line f2-g2 passes through no square between; blocking impossible. White queen d1 to e2? If queen moves to e2, does it block? King g2 to queen f2: line is f2-g2 adjacent. e2 not between. No. White bishop c1 to d2? no. White bishop c4 to e2? line c4-d3-e2-f1 not f2, no. White knight g6 can move to e7? not relevant. White rook h1 to h3? Could capture knight h3? Actually white rook h1 could move to h3 and capture black knight h3 if h2 empty? h2 empty, h3 black knight. But does that address check? The check is from queen f2 to king g2. Moving rook to h3 does not block/capture queen. White king could maybe capture h3 if h3 unprotected? But h3 protected by rook h5, but if white rook moves to h3 capturing knight, it's not a king move; but check remains, so illegal unless also blocks check. No.\nWhite rook b1 could move to f1? b1-c1 (own bishop c1 blocks), no.\nWhite queen d1 could capture f3? d1-e2-f3 (queen diagonal), but doesn't block f2-g2. Could queen d1 capture h5? d1 to h5 diagonal d1-e2-f3-g4-h5; f3 empty, g4 empty, h5 black rook. But checking queen f2 not captured, no.\nWhite bishop c1 could capture h6? no.\nWhite pawn g3 could move? Pawn g3 moves forward? White pawn at g3 (moving up ranks) to g4? g4 empty, but doesn't affect check. Pinned? Can't because king in check, must respond.\nWhite knight g6 could capture e7/f8/h8/e5/f4/h4? But doesn't capture f2 or block f2-g2. No.\nWhite queen d1 to f3? Does queen on f3 block queen f2 to king g2? No, because line is f2-g2, f3 not between; also f3 is adjacent to king but not interpose.\nThus mate.\n\nSo MoveB is checkmate; obviously best. Need output exactly \"MoveB:f5f2\". But let's check if MoveA maybe also captures queen? No. So answer MoveB.\n\nNeed ensure FEN notation: MoveB f5f2 means queen from f5 to f2 (captures pawn). Algebraic notation would be Qxf2#. Candidate uses \"f5f2\" coordinate notation. So answer line: MoveB:f5f2.\n\nFinal only that.",
  "finished": true,
  "token_usage": {
-  "input_tokens": 343,
-  "output_tokens": 6682,
-  "reasoning_tokens": 6674,
-  "total_tokens": 7025,
+  "input_tokens": 334,
+  "output_tokens": 3898,
+  "reasoning_tokens": 3891,
+  "total_tokens": 4232,
   "cache_read_tokens": 0,
   "cache_write_tokens": null,
   "cache_hit_tokens": 0,
-  "cache_miss_tokens": 343,
+  "cache_miss_tokens": 334,
   "usage_source": "opencode_go",
   "usage_complete": true,
-  "stream_events": 6681,
-  "time_to_first_token_ms": 2213.7622833251953,
-  "generation_seconds": 75.5728747844696,
-  "output_tokens_per_second": 88.4179676776457,
-  "reasoning_tokens_per_second": 88.31210959003404
+  "stream_events": 3897,
+  "time_to_first_token_ms": 1477.0088195800781,
+  "generation_seconds": 40.75880837440491,
+  "output_tokens_per_second": 95.63576943156676,
+  "reasoning_tokens_per_second": 95.46402741360345
  },
  "phase": "scored",
- "status": "wrong",
- "move": "g7h6",
- "compliance": false,
+ "status": "correct",
+ "move": "f5f2",
+ "compliance": true,
  "correct": {
-  "move": "MoveA:c6e7",
+  "move": "MoveB:f5f2",
   "note": "MATE expert choice"
  },
  "oracle": {
   "kind": "mate_selection",
-  "candidate_a": "c6e7",
-  "candidate_b": "g7h6",
-  "truth_label": "A"
+  "candidate_a": "h7g6",
+  "candidate_b": "f5f2",
+  "truth_label": "B"
  },
- "fen": "r4r2/ppp1R1k1/1bnp2p1/5pN1/3P2qB/1PPQ4/P5PP/5R1K b - - 3 24",
+ "fen": "r5k1/4b1pp/1p1p2N1/1PpP1q1r/P1B5/6Pn/5PK1/1RBQ3R b - - 0 23",
  "pieces": [
   {
-   "sq": "f1",
+   "sq": "b1",
    "color": "w",
    "kind": "R"
   },
   {
-   "sq": "h1",
+   "sq": "c1",
    "color": "w",
-   "kind": "K"
+   "kind": "B"
   },
   {
-   "sq": "a2",
+   "sq": "d1",
+   "color": "w",
+   "kind": "Q"
+  },
+  {
+   "sq": "h1",
+   "color": "w",
+   "kind": "R"
+  },
+  {
+   "sq": "f2",
    "color": "w",
    "kind": "P"
   },
   {
    "sq": "g2",
    "color": "w",
-   "kind": "P"
+   "kind": "K"
   },
   {
-   "sq": "h2",
+   "sq": "g3",
    "color": "w",
    "kind": "P"
   },
   {
-   "sq": "b3",
-   "color": "w",
-   "kind": "P"
-  },
-  {
-   "sq": "c3",
-   "color": "w",
-   "kind": "P"
-  },
-  {
-   "sq": "d3",
-   "color": "w",
-   "kind": "Q"
-  },
-  {
-   "sq": "d4",
-   "color": "w",
-   "kind": "P"
-  },
-  {
-   "sq": "g4",
+   "sq": "h3",
    "color": "b",
-   "kind": "Q"
+   "kind": "N"
   },
   {
-   "sq": "h4",
+   "sq": "a4",
+   "color": "w",
+   "kind": "P"
+  },
+  {
+   "sq": "c4",
    "color": "w",
    "kind": "B"
+  },
+  {
+   "sq": "b5",
+   "color": "w",
+   "kind": "P"
+  },
+  {
+   "sq": "c5",
+   "color": "b",
+   "kind": "P"
+  },
+  {
+   "sq": "d5",
+   "color": "w",
+   "kind": "P"
   },
   {
    "sq": "f5",
    "color": "b",
-   "kind": "P"
+   "kind": "Q"
   },
   {
-   "sq": "g5",
-   "color": "w",
-   "kind": "N"
+   "sq": "h5",
+   "color": "b",
+   "kind": "R"
   },
   {
    "sq": "b6",
    "color": "b",
-   "kind": "B"
-  },
-  {
-   "sq": "c6",
-   "color": "b",
-   "kind": "N"
+   "kind": "P"
   },
   {
    "sq": "d6",
@@ -132,33 +137,23 @@
   },
   {
    "sq": "g6",
-   "color": "b",
-   "kind": "P"
-  },
-  {
-   "sq": "a7",
-   "color": "b",
-   "kind": "P"
-  },
-  {
-   "sq": "b7",
-   "color": "b",
-   "kind": "P"
-  },
-  {
-   "sq": "c7",
-   "color": "b",
-   "kind": "P"
+   "color": "w",
+   "kind": "N"
   },
   {
    "sq": "e7",
-   "color": "w",
-   "kind": "R"
+   "color": "b",
+   "kind": "B"
   },
   {
    "sq": "g7",
    "color": "b",
-   "kind": "K"
+   "kind": "P"
+  },
+  {
+   "sq": "h7",
+   "color": "b",
+   "kind": "P"
   },
   {
    "sq": "a8",
@@ -166,93 +161,98 @@
    "kind": "R"
   },
   {
-   "sq": "f8",
+   "sq": "g8",
    "color": "b",
-   "kind": "R"
+   "kind": "K"
   }
  ],
  "n": 8,
- "record_id": "mate-sel-27860",
+ "record_id": "mate-sel-27880",
  "position": {
-  "id": "mate-sel-27860",
+  "id": "mate-sel-27880",
   "n": 8,
   "turn": "b",
-  "fen": "r4r2/ppp1R1k1/1bnp2p1/5pN1/3P2qB/1PPQ4/P5PP/5R1K b - - 3 24",
+  "fen": "r5k1/4b1pp/1p1p2N1/1PpP1q1r/P1B5/6Pn/5PK1/1RBQ3R b - - 0 23",
   "pieces": [
    {
-    "sq": "f1",
+    "sq": "b1",
     "color": "w",
     "kind": "R"
    },
    {
-    "sq": "h1",
+    "sq": "c1",
     "color": "w",
-    "kind": "K"
+    "kind": "B"
    },
    {
-    "sq": "a2",
+    "sq": "d1",
+    "color": "w",
+    "kind": "Q"
+   },
+   {
+    "sq": "h1",
+    "color": "w",
+    "kind": "R"
+   },
+   {
+    "sq": "f2",
     "color": "w",
     "kind": "P"
    },
    {
     "sq": "g2",
     "color": "w",
-    "kind": "P"
+    "kind": "K"
    },
    {
-    "sq": "h2",
+    "sq": "g3",
     "color": "w",
     "kind": "P"
    },
    {
-    "sq": "b3",
-    "color": "w",
-    "kind": "P"
-   },
-   {
-    "sq": "c3",
-    "color": "w",
-    "kind": "P"
-   },
-   {
-    "sq": "d3",
-    "color": "w",
-    "kind": "Q"
-   },
-   {
-    "sq": "d4",
-    "color": "w",
-    "kind": "P"
-   },
-   {
-    "sq": "g4",
+    "sq": "h3",
     "color": "b",
-    "kind": "Q"
+    "kind": "N"
    },
    {
-    "sq": "h4",
+    "sq": "a4",
+    "color": "w",
+    "kind": "P"
+   },
+   {
+    "sq": "c4",
     "color": "w",
     "kind": "B"
+   },
+   {
+    "sq": "b5",
+    "color": "w",
+    "kind": "P"
+   },
+   {
+    "sq": "c5",
+    "color": "b",
+    "kind": "P"
+   },
+   {
+    "sq": "d5",
+    "color": "w",
+    "kind": "P"
    },
    {
     "sq": "f5",
     "color": "b",
-    "kind": "P"
+    "kind": "Q"
    },
    {
-    "sq": "g5",
-    "color": "w",
-    "kind": "N"
+    "sq": "h5",
+    "color": "b",
+    "kind": "R"
    },
    {
     "sq": "b6",
     "color": "b",
-    "kind": "B"
-   },
-   {
-    "sq": "c6",
-    "color": "b",
-    "kind": "N"
+    "kind": "P"
    },
    {
     "sq": "d6",
@@ -261,33 +261,23 @@
    },
    {
     "sq": "g6",
-    "color": "b",
-    "kind": "P"
-   },
-   {
-    "sq": "a7",
-    "color": "b",
-    "kind": "P"
-   },
-   {
-    "sq": "b7",
-    "color": "b",
-    "kind": "P"
-   },
-   {
-    "sq": "c7",
-    "color": "b",
-    "kind": "P"
+    "color": "w",
+    "kind": "N"
    },
    {
     "sq": "e7",
-    "color": "w",
-    "kind": "R"
+    "color": "b",
+    "kind": "B"
    },
    {
     "sq": "g7",
     "color": "b",
-    "kind": "K"
+    "kind": "P"
+   },
+   {
+    "sq": "h7",
+    "color": "b",
+    "kind": "P"
    },
    {
     "sq": "a8",
@@ -295,9 +285,9 @@
     "kind": "R"
    },
    {
-    "sq": "f8",
+    "sq": "g8",
     "color": "b",
-    "kind": "R"
+    "kind": "K"
    }
   ],
   "source": "MATE testset"
