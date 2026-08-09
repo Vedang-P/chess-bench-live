@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-08-09T16:45:15Z",
+ "updated_at": "2026-08-09T16:45:35Z",
  "cell": {
   "model": "deepseek-v4-flash",
   "task": "mate-selection-test",
@@ -9,61 +9,71 @@
  "task_kind": "mate_selection",
  "run_kind": "mate-selection",
  "run_id": "mate-both-w5",
- "sample_idx": 42,
+ "sample_idx": 43,
  "sample_total": 200,
- "position_id": "mate-sel-32947",
- "prompt": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves with their strategy explanations and tactics.\nThe FEN of the given chess board is \"3Q4/5pPk/pp5p/8/1P2n1P1/P5rP/2r2P2/3R1K2 b - - 2 38\". Which move is better? MoveA:h7g7, Exchange a lower-valued piece for a more valuable one, and secure an advantage. TacticA: h7g7 d8d4 e4f6 f2g3 Trade the lower value piece for a higher value piece.  MoveB:c2f2, Sacrifice a piece to carve open a file or diagonal close to the enemy king TacticB: c2f2 f1e1 g3e3 Checkmate! ",
- "model_input": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves with their strategy explanations and tactics.\nThe FEN of the given chess board is \"3Q4/5pPk/pp5p/8/1P2n1P1/P5rP/2r2P2/3R1K2 b - - 2 38\". Which move is better? MoveA:h7g7, Exchange a lower-valued piece for a more valuable one, and secure an advantage. TacticA: h7g7 d8d4 e4f6 f2g3 Trade the lower value piece for a higher value piece.  MoveB:c2f2, Sacrifice a piece to carve open a file or diagonal close to the enemy king TacticB: c2f2 f1e1 g3e3 Checkmate! \nAnswer with exactly one of: MoveA:<move> or MoveB:<move>. Only output the line, nothing else.\nYou MUST output an answer. If you cannot determine which move is better with confidence, output your best guess from the two candidates anyway. An answer is required; refusing to answer is not acceptable.",
- "output": "MoveB:c2f2",
- "reasoning": "We need answer chess move. Need evaluate FEN and candidate moves. Need choose better. Let's parse board.\n\nFEN: \"3Q4/5Pk/pp5p/8/1P2n1P1/P5rP/r2P4? Wait given: \"3Q4/5pPk/pp5p/8/1P2n1P1/P5rP/P? Let's copy: 3Q4/5pPk/pp5p/8/1P2n1P1/P5rP/2r2P2/3R1K2 b - - 2 38\"\n\nLet's list ranks from rank8 to rank1:\n\n8: \"3Q4\" => a8 empty, b8 empty, c8 empty, d8 White Queen, e8 empty, f8 empty, g8 empty, h8 empty.\n7: \"5pPk\" => a7 empty, b7 empty, c7 empty, d7 empty, e7 empty, f7 black pawn, g7 white pawn? Wait FEN uses uppercase white, lowercase black. \"5pPk\": positions a7- f7? Actually 5 empties then p at f7, P at g7, k at h7. So black pawn f7, white pawn g7, black king h7.\n6: \"pp5p\" => a6 black pawn, b6 black pawn, c6- f6 empty? Let's parse: p p 5 empty? \"pp5p\": a6 p, b6 p, c6 empty, d6 empty, e6 empty, f6 empty, g6 empty? Wait 5 means five empty squares c,d,e,f,g? Actually string length: p(1), p(2), 5 (3-7? c,d,e,f,g =5), h6 p. So c6,d6,e6,f6,g6 empty; h6 black pawn.\n5: \"8\" empty.\n4: \"1P2n1P1\" => a4 empty, b4 White pawn, c4 empty, d4 empty, e4 black knight, f4 empty, g4 White pawn, h4 empty.\n3: \"P5rP\"? Wait rank3: \"P5rP\"? Actually FEN \"P5rP\" after slash? Given: \"1P2n1P1/P5rP/2r2P2/3R1K2\" Wait full: 3Q4/5pPk/pp5p/8/1P2n1P1/P5rP/2r2P2/3R1K2 b - - 2 38\nRank3: \"P5rP\": a3 White pawn, b3 empty, c3 empty, d3 empty, e3 empty, f3 empty, g3 black rook, h3 White pawn.\nRank2: \"2r2P2\": a2 empty, b2 empty, c2 black rook, d2 empty, e2 empty, f2 White pawn, g2 empty, h2 empty.\nRank1: \"3R1K2\": a1 empty, b1 empty, c1 empty, d1 White rook, e1 empty, f1 White king, g1 empty, h1 empty.\n\nBlack to move, side to move b; castling none; halfmove 2; fullmove 38.\n\nNeed choose between:\nMoveA: h7g7? Wait black king at h7. h7g7 means king captures white pawn on g7? Yes black king h7 moves to g7 capturing white pawn. Legal? g7 has white pawn. Is g7 adjacent to f7 black pawn, h6 black pawn, h7 original, g8 empty, f8 empty, f7 black pawn, h? Need king not moving into check: squares controlled by White. Need assess. TacticA line: h7g7 d8d4 e4f6 f2g3? Wait notation weird: \"h7g7 d8d4 e4f6 f2g3\" They say Trade lower value piece for higher. Actually after Kxg7, White Qd8-d4+ maybe check? Then black knight e4-f6? But black knight at e4 could move to f6? After Kxg7, black pieces: Kh7->g7, pawn f7, a6,b6,h6; knight e4; rooks g3, c2. White Queen d8, pawns g4,h3,f2,a3,b4, rook d1, king f1. White Qd4 attacks? Let's analyze. Actually MoveA: h7g7 (Kxg7). TacticA: h7g7 d8d4 e4f6 f2g3 \"Trade lower value piece for higher value piece.\" Hmm after Kxg7, White might play Qd4+? The knight e4-f6 blocks? But black knight from e4 to f6: f6 empty, what does it do? Maybe after Qd4+, black plays Nf6? But Nf6 blocks queen? Queen d4 attacks g7? Let's see line: 1... Kxg7 2. Qd4+ Nf6? Actually black knight e4 to f6 could block/check? Does Nf6 attack? From f6 it attacks d5,e4,g4,h5,d7,e8,g8,h7. It doesn't block queen d4 to g7? Queen d4 diagonal to g7: d4-e5-f6-g7. Yes Nf6 occupies f6, blocks check on g7. Then 3. f2g3? White pawn f2 takes g3? There is black rook on g3! Wait f2g3 means white f2 pawn captures black rook g3, maybe after ...? But if black knight moves f6, white pawn f2xg3 captures rook. That line: Kxg7 Qd4+ Nf6 f2xg3. White gains rook for pawn? Actually black rook g3 captured by f-pawn, material? Black king took a pawn, then white captures rook. Maybe moveA trades king capturing pawn (lower piece?) Hmm.\n\nMoveB: c2f2, black rook c2 captures white pawn f2? Wait f2 has white pawn. c2 rook to f2: Rxf2+? From c2 to f2 horizontal same rank, captures pawn on f2, giving check to White king f1? Rook on f2 attacks f1 vertically adjacent (same file) so it's check. TacticB line: c2f2 f1e1 g3e3 Checkmate! After 1... Rxf2+ 2. Ke1? Actually white king f1 cannot move to e1? From f1 to e1 empty, legal. Then 2... Rg3-e3#? Black rook from g3 to e3 gives checkmate? Need examine after Rxf2+ Kf1-e1, black rook g3-e3: rook on e3 attacks e1 along rank, but need also other black pieces cover escape squares, and white king at e1 maybe in double check? Let's analyze board.\n\nNeed determine which move is better, likely tactical mate MoveB. Need confirm legal and actually checkmate. Candidate MoveB states Sacrifice a piece to carve open a file or diagonal close to enemy king TacticB: c2f2 f1e1 g3e3 Checkmate! It claims black sacrifices rook? Rxf2+ is rook takes pawn, protected by rook g3? Actually black rook c2 captures f2 with check. White king f1 can capture f2? From f1 to f2 occupied by black rook, but is f2 protected by black rook g3? Rook g3 on rank3 attacks f3,e3,d3,c3,b3,a3, also g-file etc. It attacks f2? Rook moves horizontally/vertically: g3 to f3 is horizontal, not f2 diagonal. Rook g3 doesn't protect f2. But black rook f2 is protected by knight e4? Knight e4 attacks f2 (yes knight moves 2+1: e4-f2) and g3, d2, c3, c5, d6, f6, g5. So Kxf2 impossible because Nf2? Actually if White king f1 captures f2, square f2 controlled by knight e4, so illegal. Also black rook g3 maybe? Rook g3 controls f3, no f2. So Rxf2+ is legal, king cannot take due knight. Could move Kg1? White king f1 to g1? g1 empty but attacked by rook g3 along g-file? Rook g3 attacks g1 through g2 empty, so illegal. Ke1? Need see if e1 is safe after Rxf2+? White king at e1, black rook g3-e3 would check along rank e1-e3 with e2 empty? e2 empty. But is e1 attacked by other black pieces? Rook f2 controls f-file and rank2; knight e4 controls d2/f2/c3/c5/d6/f6/g5/g3; rook g3 controls g-file and rank3. King e1 escape squares: d1 occupied white rook, f1 empty but attacked by rook f2 along f-file? From f2 to f1 adjacent, yes. e2 empty attacked by knight e4? Knight e4 attacks d2/f2, not e2. Rook f2 attacks e2 horizontally? Rook f2 attacks e2 along rank2 (e2 empty), so e2 is attacked by rook f2. d2 attacked by knight e4 and rook f2? Rook f2 attacks d2 through e2 empty, yes. d1 is occupied by white rook, protected by king? Actually white king e1 protects d1? Kings move diagonal to d1, yes but cannot capture protected? Need square d1 occupied by own rook, not escape. e1 king maybe attacked by? After Rxf2+, white king in check by rook f2 along f-file. If king moves e1, is e1 occupied? e1 empty originally? White king at f1 moves to e1, yes. Is e1 attacked by black rook g3 after 2...Re3#. At the moment after 2.Ke1, white king e1 is not in check? It is not on f-file, not attacked by rook f2 (rank2 not e1); knight e4 attacks d2/f2/c3/c5/d6/f6/g5/g3, not e1; rook g3 attacks e3 not e1. So Ke1 legal if e1 not under attack by black queen? White queen d8 controls d-file and diagonals, but irrelevant. So 2.Ke1 legal.\n\nThen 2... Rg3-e3#. After Re3, black rook at e3 attacks e1 horizontally along rank 3? Wait rook e3 to e1 moves down same file e: e3-e2-e1. e2 must be empty? After Rxf2+ and Ke1, what occupies e2? Empty. So Re3# gives check along e-file to king e1. Is there any block or capture? White can capture rook e3 with? Queen d8? Queen d8 could move to e7/d? Not block/check? White queen d8 along diagonal to e7-f6-g5-h4, not e3. Along file d? no. Rook d1 could capture e1? no. King e1 can capture e3? Too far. White rook d1 attacks d-file, not e3. White queen could capture e3? Queen d8 to d3? diagonal d8-e7-f6-g5-h4; d8 to e8-f7-g6-h5; d8 to d7-d6-d5-d4-d3-d2-d1; No e3. Queen could go e? d8-e7-f6-g5-h4; d8-e8-f7-g6-h5; not e3. Knight none. White pawn g4 attacks f5/h5; h3 attacks g4; f2 pawn captured. So Re3# seems mate? Need check if white king e1 can move to d2? d2 attacked by rook f2? Rook f2 attacks d2 through e2, yes. Also knight e4 attacks d2. e2 attacked by rook f2 and rook e3? Rook e3 attacks e2, yes. f1 attacked by rook f2? yes, and rook e3? Rook e3 attacks f3 not f1. d1 occupied by rook; f2 occupied by black rook; d2/e2 attacked. So king no moves. Can White block check on e-file by moving something to e2? White queen d8 to e7? No, to e? Queen could move d8-e7-f6 etc, not e2. Rook d1 to e1? But e1 occupied by king, cannot. Rook d1 could move to d2? That doesn't block e-file. Queen could move to d2? Queen d8-d2 along d-file but e2 still path? Check line e3-e2-e1, block must go e2. Only white pieces that can move to e2: Queen d8 to e7? No queen doesn't target e2 from d8 unless along diagonal? d8-e7-f6-g5-h4 or d8-e8-f7-g6-h5 or d8-c7-b6-a5, d8-d7-d6-d5-d4-d3-d2-d1. Not e2. Rook d1 to d2 not e2; to e1 impossible occupied by king; king could move to e2 but occupied? e2 empty but attacked/illegal. White pawn? none can move to e2. So checkmate.\n\nThus MoveB seems winning mate. Need ensure initial Rxf2+ legal given black king in check? Wait before move, is black in check by white queen d8 to h4? Black king h7: queen d8 diagonal d8-e7-f6-g5-h4, not h7. Queen d8 vertical d-file to d1, not h7. Queen d8 to h8? d8-e8-f8-g8-h8, not h7. White rook d1? Rook d1 to h1? no. White pawn g4 attacks f5/h5; h3 attacks g4; f2 attacks g3/e3; g? Actually black king h7 not in check. So black can move.\n\nBut candidate MoveA maybe also strong? Need choose better. MoveB checkmates in 2 moves if White plays Ke1, but White might have better response to Rxf2+? Candidate TacticB assumes f1e1 forced? Need verify if White king has alternatives after 1... Rxf2+? Actually check by rook f2 attacking f1. White options: Kxf2? illegal due knight e4; Kg1? illegal due rook g3? Wait g1 attacked by rook g3 along g-file (g2 empty) yes. Ke1 legal? Also maybe Qd8-e8? Block? Check from rook f2 to king f1 along f-file: squares between f2 and f1 none (adjacent). Cannot block; capture rook? White king could capture if f2 not protected, but protected by knight e4 as said. White queen could capture f2? Queen d8 to f6? Actually could move to f? Queen d8 to d2? to f2? Queen d8 diagonal to e7-f6-g5-h4, no. Queen d8 to f8-f7-f6? Wait queen moves vertically along d-file to d2, horizontally to f8? From d8 to f8 is two squares same rank, then f8-f7-f6 etc, but not f2. Queen d8 cannot reach f2 in one move: d8 to e7-f6-g5-h4 diagonal; d8 to d7-d6-d5-d4-d3-d2; d8 to e8-f8-g8-h8; d8 to c8-b8-a8; d8 to c7-b6-a5. It cannot move to f2. Rook d1 could capture f1? no. Rook d1 to f1? Square f1 occupied by king, cannot. Rook d1 to d2? no. King only. Could White play Qd8-d4+?? In response to check, must get out of check. Cannot ignore to give check. Could move king to e1 or e? f1 to e1 only legal? What about Qd1? Block f-file? Rook f2 to f1 adjacent, cannot block; capture rook by queen? Queen cannot. Rook d1 could capture f1 no. So only Ke1 and maybe Kxf2? Kxf2 illegal because f2 protected by N e4. Kg1 illegal because Rg3 attacks g1. What about Ke2? King f1 to e2? e2 attacked by rook f2 along rank2? Rook f2 attacks e2, and knight e4 attacks f2 not e2. But e2 also maybe attacked by rook g3? Rook g3 to e3 not e2. So e2 is attacked by rook f2, illegal. King f1 to g2? g2 attacked by rook g3 along file g3-g2 (adjacent), illegal. King f1 to e1 only legal. So 1... Rxf2+ forces 2. Ke1. Then Re3# indeed mate. So MoveB is immediate mate. MoveA: hxg7 captures pawn, maybe wins material but not checkmate. Obviously MoveB better.\n\nNeed answer exactly \"MoveB:c2f2\" or \"MoveB:<move>\"? User says Answer with exactly one of: MoveA:<move> or MoveB:<move>. Only output line. Need choose. So output MoveB:c2f2. Ensure lowercase? Candidate uses c2f2. Yes.\n\nNeed no explanation.\n\nFinal: MoveB:c2f2",
+ "position_id": "mate-sel-33019",
+ "prompt": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves with their strategy explanations and tactics.\nThe FEN of the given chess board is \"r4rk1/ppp1bppp/8/2nP1q2/2Q5/2N1BP2/PP3P1P/R4RK1 w - - 1 19\". Which move is better? MoveA:c4a6, Move the piece to an aggressive spot, enhancing its control over the board. TacticA: c4a6 c5a6 Trade the lower value piece for a higher value piece.  MoveB:f1d1, Plant the piece in a dominant spot, expanding its control over the board. TacticB: f1d1 f5g6 g1h1 b7b6 c4g4 e7d6  ",
+ "model_input": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves with their strategy explanations and tactics.\nThe FEN of the given chess board is \"r4rk1/ppp1bppp/8/2nP1q2/2Q5/2N1BP2/PP3P1P/R4RK1 w - - 1 19\". Which move is better? MoveA:c4a6, Move the piece to an aggressive spot, enhancing its control over the board. TacticA: c4a6 c5a6 Trade the lower value piece for a higher value piece.  MoveB:f1d1, Plant the piece in a dominant spot, expanding its control over the board. TacticB: f1d1 f5g6 g1h1 b7b6 c4g4 e7d6  \nAnswer with exactly one of: MoveA:<move> or MoveB:<move>. Only output the line, nothing else.\nYou MUST output an answer. If you cannot determine which move is better with confidence, output your best guess from the two candidates anyway. An answer is required; refusing to answer is not acceptable.",
+ "output": "MoveB:f1d1",
+ "reasoning": "We need answer exactly one line. Need evaluate chess position. Need decide MoveA c4a6 or MoveB f1d1. Need analyze carefully.\n\nFEN: \"r4rk1/ppp1bppp/8/2nP1q2/2Q5/2N1BP2/PP3P1P/R4RK1 w - - 1 19\"\n\nLet's parse board. White: King g1, queen c4, rooks a1 f1, bishops e3, knights c3, pawns a2 b2 d5 f2 g2 h2? Actually FEN ranks:\n8: r4rk1 = a8 rook, b8 empty, c8 empty, d8 empty, e8 empty, f8 rook, g8 king, h8 empty.\n7: ppp1bppp = a7 pawn b7 pawn c7 pawn d7 empty e7 bishop f7 pawn g7 pawn h7 pawn.\n6: 8 empty.\n5: 2nP1q2 = a5 empty b5 empty c5 black knight d5 white pawn e5 empty f5 black queen g5 empty h5 empty.\n4: 2Q5 = a4 empty b4 empty c4 white queen d4 empty e4 empty f4 empty g4 empty h4 empty.\n3: 2N1BP2 = a3 empty b3 empty c3 white knight d3 empty e3 white bishop f3 white pawn g3 empty h3 empty.\n2: PP3P1P = a2 white pawn b2 white pawn c2 empty d2 empty e2 empty f2 white pawn g2 empty h2 white pawn.\n1: R4RK1 = a1 white rook, b1 empty c1 empty d1 empty e1 empty f1 white rook, g1 white king, h1 empty.\nWhite to move, castling none? FEN w - - 1 19. Black king g8, black queen f5, black bishop e7, black rooks a8 f8, knight c5, pawns a7 b7 c7 f7 g7 h7. White queen c4, rooks a1 f1, bishop e3, knight c3, pawns a2 b2 d5 f2 g2 h2. White king g1. White has no king safety? King g1, rook f1, pawns f2 g2 h2.\n\nCandidate MoveA: Qc4a6 (queen captures? actually c4 to a6 diagonal? c4 -> b5 -> a6 yes, black pawn at a7? a6 empty. Qa6 attacks a7 pawn? Queen on a6, also maybe takes? Let's see TacticA: \"c4a6 c5a6 Trade the lower value piece for a higher value piece.\" Wait notation candidate move: c4a6, but tactic says \"c4a6 c5a6 Trade the lower value piece for a higher value piece.\" That means after Qc4-a6, black Nc5xa6 capturing queen? Is that possible? Black knight at c5 can move to a6? Knight c5 to a6: yes coordinates c5 -> a6 (distance 2,1). So Qa6 is hanging to knight c5. TacticA says White queen captures? Actually c4a6 is queen moves to a6, then black c5x a6 (knight captures queen). Then white would have traded queen for knight? Wait \"Trade lower value piece for higher value piece\" means black knight (lower value) captures white queen (higher value)??? That would be bad for White. But tactic might be black's response \"c5a6 Trade the lower value piece for a higher value piece\" from black perspective? It says MoveA c4a6, TacticA: c4a6 c5a6 Trade the lower value piece for a higher value piece. That seems candidate move loses queen to knight, terrible. Unless \"c5a6\" is white? No, c5 is black knight, a6 destination. So MoveA Qxa? Actually c4 to a6 captures? What piece on a6? None. So Qa6 attacks a7 pawn, but knight c5 can capture queen. Thus MoveA is blunder. Maybe notation \"c4a6\" could be queen captures something at a6? Board has no piece at a6. So no. MoveA seems losing queen for no compensation. Therefore MoveB likely better.\n\nBut need be absolutely sure: Maybe \"TacticA: c4a6 c5a6 Trade the lower value piece for a higher value piece.\" It might be black plays Nxa6, capturing queen, with white bishop? Wait after 1.Qa6 Nxa6, white has bishop e3 maybe can capture knight? No bishop e3 controls? Bishop e3 diagonal to c5? e3-d4-c5 yes! Bishop e3 attacks c5. If black knight moves to a6, bishop e3 no longer attacks a6 (e3-d4-c5-b6-a7? not a6). White knight c3? Knight c3 attacks a4, b5, d5, e4, e2, d1, b1, a2. Not a6. Bishop f1? No. So knight lands a6 safe. White lost queen for knight. Terrible.\n\nMoveB: f1d1 Rfd1. Candidate TacticB: f1d1 f5g6 g1h1 b7b6 c4g4 e7d6. It seems plausible. Need choose MoveB. But let's analyze if there is any tactical nuance: Position: after 1.Rfd1, Black maybe Qf5-g6, White Kg1-h1, Black b7-b6, White Qc4-g4, Black Be7-d6. This line is given. Is it better than Qa6? Obviously yes because Qa6 loses queen. So answer MoveB:f1d1. Need output exactly \"MoveB:f1d1\" no extra. Ensure format: exactly one of MoveA:<move> or MoveB:<move>. Since move string \"f1d1\". So \"MoveB:f1d1\".",
  "finished": true,
  "token_usage": {
-  "input_tokens": 343,
-  "output_tokens": 3916,
-  "reasoning_tokens": 3909,
-  "total_tokens": 4259,
+  "input_tokens": 344,
+  "output_tokens": 1337,
+  "reasoning_tokens": 1330,
+  "total_tokens": 1681,
   "cache_read_tokens": 0,
   "cache_write_tokens": null,
   "cache_hit_tokens": 0,
-  "cache_miss_tokens": 343,
+  "cache_miss_tokens": 344,
   "usage_source": "opencode_go",
   "usage_complete": true,
-  "stream_events": 3915,
-  "time_to_first_token_ms": 6624.729871749878,
-  "generation_seconds": 48.80002760887146,
-  "output_tokens_per_second": 80.24585623980471,
-  "reasoning_tokens_per_second": 80.10241369800731
+  "stream_events": 1336,
+  "time_to_first_token_ms": 6717.926025390625,
+  "generation_seconds": 19.30742883682251,
+  "output_tokens_per_second": 69.24795690299872,
+  "reasoning_tokens_per_second": 68.8854021548155
  },
  "phase": "scored",
  "status": "correct",
- "move": "c2f2",
+ "move": "f1d1",
  "compliance": true,
  "correct": {
-  "move": "MoveB:c2f2",
+  "move": "MoveB:f1d1",
   "note": "MATE expert choice"
  },
  "oracle": {
   "kind": "mate_selection",
-  "candidate_a": "h7g7",
-  "candidate_b": "c2f2",
+  "candidate_a": "c4a6",
+  "candidate_b": "f1d1",
   "truth_label": "B"
  },
- "fen": "3Q4/5pPk/pp5p/8/1P2n1P1/P5rP/2r2P2/3R1K2 b - - 2 38",
+ "fen": "r4rk1/ppp1bppp/8/2nP1q2/2Q5/2N1BP2/PP3P1P/R4RK1 w - - 1 19",
  "pieces": [
   {
-   "sq": "d1",
+   "sq": "a1",
    "color": "w",
    "kind": "R"
   },
   {
    "sq": "f1",
    "color": "w",
+   "kind": "R"
+  },
+  {
+   "sq": "g1",
+   "color": "w",
    "kind": "K"
   },
   {
-   "sq": "c2",
-   "color": "b",
-   "kind": "R"
+   "sq": "a2",
+   "color": "w",
+   "kind": "P"
+  },
+  {
+   "sq": "b2",
+   "color": "w",
+   "kind": "P"
   },
   {
    "sq": "f2",
@@ -71,49 +81,64 @@
    "kind": "P"
   },
   {
-   "sq": "a3",
+   "sq": "h2",
    "color": "w",
    "kind": "P"
   },
   {
-   "sq": "g3",
-   "color": "b",
-   "kind": "R"
+   "sq": "c3",
+   "color": "w",
+   "kind": "N"
   },
   {
-   "sq": "h3",
+   "sq": "e3",
+   "color": "w",
+   "kind": "B"
+  },
+  {
+   "sq": "f3",
    "color": "w",
    "kind": "P"
   },
   {
-   "sq": "b4",
+   "sq": "c4",
    "color": "w",
-   "kind": "P"
+   "kind": "Q"
   },
   {
-   "sq": "e4",
+   "sq": "c5",
    "color": "b",
    "kind": "N"
   },
   {
-   "sq": "g4",
+   "sq": "d5",
    "color": "w",
    "kind": "P"
   },
   {
-   "sq": "a6",
+   "sq": "f5",
+   "color": "b",
+   "kind": "Q"
+  },
+  {
+   "sq": "a7",
    "color": "b",
    "kind": "P"
   },
   {
-   "sq": "b6",
+   "sq": "b7",
    "color": "b",
    "kind": "P"
   },
   {
-   "sq": "h6",
+   "sq": "c7",
    "color": "b",
    "kind": "P"
+  },
+  {
+   "sq": "e7",
+   "color": "b",
+   "kind": "B"
   },
   {
    "sq": "f7",
@@ -122,42 +147,62 @@
   },
   {
    "sq": "g7",
-   "color": "w",
+   "color": "b",
    "kind": "P"
   },
   {
    "sq": "h7",
    "color": "b",
-   "kind": "K"
+   "kind": "P"
   },
   {
-   "sq": "d8",
-   "color": "w",
-   "kind": "Q"
+   "sq": "a8",
+   "color": "b",
+   "kind": "R"
+  },
+  {
+   "sq": "f8",
+   "color": "b",
+   "kind": "R"
+  },
+  {
+   "sq": "g8",
+   "color": "b",
+   "kind": "K"
   }
  ],
  "n": 8,
- "record_id": "mate-sel-32947",
+ "record_id": "mate-sel-33019",
  "position": {
-  "id": "mate-sel-32947",
+  "id": "mate-sel-33019",
   "n": 8,
-  "turn": "b",
-  "fen": "3Q4/5pPk/pp5p/8/1P2n1P1/P5rP/2r2P2/3R1K2 b - - 2 38",
+  "turn": "w",
+  "fen": "r4rk1/ppp1bppp/8/2nP1q2/2Q5/2N1BP2/PP3P1P/R4RK1 w - - 1 19",
   "pieces": [
    {
-    "sq": "d1",
+    "sq": "a1",
     "color": "w",
     "kind": "R"
    },
    {
     "sq": "f1",
     "color": "w",
+    "kind": "R"
+   },
+   {
+    "sq": "g1",
+    "color": "w",
     "kind": "K"
    },
    {
-    "sq": "c2",
-    "color": "b",
-    "kind": "R"
+    "sq": "a2",
+    "color": "w",
+    "kind": "P"
+   },
+   {
+    "sq": "b2",
+    "color": "w",
+    "kind": "P"
    },
    {
     "sq": "f2",
@@ -165,49 +210,64 @@
     "kind": "P"
    },
    {
-    "sq": "a3",
+    "sq": "h2",
     "color": "w",
     "kind": "P"
    },
    {
-    "sq": "g3",
-    "color": "b",
-    "kind": "R"
+    "sq": "c3",
+    "color": "w",
+    "kind": "N"
    },
    {
-    "sq": "h3",
+    "sq": "e3",
+    "color": "w",
+    "kind": "B"
+   },
+   {
+    "sq": "f3",
     "color": "w",
     "kind": "P"
    },
    {
-    "sq": "b4",
+    "sq": "c4",
     "color": "w",
-    "kind": "P"
+    "kind": "Q"
    },
    {
-    "sq": "e4",
+    "sq": "c5",
     "color": "b",
     "kind": "N"
    },
    {
-    "sq": "g4",
+    "sq": "d5",
     "color": "w",
     "kind": "P"
    },
    {
-    "sq": "a6",
+    "sq": "f5",
+    "color": "b",
+    "kind": "Q"
+   },
+   {
+    "sq": "a7",
     "color": "b",
     "kind": "P"
    },
    {
-    "sq": "b6",
+    "sq": "b7",
     "color": "b",
     "kind": "P"
    },
    {
-    "sq": "h6",
+    "sq": "c7",
     "color": "b",
     "kind": "P"
+   },
+   {
+    "sq": "e7",
+    "color": "b",
+    "kind": "B"
    },
    {
     "sq": "f7",
@@ -216,18 +276,28 @@
    },
    {
     "sq": "g7",
-    "color": "w",
+    "color": "b",
     "kind": "P"
    },
    {
     "sq": "h7",
     "color": "b",
-    "kind": "K"
+    "kind": "P"
    },
    {
-    "sq": "d8",
-    "color": "w",
-    "kind": "Q"
+    "sq": "a8",
+    "color": "b",
+    "kind": "R"
+   },
+   {
+    "sq": "f8",
+    "color": "b",
+    "kind": "R"
+   },
+   {
+    "sq": "g8",
+    "color": "b",
+    "kind": "K"
    }
   ],
   "source": "MATE testset"
