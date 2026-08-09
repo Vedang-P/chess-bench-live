@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-08-09T18:11:27Z",
+ "updated_at": "2026-08-09T18:16:29Z",
  "cell": {
   "model": "gemma4-e2b",
   "task": "mate-selection-test",
@@ -9,96 +9,60 @@
  "task_kind": "mate_selection",
  "run_kind": "mate-selection",
  "run_id": "mate-gemma-both-w2",
- "sample_idx": 213,
+ "sample_idx": 217,
  "sample_total": 500,
- "position_id": "mate-sel-28392",
- "prompt": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves with their strategy explanations and tactics.\nThe FEN of the given chess board is \"4r1k1/7p/p1qppp2/1p4N1/3P4/2PQ3P/PP4P1/6K1 w - - 0 25\". Which move is better? MoveA:g5h7, Sacrifice a piece to pry open a file or diagonal near the enemy king TacticA: g5h7 g8g7 d3g3 g7h7 Trade the lower value piece for a higher value piece.  MoveB:d3h7, Exchange a piece to open up a file or diagonal near the opponent's king TacticB: d3h7 g8f8 h7f7 Checkmate! ",
- "model_input": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves with their strategy explanations and tactics.\nThe FEN of the given chess board is \"4r1k1/7p/p1qppp2/1p4N1/3P4/2PQ3P/PP4P1/6K1 w - - 0 25\". Which move is better? MoveA:g5h7, Sacrifice a piece to pry open a file or diagonal near the enemy king TacticA: g5h7 g8g7 d3g3 g7h7 Trade the lower value piece for a higher value piece.  MoveB:d3h7, Exchange a piece to open up a file or diagonal near the opponent's king TacticB: d3h7 g8f8 h7f7 Checkmate! \nAnswer with exactly one of: MoveA:<move> or MoveB:<move>. Only output the line, nothing else.\nYou MUST output an answer. If you cannot determine which move is better with confidence, output your best guess from the two candidates anyway. An answer is required; refusing to answer is not acceptable.",
- "output": "MoveB:d3h7",
- "reasoning": "The user wants me to evaluate two candidate moves (MoveA and MoveB) for a chess position given by a FEN and determine which one is better.\n\nFEN: `4r1k1/7p/p1qppp2/1p4N1/3P4/2PQ3P/PP4P1/6K1 w - - 0 25`\nIt is White's turn to move.\n\n**Evaluation:**\nWhite has pieces on d3, c3, Q on d3, P on d4, N on g5, P on h3, K on g1.\nBlack has R on e8, Q on c6, Pawns on a6, b5, f7, g7, h7, and a pawn on e6 (wait, looking at the FEN: `4r1k1/7p/p1qppp2/1p4N1/3P4/2PQ3P/PP4P1/6K1`). Black has pawns on a6, b5, f7, g7, h7, and pawns on e6, f6, g6 (Wait, let's re-read the board structure based on the FEN).\n\nBoard setup:\nRank 8: . . . . r . k . (Black King on g8, Rook on e8)\nRank 7: . . . p . . p . (Black Pawn on h7)\nRank 6: . p q p p p . (Black Pawns on b6, c6, d6, e6, f6) -> Wait, this interpretation seems wrong based on standard notation if we look at the input string literally.\n\nLet's parse the FEN: `4r1k1/7p/p1qppp2/1p4N1/3P4/2PQ3P/PP4P1/6K1 w - - 0 25`\n\nWhite pieces: K(g1), Q(d3), P(d4), P(c3), P(a2), P(b2), P(h3), N(g5).\nBlack pieces: K(g8), R(e8), Q(c6), Pawns on a6, b5, c5, d6, e6, f6, h7. (This looks like a complex middlegame/endgame scenario.)\n\nMaterial balance: Equal material (Q+N vs Q+R + 6 pawns each side). However, White has a strong centralized Queen and Knight attacking the kingside/center.\n\nIt is White's 25th move. The game is likely heading towards simplification or tactical breakthroughs.\n\n**Candidate Moves Analysis:**\n\n**MoveA: g5h7**\nThis move implies moving the Knight from g5 to h7, capturing something, or perhaps it means Ng5 moves to h7, threatening something, or maybe it's a typo and meant to be related to the attack.\nIf it means $Nxh7$ (if there was a piece on h7), but h7 is occupied by a black pawn. This move notation `g5h7` usually means the piece on g5 moves to h7. Since h7 is occupied by a black pawn, this must be a capture if possible, or just a positional move. Given the context \"Sacrifice a piece...\", it suggests a tactical shot.\n\nTacticA explanation: `g5h7 g8g7 d3g3 g7h7 Trade the lower value piece for a higher value piece.`\nThis sequence is highly confusing and doesn't seem immediately sound unless it leads to forced mate or massive material gain. It involves multiple hypothetical moves (`d3g3`, `g7h7`) that don't align well with the initial move `g5h7`.\n\n**MoveB: d3h7**\nThis move implies the Queen on d3 moves to h7. This is a very aggressive move, aiming directly at the Black King (g8) or creating immediate threats along the 7th rank.\n\nTacticB explanation: `d3h7 g8f8 h7f7 Checkmate!`\nThis suggests a forced sequence leading to checkmate. Let's analyze if Qd3-h7 forces mate.\n\nCurrent position state after Qd3-h7:\nIf 25. Qh7+, Black must respond.\nThe King is on g8.\nIf 25. Qh7+, Black can play Kg8 (if safe) or Kh8.\nIf 25. Qh7+, the threat is unclear without seeing the resulting position fully.\n\nLet's check legality of 25. Qd3h7+.\nThe path is clear. Does it deliver check? Yes, if the Queen attacks g8 diagonally or horizontally/vertically. From d3 to h7, it passes through d4, e5, f6, g7.\nIf Qd3 moves to h7, it checks the King on g8 only if the path is unobstructed and the destination square is attacked.\nPath: d3 -> e4 -> f5 -> g6 -> h7.\nIs g8 attacked? No, because the Queen lands on h7. A check requires the King to be attacked by the checking piece.\nIf 25. Qh7+, the Queen attacks g8 diagonally if the path allows it, or if h7 controls g8. H7 does not control g8 directly in terms of check unless the King moves away.\n\nLet's assume the tactic description implies a winning line exists. In high-level puzzles provided this way, often the stated tactic is correct.\n\nGiven the options, MoveB explicitly claims \"Checkmate!\". This strongly suggests it is the intended winning move, even if my manual verification of the exact mating sequence is difficult without a full engine search.\n\nSince I must choose the better move, and MoveB promises checkmate via its associated tactic, I will select MoveB.",
- "finished": true,
- "token_usage": {
-  "input_tokens": 280,
-  "output_tokens": 1301,
-  "reasoning_tokens": 1289,
-  "total_tokens": 1581,
-  "cache_read_tokens": null,
-  "cache_write_tokens": null,
-  "cache_hit_tokens": null,
-  "cache_miss_tokens": null,
-  "usage_source": "hf_transformers",
-  "usage_complete": true,
-  "stream_events": null,
-  "time_to_first_token_ms": null,
-  "generation_seconds": 90.85451626777649,
-  "output_tokens_per_second": 14.319596355183366,
-  "reasoning_tokens_per_second": 14.187517065204734
- },
- "phase": "scored",
- "status": "correct",
- "move": "d3h7",
- "compliance": true,
+ "position_id": "mate-sel-28514",
+ "prompt": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves with their strategy explanations and tactics.\nThe FEN of the given chess board is \"8/8/p6p/PB6/5k2/1K1n4/6P1/8 b - - 0 44\". Which move is better? MoveA:f4e5, Move the piece to an aggressive spot, enhancing its control over the board. TacticA: f4e5 b5d3 e5d5 d3a6 d5d6 b3b4   MoveB:a6b5, Replace the lower-value piece with a more valuable one to secure an advantage. TacticB: a6b5 b3c3 d3e5 c3d4 e5c6 d4d5  ",
+ "model_input": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves with their strategy explanations and tactics.\nThe FEN of the given chess board is \"8/8/p6p/PB6/5k2/1K1n4/6P1/8 b - - 0 44\". Which move is better? MoveA:f4e5, Move the piece to an aggressive spot, enhancing its control over the board. TacticA: f4e5 b5d3 e5d5 d3a6 d5d6 b3b4   MoveB:a6b5, Replace the lower-value piece with a more valuable one to secure an advantage. TacticB: a6b5 b3c3 d3e5 c3d4 e5c6 d4d5  \nAnswer with exactly one of: MoveA:<move> or MoveB:<move>. Only output the line, nothing else.\nYou MUST output an answer. If you cannot determine which move is better with confidence, output your best guess from the two candidates anyway. An answer is required; refusing to answer is not acceptable.",
+ "output": "",
+ "reasoning": "The user wants me to evaluate two candidate moves for a black position given a FEN: `8/8/p6p/PB6/5k2/1K1n4/6P1/8 b - - 0 44`.\nIt is Black's turn to move.\n\n**FEN Analysis:**\n`8/8/p6p/PB6/5k2/1K1n4/6P1/8 b - - 0 44`\nWhite has pieces on b5 (Bishop), b2 (King), g2 (Pawn).\nBlack has pawns on a6, h7, h6. Black has a Knight on d3, King on f4.\nWhite has a Bishop on b5.\n\nMaterial advantage: Equal material (N vs B, but White's bishop might be misplaced or Black's knight is well-placed). However, the position is highly tactical due to the exposed white king/pieces and the centralized black knight.\n\n**Evaluation:**\nBlack is trying to exploit the weak white structure or coordinate pieces. The black knight on d3 is currently attacking nothing critical immediately, but it controls important squares.\n\n**Candidate Moves:**\n\n**MoveA: f4e5**\nThis move seems nonsensical based on standard algebraic notation interpretation if 'f4e5' means moving a piece *to* f4 and then *to* e5, or perhaps moving a piece from f4 to e5. Looking at the board:\nBlack King is on f4.\nIf this means $Kf4 \\rightarrow e5$: This attacks nothing directly, and allows White to consolidate.\nIf this implies some other piece movement that results in these coordinates, I need to assume the provided move description dictates the intent.\nStrategy A: \"f4e5, Replace the lower-value piece with a more valuable one to secure an advantage.\" (Wait, the description says \"Replace the lower-value piece\", but the move listed is f4e5.) Let's stick strictly to the move notation provided: `f4e5`. Since the only black piece near f4 is the King, let's assume $Kf4-e5$.\n\n**MoveB: a6b5**\nThis suggests moving the pawn on a6 to b5. Wait, the pawn is already on a6. Moving a6 to b5 would mean capturing the White Bishop on b5, assuming the notation refers to the pawn capture.\nIf Black plays $a6xb5$: This captures the Bishop.\n\nLet's re-examine the FEN and the proposed moves in context.\n\nFEN: `8/8/p6p/PB6/5k2/1K1n4/6P1/8 b - - 0 44`\nBlack to move.\n\nWhite pieces: Bb5, Kb2, g2.\nBlack pieces: Nd3, Kf4, Pa6, Ph7, Ph6.\n\n**Analyzing Move B: a6b5**\nThis must mean $P(a6) \\times B(b5)$.\nIf $... axb5$:\n1. Black wins the Bishop. Material advantage (+3 points).\n2. After $... axb5$, White must recapture or deal with the threat. White has no immediate recapture available unless they sacrifice something, but there are no pieces adjacent to b5 except the pawn itself being captured.\nIf $... axb5$, the resulting position is likely winning for Black due to the massive material gain and White's lack of counterplay.\n\nTactic B explanation: \"Replace the lower-value piece with a more valuable one to",
+ "finished": false,
+ "token_usage": null,
+ "phase": "generating",
+ "status": null,
+ "move": null,
+ "compliance": null,
  "correct": {
-  "move": "MoveB:d3h7",
+  "move": "MoveB:a6b5",
   "note": "MATE expert choice"
  },
  "oracle": {
   "kind": "mate_selection",
-  "candidate_a": "g5h7",
-  "candidate_b": "d3h7",
+  "candidate_a": "f4e5",
+  "candidate_b": "a6b5",
   "truth_label": "B"
  },
- "fen": "4r1k1/7p/p1qppp2/1p4N1/3P4/2PQ3P/PP4P1/6K1 w - - 0 25",
+ "fen": "8/8/p6p/PB6/5k2/1K1n4/6P1/8 b - - 0 44",
  "pieces": [
-  {
-   "sq": "g1",
-   "color": "w",
-   "kind": "K"
-  },
-  {
-   "sq": "a2",
-   "color": "w",
-   "kind": "P"
-  },
-  {
-   "sq": "b2",
-   "color": "w",
-   "kind": "P"
-  },
   {
    "sq": "g2",
    "color": "w",
    "kind": "P"
   },
   {
-   "sq": "c3",
+   "sq": "b3",
    "color": "w",
-   "kind": "P"
+   "kind": "K"
   },
   {
    "sq": "d3",
-   "color": "w",
-   "kind": "Q"
+   "color": "b",
+   "kind": "N"
   },
   {
-   "sq": "h3",
-   "color": "w",
-   "kind": "P"
+   "sq": "f4",
+   "color": "b",
+   "kind": "K"
   },
   {
-   "sq": "d4",
+   "sq": "a5",
    "color": "w",
    "kind": "P"
   },
   {
    "sq": "b5",
-   "color": "b",
-   "kind": "P"
-  },
-  {
-   "sq": "g5",
    "color": "w",
-   "kind": "N"
+   "kind": "B"
   },
   {
    "sq": "a6",
@@ -106,98 +70,48 @@
    "kind": "P"
   },
   {
-   "sq": "c6",
-   "color": "b",
-   "kind": "Q"
-  },
-  {
-   "sq": "d6",
+   "sq": "h6",
    "color": "b",
    "kind": "P"
-  },
-  {
-   "sq": "e6",
-   "color": "b",
-   "kind": "P"
-  },
-  {
-   "sq": "f6",
-   "color": "b",
-   "kind": "P"
-  },
-  {
-   "sq": "h7",
-   "color": "b",
-   "kind": "P"
-  },
-  {
-   "sq": "e8",
-   "color": "b",
-   "kind": "R"
-  },
-  {
-   "sq": "g8",
-   "color": "b",
-   "kind": "K"
   }
  ],
  "n": 8,
- "record_id": "mate-sel-28392",
+ "record_id": "mate-sel-28514",
  "position": {
-  "id": "mate-sel-28392",
+  "id": "mate-sel-28514",
   "n": 8,
-  "turn": "w",
-  "fen": "4r1k1/7p/p1qppp2/1p4N1/3P4/2PQ3P/PP4P1/6K1 w - - 0 25",
+  "turn": "b",
+  "fen": "8/8/p6p/PB6/5k2/1K1n4/6P1/8 b - - 0 44",
   "pieces": [
-   {
-    "sq": "g1",
-    "color": "w",
-    "kind": "K"
-   },
-   {
-    "sq": "a2",
-    "color": "w",
-    "kind": "P"
-   },
-   {
-    "sq": "b2",
-    "color": "w",
-    "kind": "P"
-   },
    {
     "sq": "g2",
     "color": "w",
     "kind": "P"
    },
    {
-    "sq": "c3",
+    "sq": "b3",
     "color": "w",
-    "kind": "P"
+    "kind": "K"
    },
    {
     "sq": "d3",
-    "color": "w",
-    "kind": "Q"
+    "color": "b",
+    "kind": "N"
    },
    {
-    "sq": "h3",
-    "color": "w",
-    "kind": "P"
+    "sq": "f4",
+    "color": "b",
+    "kind": "K"
    },
    {
-    "sq": "d4",
+    "sq": "a5",
     "color": "w",
     "kind": "P"
    },
    {
     "sq": "b5",
-    "color": "b",
-    "kind": "P"
-   },
-   {
-    "sq": "g5",
     "color": "w",
-    "kind": "N"
+    "kind": "B"
    },
    {
     "sq": "a6",
@@ -205,39 +119,9 @@
     "kind": "P"
    },
    {
-    "sq": "c6",
-    "color": "b",
-    "kind": "Q"
-   },
-   {
-    "sq": "d6",
+    "sq": "h6",
     "color": "b",
     "kind": "P"
-   },
-   {
-    "sq": "e6",
-    "color": "b",
-    "kind": "P"
-   },
-   {
-    "sq": "f6",
-    "color": "b",
-    "kind": "P"
-   },
-   {
-    "sq": "h7",
-    "color": "b",
-    "kind": "P"
-   },
-   {
-    "sq": "e8",
-    "color": "b",
-    "kind": "R"
-   },
-   {
-    "sq": "g8",
-    "color": "b",
-    "kind": "K"
    }
   ],
   "source": "MATE testset"
