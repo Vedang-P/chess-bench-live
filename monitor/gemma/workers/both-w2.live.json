@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-08-09T22:29:38Z",
+ "updated_at": "2026-08-09T22:34:39Z",
  "cell": {
   "model": "gemma4-e2b",
   "task": "mate-selection-test",
@@ -9,135 +9,199 @@
  "task_kind": "mate_selection",
  "run_kind": "mate-selection",
  "run_id": "mate-gemma-both-w2",
- "sample_idx": 418,
+ "sample_idx": 423,
  "sample_total": 500,
- "position_id": "mate-sel-35917",
- "prompt": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves with their strategy explanations and tactics.\nThe FEN of the given chess board is \"8/8/2K5/p1p5/3p4/1PkP4/2P5/8 w - - 3 57\". Which move is better? MoveA:c6c5, Switch a lower value piece with a higher value piece, to gain an advantage. TacticA: c6c5 c3c2 Trade the lower value piece for a higher value piece.  MoveB:c6d7, Marshall the piece to a better square, extending its control over the board. TacticB: c6d7 c3c2 Trade the lower value piece for a higher value piece. ",
- "model_input": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves with their strategy explanations and tactics.\nThe FEN of the given chess board is \"8/8/2K5/p1p5/3p4/1PkP4/2P5/8 w - - 3 57\". Which move is better? MoveA:c6c5, Switch a lower value piece with a higher value piece, to gain an advantage. TacticA: c6c5 c3c2 Trade the lower value piece for a higher value piece.  MoveB:c6d7, Marshall the piece to a better square, extending its control over the board. TacticB: c6d7 c3c2 Trade the lower value piece for a higher value piece. \nAnswer with exactly one of: MoveA:<move> or MoveB:<move>. Only output the line, nothing else.\nYou MUST output an answer. If you cannot determine which move is better with confidence, output your best guess from the two candidates anyway. An answer is required; refusing to answer is not acceptable.",
- "output": "MoveA:c6c5",
- "reasoning": "The user wants me to evaluate two candidate moves (MoveA and MoveB) for a chess position given by a FEN and select the better one.\n\nFEN: `8/8/2K5/p1p5/3p4/1PkP4/2P5/8 w - - 3 57`\nIt is White's turn to move.\n\n**Evaluation of the current position:**\nWhite has a King on c6, pawns on c2, c3, d3 (Wait, let's re-examine the FEN).\nWhite pieces: K on c6, Pawns on c2, c3, d3 (No, looking at the FEN: `1PkP4`).\nBlack pieces: K on c3, Pawns on a5, c5, d4.\n\nLet's parse the FEN carefully: `8/8/2K5/p1p5/3p4/1PkP4/2P5/8 w - - 3 57`\n\nBoard setup:\nRank 8: Empty\nRank 7: Empty\nRank 6: White King (Kc6)\nRank 5: Empty\nRank 4: Black pawn (c5), Black pawn (d4)\nRank 3: White pawn (c3), Black King (Kc3), White pawn (c2) -- Wait, this interpretation seems wrong based on standard notation if we read left to right.\n\nLet's map it out:\n8: . . . . . . . .\n7: . . . . . . . .\n6: . . K . . . . . (White King on c6)\n5: . . . . . . . .\n4: . . p . p . . . (Black pawns on a5, c5, d4?) No, wait, the input shows: `p1p5`. This means a black pawn on a5, another on c5.\n3: . . P . . . . . (White pawn on c3)\n2: . . K . . . . . (Black King on c3) -- Wait, `1PkP4`. The 'P' must be white if it follows the pattern where lowercase is black and uppercase is white, but here the structure suggests mixed colors or unusual placement relative to the kings.\n\nLet's assume standard algebraic notation parsing:\nWhite pieces: K (on c6), P (on c3, c2?).\nBlack pieces: K (on c3), P (on a5, c5, d4?).\n\nIf we look at the actual FEN string components:\n`8/8/2K5/p1p5/3p4/1PkP4/2P5/8 w - - 3 57`\n\nRow 6: `2K5` -> White King on c6.\nRow 5: `p1p5` -> Black pawns on a5, c5. (This implies rank 5 has only these two pieces specified in that segment, which is impossible unless they are separated.) Let's assume standard representation where pieces occupy squares.\na5=p, c5=p.\nRow 4: `3p4` -> Pawn on d4.\nRow 3: `1PkP4` -> Black King on c3, White Pawn on c3. (This is highly confusing as both sides have pieces on the same file/rank depending on how we interpret the sequence.)\nRow 2: `2P5` -> White Pawn on c2.\n\nLet's rely purely on coordinate mapping implied by the FEN structure:\nWhite King (K): c6\nWhite Pawns (P): c3, c2 (from row 3 and 2)\nBlack King (k): c3 (from row 3)\nBlack Pawns (p): a5, c5, d4 (from rows 5 and 4)\n\nMaterial balance: Equal material (King + 3 Pawns vs King + 3 Pawns).\nThe position is extremely locked down. White needs to find a way to break through or improve the king position.\n\nWhite's immediate threats/opportunities:\nThe White King is somewhat exposed near the queenside action. Black's King is centralized on c3.\n\nCandidate Moves:\n1. **MoveA: c6c5** (Moving the King from c6 to c5, attacking the c5 pawn, potentially trading or forcing concessions).\n   Strategy A: Switch a lower value piece with a higher value piece, to gain an advantage.\n   Tactic A: c6c5 c3c2 Trade the lower value piece for a higher value piece. (This tactic description seems nonsensical for the move itself, suggesting a trade involving c3 and c2).\n\n2. **MoveB: c6d7** (Moving the King from c6 to d7, moving away from the action, perhaps aiming for the kingside or just repositioning).\n   Strategy B: Marshall the piece to a better square, extending its control over the board.\n   Tactic B: c6d7 c3c2 Trade the lower value piece for a higher value piece. (Again, the tactic description is identical to A, implying the underlying tactical idea might be related to exploiting weaknesses around c3/c2).\n\n**Detailed Analysis:**\n\nCurrent state: White King on c6. Black King on c3.\nIf White plays Kc5 (MoveA):\nThe White King attacks the Black pawn on c5.\nIf Black ignores it, White gains space or forces a structural change.\nIf Black captures (e.g., ... bxc5, though there is no b-pawn visible, only a5 and c5), or defends somehow. Since c5 is occupied by a black pawn, Kc5 directly challenges it.\n\nIf White plays Kd7 (MoveB):\nThis retreats the King significantly. It doesn't immediately challenge anything critical. It allows Black time to consolidate or attack elsewhere.\n\nGiven the static nature of the position, improving the King's central influence or challenging enemy pawns is usually preferred. Kc5 looks more active than Kd7.\n\nLet's check the consequences of Kc5:\nIf 57. Kc5, Black must respond.\nPossible responses for Black:\na) 57... Kd2 (trying to activate the King)\nb) 57... a4 (creating counterplay on the queenside)\nc) 57... Kb3 (if possible, but Black King is on c3)\n\nThe provided tactics suggest a trade involving c3 and c2. This hints that White might be trying to eliminate the Black King or force favorable exchanges using the pawns.\n\nIf we analyze the positional goals: White needs activity. Kc5 is active. Kd7 is passive retreat. Therefore, MoveA seems strategically superior.\n\nSince I must choose between A and B, and A involves an aggressive maneuver (challenging the center/queenside structure) while B is a passive retreat, A is likely the better choice for an expert player seeking an advantage.",
- "finished": true,
- "token_usage": {
-  "input_tokens": 266,
-  "output_tokens": 1544,
-  "reasoning_tokens": 1532,
-  "total_tokens": 1810,
-  "cache_read_tokens": null,
-  "cache_write_tokens": null,
-  "cache_hit_tokens": null,
-  "cache_miss_tokens": null,
-  "usage_source": "hf_transformers",
-  "usage_complete": true,
-  "stream_events": null,
-  "time_to_first_token_ms": null,
-  "generation_seconds": 106.91380882263184,
-  "output_tokens_per_second": 14.441539563532615,
-  "reasoning_tokens_per_second": 14.32929961873832
- },
- "phase": "scored",
- "status": "correct",
- "move": "c6c5",
- "compliance": true,
+ "position_id": "mate-sel-36047",
+ "prompt": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves with their strategy explanations and tactics.\nThe FEN of the given chess board is \"8/5k1p/p4p1P/1p2p3/3rb1B1/5P2/PPP5/1K1R4 b - - 0 28\". Which move is better? MoveA:f7e8, Adjust the piece to a key area, where it holds more influence over the board. TacticA: f7e8 d1d4 e4f3 d4d7 f3g4 d7h7   MoveB:f6f5, The movement of a black pawn creates additional room on the kingside, giving black more control over piece movement. TacticB: f6f5 g4h5 f7f6 d1d4 e5d4 Trade the lower value piece for a higher value piece. ",
+ "model_input": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves with their strategy explanations and tactics.\nThe FEN of the given chess board is \"8/5k1p/p4p1P/1p2p3/3rb1B1/5P2/PPP5/1K1R4 b - - 0 28\". Which move is better? MoveA:f7e8, Adjust the piece to a key area, where it holds more influence over the board. TacticA: f7e8 d1d4 e4f3 d4d7 f3g4 d7h7   MoveB:f6f5, The movement of a black pawn creates additional room on the kingside, giving black more control over piece movement. TacticB: f6f5 g4h5 f7f6 d1d4 e5d4 Trade the lower value piece for a higher value piece. \nAnswer with exactly one of: MoveA:<move> or MoveB:<move>. Only output the line, nothing else.\nYou MUST output an answer. If you cannot determine which move is better with confidence, output your best guess from the two candidates anyway. An answer is required; refusing to answer is not acceptable.",
+ "output": "",
+ "reasoning": "The user wants me to evaluate two candidate moves (MoveA and MoveB) for Black given the FEN: `8/",
+ "finished": false,
+ "token_usage": null,
+ "phase": "generating",
+ "status": null,
+ "move": null,
+ "compliance": null,
  "correct": {
-  "move": "MoveA:c6c5",
+  "move": "MoveB:f6f5",
   "note": "MATE expert choice"
  },
  "oracle": {
   "kind": "mate_selection",
-  "candidate_a": "c6c5",
-  "candidate_b": "c6d7",
-  "truth_label": "A"
+  "candidate_a": "f7e8",
+  "candidate_b": "f6f5",
+  "truth_label": "B"
  },
- "fen": "8/8/2K5/p1p5/3p4/1PkP4/2P5/8 w - - 3 57",
+ "fen": "8/5k1p/p4p1P/1p2p3/3rb1B1/5P2/PPP5/1K1R4 b - - 0 28",
  "pieces": [
+  {
+   "sq": "b1",
+   "color": "w",
+   "kind": "K"
+  },
+  {
+   "sq": "d1",
+   "color": "w",
+   "kind": "R"
+  },
+  {
+   "sq": "a2",
+   "color": "w",
+   "kind": "P"
+  },
+  {
+   "sq": "b2",
+   "color": "w",
+   "kind": "P"
+  },
   {
    "sq": "c2",
    "color": "w",
    "kind": "P"
   },
   {
-   "sq": "b3",
-   "color": "w",
-   "kind": "P"
-  },
-  {
-   "sq": "c3",
-   "color": "b",
-   "kind": "K"
-  },
-  {
-   "sq": "d3",
+   "sq": "f3",
    "color": "w",
    "kind": "P"
   },
   {
    "sq": "d4",
    "color": "b",
-   "kind": "P"
+   "kind": "R"
   },
   {
-   "sq": "a5",
+   "sq": "e4",
    "color": "b",
-   "kind": "P"
+   "kind": "B"
   },
   {
-   "sq": "c5",
-   "color": "b",
-   "kind": "P"
-  },
-  {
-   "sq": "c6",
+   "sq": "g4",
    "color": "w",
+   "kind": "B"
+  },
+  {
+   "sq": "b5",
+   "color": "b",
+   "kind": "P"
+  },
+  {
+   "sq": "e5",
+   "color": "b",
+   "kind": "P"
+  },
+  {
+   "sq": "a6",
+   "color": "b",
+   "kind": "P"
+  },
+  {
+   "sq": "f6",
+   "color": "b",
+   "kind": "P"
+  },
+  {
+   "sq": "h6",
+   "color": "w",
+   "kind": "P"
+  },
+  {
+   "sq": "f7",
+   "color": "b",
    "kind": "K"
+  },
+  {
+   "sq": "h7",
+   "color": "b",
+   "kind": "P"
   }
  ],
  "n": 8,
- "record_id": "mate-sel-35917",
+ "record_id": "mate-sel-36047",
  "position": {
-  "id": "mate-sel-35917",
+  "id": "mate-sel-36047",
   "n": 8,
-  "turn": "w",
-  "fen": "8/8/2K5/p1p5/3p4/1PkP4/2P5/8 w - - 3 57",
+  "turn": "b",
+  "fen": "8/5k1p/p4p1P/1p2p3/3rb1B1/5P2/PPP5/1K1R4 b - - 0 28",
   "pieces": [
+   {
+    "sq": "b1",
+    "color": "w",
+    "kind": "K"
+   },
+   {
+    "sq": "d1",
+    "color": "w",
+    "kind": "R"
+   },
+   {
+    "sq": "a2",
+    "color": "w",
+    "kind": "P"
+   },
+   {
+    "sq": "b2",
+    "color": "w",
+    "kind": "P"
+   },
    {
     "sq": "c2",
     "color": "w",
     "kind": "P"
    },
    {
-    "sq": "b3",
-    "color": "w",
-    "kind": "P"
-   },
-   {
-    "sq": "c3",
-    "color": "b",
-    "kind": "K"
-   },
-   {
-    "sq": "d3",
+    "sq": "f3",
     "color": "w",
     "kind": "P"
    },
    {
     "sq": "d4",
     "color": "b",
-    "kind": "P"
+    "kind": "R"
    },
    {
-    "sq": "a5",
+    "sq": "e4",
     "color": "b",
-    "kind": "P"
+    "kind": "B"
    },
    {
-    "sq": "c5",
-    "color": "b",
-    "kind": "P"
-   },
-   {
-    "sq": "c6",
+    "sq": "g4",
     "color": "w",
+    "kind": "B"
+   },
+   {
+    "sq": "b5",
+    "color": "b",
+    "kind": "P"
+   },
+   {
+    "sq": "e5",
+    "color": "b",
+    "kind": "P"
+   },
+   {
+    "sq": "a6",
+    "color": "b",
+    "kind": "P"
+   },
+   {
+    "sq": "f6",
+    "color": "b",
+    "kind": "P"
+   },
+   {
+    "sq": "h6",
+    "color": "w",
+    "kind": "P"
+   },
+   {
+    "sq": "f7",
+    "color": "b",
     "kind": "K"
+   },
+   {
+    "sq": "h7",
+    "color": "b",
+    "kind": "P"
    }
   ],
   "source": "MATE testset"
