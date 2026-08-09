@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-08-09T17:44:24Z",
+ "updated_at": "2026-08-09T17:49:26Z",
  "cell": {
   "model": "gemma4-e2b",
   "task": "mate-selection-test",
@@ -9,66 +9,50 @@
  "task_kind": "mate_selection",
  "run_kind": "mate-selection",
  "run_id": "mate-gemma-tactic-w2",
- "sample_idx": 189,
+ "sample_idx": 193,
  "sample_total": 500,
- "position_id": "mate-sel-27594",
- "prompt": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves and their tactics.\nThe FEN of the given chess board is \"7k/p5p1/2p1B2p/2P1n3/3rp3/6P1/P1R2P1P/6K1 b - - 5 31\". Which move is better? MoveA:h8h7,tactic h8h7 g1f1 h7g6 f1e2 g6f6 e6g8   MoveB:e5f3,tactic e5f3 g1g2 f3e1 g2f1 e1c2 Trade the lower value piece for a higher value piece. ",
- "model_input": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves and their tactics.\nThe FEN of the given chess board is \"7k/p5p1/2p1B2p/2P1n3/3rp3/6P1/P1R2P1P/6K1 b - - 5 31\". Which move is better? MoveA:h8h7,tactic h8h7 g1f1 h7g6 f1e2 g6f6 e6g8   MoveB:e5f3,tactic e5f3 g1g2 f3e1 g2f1 e1c2 Trade the lower value piece for a higher value piece. \nAnswer with exactly one of: MoveA:<move> or MoveB:<move>. Only output the line, nothing else.\nYou MUST output an answer. If you cannot determine which move is better with confidence, output your best guess from the two candidates anyway. An answer is required; refusing to answer is not acceptable.",
- "output": "MoveB:e5f3",
- "reasoning": "The user wants me to evaluate two candidate moves (MoveA and MoveB) for a black position given a FEN and choose the better one.\n\nFEN: `7k/p5p1/2p1B2p/2P1n3/3rp3/6P1/P1R2P1P/6K1 b - - 5 31`\nIt is Black's turn to move.\n\n**Evaluation of the current position:**\nWhite has pieces on c2 (Rook), b5 (Bishop), d4 (Pawn), g3, f2, h2. White also has pawns on a2, c4, g3, h2.\nBlack has pieces on a7, c6, e5 (Knight), d4 (Rook), h7 (Pawn). Black also has pawns on a7, c6, g7, h7. Wait, let's re-examine the FEN structure carefully.\n\nFEN breakdown: `7k/p5p1/2p1B2p/2P1n3/3rp3/6P1/P1R2P1P/6K1 b - - 5 31`\nBoard setup:\nRank 8: Empty except for K on h8.\nRank 7: p (a7), empty, p (g7), p (h7). (Wait, the FEN shows `7k/p5p1`. This means a7 pawn, empty, g7 pawn, h7 pawn.)\nRank 6: empty, c (c6), p (g6), B (e6).\nRank 5: empty, c (c5), n (e5), empty, r (d5), p (h5)? No, wait.\nLet's parse the input string literally:\n8: 7k (King on h8)\n7: p5p1 (a7=p, b7=empty, c7=empty, d7=empty, e7=empty, f7=empty, g7=p, h7=p) -> This seems wrong based on standard notation if we assume the last character is rank 1. Let's count ranks from bottom up.\n\nRow 1 (Rank 1): P1R2P1P (a2, c2(R), f2, g2, h2)\nRow 2 (Rank 2): 6P1 (a2, b2, c2, d2, e2, f2, g2, h2) -> The FEN says `P1R2P1P`. So a2=P, c2=R, f2=P, g2=P, h2=P.\nRow 3 (Rank 3): 6P1 (Empty)\nRow 4 (Rank 4): 3rp3 (d4=r, e4=p, f4=empty, g4=empty, h4=empty) -> Wait, this implies Black has a Rook on d4 and a Pawn on e4.\nRow 5 (Rank 5): 3P1n3 (c5=P, e5=n)\nRow 6 (Rank 6): 2p1B2p (b6=p, e6=B, g6=p)\nRow 7 (Rank 7): p5p1 (a7=p, g7=p, h7=p)\nRow 8 (Rank 8): 7k (h8=K)\n\nMaterial advantage check:\nWhite: R, B, 5 Pawns (a2, c4, g3, h2, plus others implied by the board state).\nBlack: R, N, 5 Pawns.\nWhite has a Bishop on e6 attacking nothing immediately critical, but it controls important squares. Black has a strong centralized Rook on d4 and Knight on e5.\n\nIt is Black's turn (b).\n\n**Candidate Moves:**\n\n**MoveA: h8h7**\nThis move notation looks highly suspicious in context. In algebraic notation, moves specify where a piece moves (e.g., Nh7, Rh8). 'h8h7' usually implies moving something from h8 to h7, perhaps capturing or moving a piece that was already there, or maybe it's shorthand for promotion/capture sequence, but here it's just a King move if the King is on h8.\nIf the King is on h8, moving it to h7 is possible, but why would Black do that when White has threats?\nLooking at the FEN, the King is on h8 (`7k`). Moving Kh8-h7 seems passive unless it defends something or prepares escape.\n\nTactic provided for MoveA: `h8h7 g1f1 h7g6 f1e2 g6f6 e6g8`\nThis suggests a complex sequence involving multiple pieces or positional maneuvering. It involves moving the King, then potentially other pieces (g1f1, f1e2, etc.). This looks like a very deep tactical search suggestion rather than a simple move evaluation.\n\n**MoveB: e5f3**\nThis implies the Knight on e5 moves to f3. This attacks nothing directly, but repositions the knight aggressively or attempts to exploit weaknesses.\n\nTactic provided for MoveB: `e5f3 g1g2 f3e1 g2f1 e1c2 Trade the lower value piece for a higher value piece.`\nThis tactic suggests sacrificing material or trading a less valuable piece for a more valuable one. Trading the Ne5 for something, or using the Nf3 to initiate complications.\n\n**Positional Assessment:**\nBlack needs to find activity. The Rd4 is well placed. The Ne5 is currently pinned against potential future action. White's Be6 is annoying.\n\nLet's analyze the immediate threat level. There are no immediate checks or captures forcing a response.\n\nIf Black plays **...Nf3 (implied by MoveB)**:\nThe Knight goes to f3. It eyes d4 indirectly, and might pressure g1 or e1 later. However, it leaves e5 undefended temporarily if the exchange happens.\n\nIf Black plays **...Kh7 (MoveA interpretation)**:\nThis improves king safety slightly, but doesn't address central tension.\n\nGiven the cryptic nature of the suggested tactics, I must rely on general principles or try to deduce the intended sharp play.\n\nThe engine preference often leans towards active piece placement.\n\nComparing $N_{e5}$ vs $N_{f3}$:\n$N_{e5}$ is centrally located, supporting the rook.\n$N_{f3}$ is more aggressive, aiming towards the kingside or center.\n\nSince I am forced to choose between these specific suggestions:\n\nMove A: `h8h7` (King move)\nMove B: `e5f3` (Knight move)\n\nIn endgames or complex middlegames, improving piece coordination is usually superior to shuffling the king unnecessarily unless the king is in immediate danger. Here, the King on h8 is relatively safe for now.\n\nMove B ($Ne5 \\to f3$) seems more dynamic, fitting the description \"Trade the lower value piece for a higher value piece\" if the resulting position leads to favorable exchanges or attacks.\n\nI will proceed assuming MoveB represents the intended strategic direction indicated by its accompanying tactic.",
- "finished": true,
- "token_usage": {
-  "input_tokens": 258,
-  "output_tokens": 1618,
-  "reasoning_tokens": 1606,
-  "total_tokens": 1876,
-  "cache_read_tokens": null,
-  "cache_write_tokens": null,
-  "cache_hit_tokens": null,
-  "cache_miss_tokens": null,
-  "usage_source": "hf_transformers",
-  "usage_complete": true,
-  "stream_events": null,
-  "time_to_first_token_ms": null,
-  "generation_seconds": 113.22638869285583,
-  "output_tokens_per_second": 14.289955006770342,
-  "reasoning_tokens_per_second": 14.183972645780697
- },
- "phase": "scored",
- "status": "correct",
- "move": "e5f3",
- "compliance": true,
+ "position_id": "mate-sel-27782",
+ "prompt": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves and their tactics.\nThe FEN of the given chess board is \"6k1/6pp/p7/1p2Bp2/3P1P2/P3p2K/R3Q2P/1qr5 b - - 5 31\". Which move is better? MoveA:b1e4,tactic b1e4 e2g2 g7g6 a2e2 c1c3 g2e4   MoveB:c1e1,tactic c1e1 e2g2 g7g5 g2g5 g8f7 g5g7  ",
+ "model_input": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves and their tactics.\nThe FEN of the given chess board is \"6k1/6pp/p7/1p2Bp2/3P1P2/P3p2K/R3Q2P/1qr5 b - - 5 31\". Which move is better? MoveA:b1e4,tactic b1e4 e2g2 g7g6 a2e2 c1c3 g2e4   MoveB:c1e1,tactic c1e1 e2g2 g7g5 g2g5 g8f7 g5g7  \nAnswer with exactly one of: MoveA:<move> or MoveB:<move>. Only output the line, nothing else.\nYou MUST output an answer. If you cannot determine which move is better with confidence, output your best guess from the two candidates anyway. An answer is required; refusing to answer is not acceptable.",
+ "output": "",
+ "reasoning": "The user wants me to evaluate two candidate moves (MoveA and MoveB) for a chess position given by a FEN and choose the better one.\n\nFEN: `6k1/6pp/p7/1p2Bp2/3P1P2/P3p2K/R3Q2P/1qr5 b - - 5 31`\nIt is Black's turn to move.\n\n**Evaluation of the current position:**\nWhite has a strong bishop on e5 and a passed pawn structure potential. Black has a queen on b1 and a rook on b1 (Wait, the notation implies R on a1, Q on b1). Let's re-examine the FEN:\n`6k1/6pp/p7/1p2Bp2/3P1P2/P3p2K/R3Q2P/1qr5 b - - 5 31`\nBlack pieces: King on g8, Queen on b1, Rook on c1, Pawns on a6, b5, e3, g7, h7.\nWhite pieces: King on h3, Queen on e2, Bishop on e5, Rook on a1, Pawns on a3, d4, f4, g2, h2.\n\nMaterial is equal. The position is complex. Black has a dangerous passed pawn on e3, but White's king is relatively safe, and the white pieces are coordinated.\n\n**Candidate Moves Analysis:**\n\n**MoveA: b1e4** (Moving the Queen from b1 to e4)\nTactic sequence suggested: `b1e4 e2g2 g7g6 a2e2 c1c3 g2e4`\nThis looks like trying to activate the Queen aggressively, perhaps aiming at the kingside or centralizing.\nIf 31... Qe4:\nWhite needs to respond. The immediate threat isn't clear.\nThe proposed continuation seems highly speculative without deeper engine analysis.\n\n**MoveB: c1e1** (Moving the Rook from c1 to e1)\nTactic sequence suggested: `c1e1 e2g2 g7g5 g2g5 g8f7 g5g7`\nThis involves repositioning the rook defensively or preparing counterplay along the e-file or supporting the kingside pawns.\n\n**Engine Evaluation Strategy:**\nSince I am an expert, I should look for forcing lines or positional advantages.\n\nLet's analyze the threats based on the FEN.\nBlack's main asset is the advanced e3 pawn, restricting White's coordination slightly if Black can support it. However, White controls the center squares well.\n\nIf we use Stockfish evaluation (simulated):\n\nPosition check: Depth search needed.\n\nComparing the moves provided in the prompt suggests that Move A aims for immediate tactical complications involving the e-file and kingside pressure (`e2g2`, `g2e4`). Move B is more positional reorganization (`e2g2`, `g5g7`).\n\nGiven the complexity and the instruction to pick the *better* move, I must rely on identifying the most promising path. In endgames or complex middlegames, activating the Queen or Rook effectively is key.\n\nLet's assume standard chess principles apply:\n1. **MoveA (Qb1-e4):** Centralizes the Queen, puts pressure on d4 indirectly, prepares potential attacks.\n2. **MoveB (Rc1-e1):** A passive retreat or preparation for defense/counterattack down the e-file, potentially blocking the Queen's diagonal access if it were still on b1.\n\nWithout running a full deep search, I lean towards the active move unless there is an immediate tactical blunder associated with it. Moving the Queen to",
+ "finished": false,
+ "token_usage": null,
+ "phase": "generating",
+ "status": null,
+ "move": null,
+ "compliance": null,
  "correct": {
-  "move": "MoveB:e5f3",
+  "move": "MoveA:b1e4",
   "note": "MATE expert choice"
  },
  "oracle": {
   "kind": "mate_selection",
-  "candidate_a": "h8h7",
-  "candidate_b": "e5f3",
-  "truth_label": "B"
+  "candidate_a": "b1e4",
+  "candidate_b": "c1e1",
+  "truth_label": "A"
  },
- "fen": "7k/p5p1/2p1B2p/2P1n3/3rp3/6P1/P1R2P1P/6K1 b - - 5 31",
+ "fen": "6k1/6pp/p7/1p2Bp2/3P1P2/P3p2K/R3Q2P/1qr5 b - - 5 31",
  "pieces": [
   {
-   "sq": "g1",
-   "color": "w",
-   "kind": "K"
+   "sq": "b1",
+   "color": "b",
+   "kind": "Q"
+  },
+  {
+   "sq": "c1",
+   "color": "b",
+   "kind": "R"
   },
   {
    "sq": "a2",
    "color": "w",
-   "kind": "P"
-  },
-  {
-   "sq": "c2",
-   "color": "w",
    "kind": "R"
   },
   {
-   "sq": "f2",
+   "sq": "e2",
    "color": "w",
-   "kind": "P"
+   "kind": "Q"
   },
   {
    "sq": "h2",
@@ -76,47 +60,47 @@
    "kind": "P"
   },
   {
-   "sq": "g3",
+   "sq": "a3",
    "color": "w",
    "kind": "P"
+  },
+  {
+   "sq": "e3",
+   "color": "b",
+   "kind": "P"
+  },
+  {
+   "sq": "h3",
+   "color": "w",
+   "kind": "K"
   },
   {
    "sq": "d4",
-   "color": "b",
-   "kind": "R"
-  },
-  {
-   "sq": "e4",
-   "color": "b",
+   "color": "w",
    "kind": "P"
   },
   {
-   "sq": "c5",
+   "sq": "f4",
    "color": "w",
+   "kind": "P"
+  },
+  {
+   "sq": "b5",
+   "color": "b",
    "kind": "P"
   },
   {
    "sq": "e5",
-   "color": "b",
-   "kind": "N"
-  },
-  {
-   "sq": "c6",
-   "color": "b",
-   "kind": "P"
-  },
-  {
-   "sq": "e6",
    "color": "w",
    "kind": "B"
   },
   {
-   "sq": "h6",
+   "sq": "f5",
    "color": "b",
    "kind": "P"
   },
   {
-   "sq": "a7",
+   "sq": "a6",
    "color": "b",
    "kind": "P"
   },
@@ -126,38 +110,43 @@
    "kind": "P"
   },
   {
-   "sq": "h8",
+   "sq": "h7",
+   "color": "b",
+   "kind": "P"
+  },
+  {
+   "sq": "g8",
    "color": "b",
    "kind": "K"
   }
  ],
  "n": 8,
- "record_id": "mate-sel-27594",
+ "record_id": "mate-sel-27782",
  "position": {
-  "id": "mate-sel-27594",
+  "id": "mate-sel-27782",
   "n": 8,
   "turn": "b",
-  "fen": "7k/p5p1/2p1B2p/2P1n3/3rp3/6P1/P1R2P1P/6K1 b - - 5 31",
+  "fen": "6k1/6pp/p7/1p2Bp2/3P1P2/P3p2K/R3Q2P/1qr5 b - - 5 31",
   "pieces": [
    {
-    "sq": "g1",
-    "color": "w",
-    "kind": "K"
+    "sq": "b1",
+    "color": "b",
+    "kind": "Q"
+   },
+   {
+    "sq": "c1",
+    "color": "b",
+    "kind": "R"
    },
    {
     "sq": "a2",
     "color": "w",
-    "kind": "P"
-   },
-   {
-    "sq": "c2",
-    "color": "w",
     "kind": "R"
    },
    {
-    "sq": "f2",
+    "sq": "e2",
     "color": "w",
-    "kind": "P"
+    "kind": "Q"
    },
    {
     "sq": "h2",
@@ -165,47 +154,47 @@
     "kind": "P"
    },
    {
-    "sq": "g3",
+    "sq": "a3",
     "color": "w",
     "kind": "P"
+   },
+   {
+    "sq": "e3",
+    "color": "b",
+    "kind": "P"
+   },
+   {
+    "sq": "h3",
+    "color": "w",
+    "kind": "K"
    },
    {
     "sq": "d4",
-    "color": "b",
-    "kind": "R"
-   },
-   {
-    "sq": "e4",
-    "color": "b",
+    "color": "w",
     "kind": "P"
    },
    {
-    "sq": "c5",
+    "sq": "f4",
     "color": "w",
+    "kind": "P"
+   },
+   {
+    "sq": "b5",
+    "color": "b",
     "kind": "P"
    },
    {
     "sq": "e5",
-    "color": "b",
-    "kind": "N"
-   },
-   {
-    "sq": "c6",
-    "color": "b",
-    "kind": "P"
-   },
-   {
-    "sq": "e6",
     "color": "w",
     "kind": "B"
    },
    {
-    "sq": "h6",
+    "sq": "f5",
     "color": "b",
     "kind": "P"
    },
    {
-    "sq": "a7",
+    "sq": "a6",
     "color": "b",
     "kind": "P"
    },
@@ -215,7 +204,12 @@
     "kind": "P"
    },
    {
-    "sq": "h8",
+    "sq": "h7",
+    "color": "b",
+    "kind": "P"
+   },
+   {
+    "sq": "g8",
     "color": "b",
     "kind": "K"
    }
