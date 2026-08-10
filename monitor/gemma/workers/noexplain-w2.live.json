@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-08-10T09:37:11Z",
+ "updated_at": "2026-08-10T09:42:14Z",
  "cell": {
   "model": "gemma4-e2b",
   "task": "mate-selection-test",
@@ -9,81 +9,35 @@
  "task_kind": "mate_selection",
  "run_kind": "mate-selection",
  "run_id": "mate-gemma-noexplain-w2",
- "sample_idx": 50,
+ "sample_idx": 54,
  "sample_total": 500,
- "position_id": "mate-sel-91840",
- "prompt": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves.\nThe FEN of the given chess board is \"r2q1rk1/2p1bpp1/p2p1n1p/2p5/3NP1bB/2N5/PPP2PPP/R3QRK1 w - - 0 13\". Which move is better? MoveA:h4g5 MoveB:d4c6 ",
- "model_input": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves.\nThe FEN of the given chess board is \"r2q1rk1/2p1bpp1/p2p1n1p/2p5/3NP1bB/2N5/PPP2PPP/R3QRK1 w - - 0 13\". Which move is better? MoveA:h4g5 MoveB:d4c6 \nAnswer with exactly one of: MoveA:<move> or MoveB:<move>. Only output the line, nothing else.\nYou MUST output an answer. If you cannot determine which move is better with confidence, output your best guess from the two candidates anyway. An answer is required; refusing to answer is not acceptable.",
- "output": "MoveA:h4g5",
- "reasoning": "The user wants me to evaluate two candidate moves for a chess position given by a FEN and determine which one is better.\n\nFEN: `r2q1rk1/2p1bpp1/p2p1n1p/2p5/3NP1bB/2N5/PPP2PPP/R3QRK1 w - - 0 13`\nIt is White's turn to move.\n\n**Evaluation:**\nMaterial is equal. The position is relatively balanced but complex. White has a strong knight on d4 and good development. Black has pieces developed, and the bishop pair (though the light-squared bishop on g4 is currently pinning something indirectly).\n\n**Candidate Moves:**\nMoveA: h4g5\nMoveB: d4c6 (Wait, the current position already has a pawn on d4 for White, so this notation seems confusing if it implies moving the d4 piece. Let's re-examine the FEN.)\n\nFEN breakdown:\nr2q1rk1 (Black Rooks)\n2p1bpp1 (Black Pawns)\np2p1n1p (Black Knight)\n2p5 (Black Pawns)\n3NP1bB (White Knight on d4, Knight on c3, Bishop on h4, Bishop on g4)\n2N5 (White Knight on c3) -> Wait, the FEN shows Nc3 and Nd4.\nPPP2PPP (White Pawns)\nR3QRK1 (White Rook, Queen, King)\nw - - 0 13 (White to move)\n\nLet's verify the piece placement based on the FEN:\nWhite pieces: K(g1), Q(e1), R(a1), R(f1), N(d4), N(c3), B(h4), B(g4).\nBlack pieces: K(g8), Q(d8), R(a8), R(f8), B(e7), N(f6), B(g4 - wait, there is a white bishop on g4 according to the FEN: `.../3NP1bB/...`. This means White has Bg4. Black has Bb7/Be7 depending on how I read the structure.\n\nLet's parse `3NP1bB`:\nSquare 3 (a3): Empty\nSquare 4 (b4): Empty\nSquare 5 (c5): Empty\nSquare 6 (d5): White Knight (Nd4)\nSquare 7 (e5): Empty\nSquare 8 (f5): White Bishop (Bh4?) No, that doesn't match standard algebraic notation interpretation unless we look at the full context.\n\nStandard FEN parsing: Pieces listed sequentially by rank, starting from rank 8 down to 1.\n\nRank 8: r2q1rk1 (R, Q, K, R, B, N, B, P)\nRank 7: 2p1bpp1 (Empty, Pawn, Empty, Bishop, Pawn, Pawn, Empty, Pawn)\nRank 6: p2p1n1p (Pawn, Pawn, Empty, Pawn, Knight, Empty, Pawn)\nRank 5: 3NP1bB (Empty, Empty, Empty, White Knight (N), Pawn, Empty, White Bishop (B)) -- This looks highly irregular if interpreted strictly as ranks 5, 4, 3.\n\nLet's assume the standard representation where the characters define the contents of the squares in order.\n\nPosition check:\nWhite pieces seem to be: Nd4, Nc3, Bh4, Bg4 (if present).\nIf the input is literally `3NP1bB`, it usually means:\na3=., b3=., c3=N, d3=P, e3=1 (empty?), f3=b (bishop?), g3=B. This is unlikely.\n\nLet's rely on the visual layout implied by common engine analysis when presented with such positions, assuming the provided FEN string is correct.\n\nFEN: `r2q1rk1/2p1bpp1/p2p1n1p/2p5/3NP1bB/2N5/PPP2PPP/R3QRK1 w - - 0 13`\n\nWhite pieces: N on d4, N on c3, B on h4, B on g4. (This configuration suggests White has played aggressively or repositioned pieces).\nBlack pieces: Q on d8, R on a8, R on f8, B on e7, N on f6, pawns distributed.\n\n**Analyzing Candidate Moves:**\n\n**MoveA: h4g5**\nThis involves moving the Bishop from h4 to g5.\nWhy would White do this? It attacks the pawn on f7 indirectly (if the black king moves, or prepares further pressure). More importantly, it challenges the control over the diagonal and potentially aims towards f6 or h6 squares later, though g5 is somewhat passive. It also removes the bishop from potential tactical lines involving the long diagonal if any existed. However, it weakens the dark squares around the king slightly if Black can exploit it.\n\n**MoveB: d4c6**\nThis move makes no sense if 'd4' refers to a piece being moved *to* d4, because the piece is already on d4 (the Knight). Perhaps this notation means $Nc3 \\rightarrow c6$ or $Nd4 \\rightarrow c6$? Given the ambiguity, let's assume the notation describes a specific action intended by the problem setter.\n\nIf MoveB means $Nc3 \\rightarrow c6$: This is a positional maneuver, challenging the queenside structure or preparing to reroute the knight.\nIf MoveB means $Nd4 \\rightarrow c6$: This is a very strange move, sacrificing central influence immediately.\n\nGiven the typical style of these puzzles, often one move is a clear tactical improvement or forcing sequence, while the other is a slow positional adjustment.\n\nLet's assume the notation follows standard algebraic move notation (Piece moved from X to Y).\n\nIf MoveA: $\\text{Bh4} \\rightarrow \\text{g5}$\nIf MoveB: A move involving d4 and c6. Since the piece on d4 is a Knight, maybe it means $Nd4 \\rightarrow c6$.\n\nIf $Nd4 \\rightarrow c6$: This allows Black to play ...Nxd4 or simply ignore it if it's not immediately threatening. It retreats the centralized knight significantly.\n\nLet's use Stockfish evaluation intuition for this type of middlegame setup. White needs to consolidate the center or increase pressure.\n\nStockfish evaluation (running quick check mentally/using knowledge base):\nThe position is roughly equal (+0.2 to +0.5).\n\nIf **h4g5**: This keeps the bishop active, perhaps aiming for future maneuvers or defense.\nIf **Nd4c6**: Retreating the powerful d4 knight seems strategically unsound unless it sets up a concrete follow-up.\n\nLet's analyze MoveA: 13. h4g5\nIf 13. h4g5, Black might respond with ...Qd7, or try to challenge the kingside.\n\nLet's analyze MoveB: 13. Nc3-c6 (assuming this interpretation)\nIf 13. Nc6, Black might play 13... Nxd4 (if possible, but the knight is gone now) or just continue developing/improving their position. If the intention was to move the piece *from* c3 *to* c6, then the resulting position is less flexible than keeping the knight centralized.\n\nSince the prompt forces a choice between A and B, and MoveB ($d4c6$) is syntactically odd if taken literally regarding the existing pieces, I lean towards interpreting them as distinct strategic ideas. In many contexts, pushing a piece forward (like h4g5) is more direct than shuffling a central piece out of the action (like Nd4c6).\n\nI will proceed assuming MoveA is the intended aggressive/active choice, and MoveB is a retreat/repositioning attempt.\n\nEngine confirmation (Simulated high-level assessment):\nIn similar structures, maintaining tension and activity is key. Moving the bishop (h4g5) maintains some attacking potential or defensive solidity related to the kingside structure.\n\nAssuming MoveA is superior due to maintaining dynamic possibilities.",
- "finished": true,
- "token_usage": {
-  "input_tokens": 198,
-  "output_tokens": 1830,
-  "reasoning_tokens": 1818,
-  "total_tokens": 2028,
-  "cache_read_tokens": null,
-  "cache_write_tokens": null,
-  "cache_hit_tokens": null,
-  "cache_miss_tokens": null,
-  "usage_source": "hf_transformers",
-  "usage_complete": true,
-  "stream_events": null,
-  "time_to_first_token_ms": null,
-  "generation_seconds": 126.42464685440063,
-  "output_tokens_per_second": 14.47502560246464,
-  "reasoning_tokens_per_second": 14.380107401792742
- },
- "phase": "scored",
- "status": "wrong",
- "move": "h4g5",
- "compliance": false,
+ "position_id": "mate-sel-92251",
+ "prompt": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves.\nThe FEN of the given chess board is \"6k1/p6p/r1P1p1p1/NR1n4/8/P5P1/5P2/6K1 w - - 0 37\". Which move is better? MoveA:b5c5 MoveB:b5b6 ",
+ "model_input": "You are an expert chess player. You are given a chess board with FEN format. Your goal is to choose a better move given two candidate moves.\nThe FEN of the given chess board is \"6k1/p6p/r1P1p1p1/NR1n4/8/P5P1/5P2/6K1 w - - 0 37\". Which move is better? MoveA:b5c5 MoveB:b5b6 \nAnswer with exactly one of: MoveA:<move> or MoveB:<move>. Only output the line, nothing else.\nYou MUST output an answer. If you cannot determine which move is better with confidence, output your best guess from the two candidates anyway. An answer is required; refusing to answer is not acceptable.",
+ "output": "",
+ "reasoning": "The user wants me to evaluate two candidate moves for a chess position given by a FEN and determine which one is better.\n\nFEN: `6k1/p6p/r1P1p1p1/NR1n4/8/P5P1/5P2/6K1 w - - 0 37`\nIt is White's turn to move.\n\nMaterial advantage: Equal. (White has R, N, 5 pawns vs Black having R, N, 5 pawns). Wait, let's count pieces precisely.\nWhite: K(g1), P(a3, f2, g3), N(a7), P(c6). Total 6 pawns + N + K.\nBlack: K(g8), R(a6), N(d4), P(a7, h7, e6, g6). Total 4 pawns + R + N + K.\nWait, looking at the FEN again:\nWhite pieces: K on g1, N on a7, P on c6, a3, f2, g3. (Total 6 pawns)\nBlack pieces: K on g8, R on a6, N on d4, P on a7 (wait, this pawn is black?), P on e6, g6, h7.\n\nLet's re-examine the FEN structure:\nRow 8: 6k1 (Black King on g8, Rook on h8? No, it's k on g8, 1 empty square?) -> `6k1` means K on g8, empty h8.\nRow 7: p6p (p on a7, empty b7, p on g7)\nRow 6: r1P1p1p (R on a6, empty b6, P on c6, p on e6, p on g6)\nRow 5: NR1n4 (N on a5, R on c5, empty d5, n on d4) -- ERROR in my reading if I assume standard piece notation based on context. Let's parse strictly.\nRow 5: N (White Knight on a5), R (White Rook on c5), empty d5, n (Black Knight on d4). This seems highly unusual placement for a white rook on c5 if there is no other white piece nearby. Ah, wait, the input FEN is: `6k1/p6p/r1P1p1p/NR1n4/",
+ "finished": false,
+ "token_usage": null,
+ "phase": "generating",
+ "status": null,
+ "move": null,
+ "compliance": null,
  "correct": {
-  "move": "MoveB:d4c6",
+  "move": "MoveA:b5c5",
   "note": "MATE expert choice"
  },
  "oracle": {
   "kind": "mate_selection",
-  "candidate_a": "h4g5",
-  "candidate_b": "d4c6",
-  "truth_label": "B"
+  "candidate_a": "b5c5",
+  "candidate_b": "b5b6",
+  "truth_label": "A"
  },
- "fen": "r2q1rk1/2p1bpp1/p2p1n1p/2p5/3NP1bB/2N5/PPP2PPP/R3QRK1 w - - 0 13",
+ "fen": "6k1/p6p/r1P1p1p1/NR1n4/8/P5P1/5P2/6K1 w - - 0 37",
  "pieces": [
-  {
-   "sq": "a1",
-   "color": "w",
-   "kind": "R"
-  },
-  {
-   "sq": "e1",
-   "color": "w",
-   "kind": "Q"
-  },
-  {
-   "sq": "f1",
-   "color": "w",
-   "kind": "R"
-  },
   {
    "sq": "g1",
    "color": "w",
    "kind": "K"
-  },
-  {
-   "sq": "a2",
-   "color": "w",
-   "kind": "P"
-  },
-  {
-   "sq": "b2",
-   "color": "w",
-   "kind": "P"
-  },
-  {
-   "sq": "c2",
-   "color": "w",
-   "kind": "P"
   },
   {
    "sq": "f2",
@@ -91,99 +45,59 @@
    "kind": "P"
   },
   {
-   "sq": "g2",
+   "sq": "a3",
    "color": "w",
    "kind": "P"
   },
   {
-   "sq": "h2",
+   "sq": "g3",
    "color": "w",
    "kind": "P"
   },
   {
-   "sq": "c3",
+   "sq": "a5",
    "color": "w",
    "kind": "N"
   },
   {
-   "sq": "d4",
+   "sq": "b5",
    "color": "w",
+   "kind": "R"
+  },
+  {
+   "sq": "d5",
+   "color": "b",
    "kind": "N"
-  },
-  {
-   "sq": "e4",
-   "color": "w",
-   "kind": "P"
-  },
-  {
-   "sq": "g4",
-   "color": "b",
-   "kind": "B"
-  },
-  {
-   "sq": "h4",
-   "color": "w",
-   "kind": "B"
-  },
-  {
-   "sq": "c5",
-   "color": "b",
-   "kind": "P"
   },
   {
    "sq": "a6",
    "color": "b",
-   "kind": "P"
-  },
-  {
-   "sq": "d6",
-   "color": "b",
-   "kind": "P"
-  },
-  {
-   "sq": "f6",
-   "color": "b",
-   "kind": "N"
-  },
-  {
-   "sq": "h6",
-   "color": "b",
-   "kind": "P"
-  },
-  {
-   "sq": "c7",
-   "color": "b",
-   "kind": "P"
-  },
-  {
-   "sq": "e7",
-   "color": "b",
-   "kind": "B"
-  },
-  {
-   "sq": "f7",
-   "color": "b",
-   "kind": "P"
-  },
-  {
-   "sq": "g7",
-   "color": "b",
-   "kind": "P"
-  },
-  {
-   "sq": "a8",
-   "color": "b",
    "kind": "R"
   },
   {
-   "sq": "d8",
-   "color": "b",
-   "kind": "Q"
+   "sq": "c6",
+   "color": "w",
+   "kind": "P"
   },
   {
-   "sq": "f8",
+   "sq": "e6",
    "color": "b",
-   "kind": "R"
+   "kind": "P"
+  },
+  {
+   "sq": "g6",
+   "color": "b",
+   "kind": "P"
+  },
+  {
+   "sq": "a7",
+   "color": "b",
+   "kind": "P"
+  },
+  {
+   "sq": "h7",
+   "color": "b",
+   "kind": "P"
   },
   {
    "sq": "g8",
@@ -192,47 +106,17 @@
   }
  ],
  "n": 8,
- "record_id": "mate-sel-91840",
+ "record_id": "mate-sel-92251",
  "position": {
-  "id": "mate-sel-91840",
+  "id": "mate-sel-92251",
   "n": 8,
   "turn": "w",
-  "fen": "r2q1rk1/2p1bpp1/p2p1n1p/2p5/3NP1bB/2N5/PPP2PPP/R3QRK1 w - - 0 13",
+  "fen": "6k1/p6p/r1P1p1p1/NR1n4/8/P5P1/5P2/6K1 w - - 0 37",
   "pieces": [
-   {
-    "sq": "a1",
-    "color": "w",
-    "kind": "R"
-   },
-   {
-    "sq": "e1",
-    "color": "w",
-    "kind": "Q"
-   },
-   {
-    "sq": "f1",
-    "color": "w",
-    "kind": "R"
-   },
    {
     "sq": "g1",
     "color": "w",
     "kind": "K"
-   },
-   {
-    "sq": "a2",
-    "color": "w",
-    "kind": "P"
-   },
-   {
-    "sq": "b2",
-    "color": "w",
-    "kind": "P"
-   },
-   {
-    "sq": "c2",
-    "color": "w",
-    "kind": "P"
    },
    {
     "sq": "f2",
@@ -240,99 +124,59 @@
     "kind": "P"
    },
    {
-    "sq": "g2",
+    "sq": "a3",
     "color": "w",
     "kind": "P"
    },
    {
-    "sq": "h2",
+    "sq": "g3",
     "color": "w",
     "kind": "P"
    },
    {
-    "sq": "c3",
+    "sq": "a5",
     "color": "w",
     "kind": "N"
    },
    {
-    "sq": "d4",
+    "sq": "b5",
     "color": "w",
+    "kind": "R"
+   },
+   {
+    "sq": "d5",
+    "color": "b",
     "kind": "N"
-   },
-   {
-    "sq": "e4",
-    "color": "w",
-    "kind": "P"
-   },
-   {
-    "sq": "g4",
-    "color": "b",
-    "kind": "B"
-   },
-   {
-    "sq": "h4",
-    "color": "w",
-    "kind": "B"
-   },
-   {
-    "sq": "c5",
-    "color": "b",
-    "kind": "P"
    },
    {
     "sq": "a6",
     "color": "b",
-    "kind": "P"
-   },
-   {
-    "sq": "d6",
-    "color": "b",
-    "kind": "P"
-   },
-   {
-    "sq": "f6",
-    "color": "b",
-    "kind": "N"
-   },
-   {
-    "sq": "h6",
-    "color": "b",
-    "kind": "P"
-   },
-   {
-    "sq": "c7",
-    "color": "b",
-    "kind": "P"
-   },
-   {
-    "sq": "e7",
-    "color": "b",
-    "kind": "B"
-   },
-   {
-    "sq": "f7",
-    "color": "b",
-    "kind": "P"
-   },
-   {
-    "sq": "g7",
-    "color": "b",
-    "kind": "P"
-   },
-   {
-    "sq": "a8",
-    "color": "b",
     "kind": "R"
    },
    {
-    "sq": "d8",
-    "color": "b",
-    "kind": "Q"
+    "sq": "c6",
+    "color": "w",
+    "kind": "P"
    },
    {
-    "sq": "f8",
+    "sq": "e6",
     "color": "b",
-    "kind": "R"
+    "kind": "P"
+   },
+   {
+    "sq": "g6",
+    "color": "b",
+    "kind": "P"
+   },
+   {
+    "sq": "a7",
+    "color": "b",
+    "kind": "P"
+   },
+   {
+    "sq": "h7",
+    "color": "b",
+    "kind": "P"
    },
    {
     "sq": "g8",
